@@ -1,8 +1,11 @@
 #ifndef PLAYER_H__
 #define PLAYER_H__
 
+#include <SDL.h>
 #include "NCCA/Vec4.h"
 #define PLAYEROFFSET 0.1f
+
+const int sensitivity = 6000;
 
 class Player
 {
@@ -14,7 +17,8 @@ class Player
     ~Player();
 
     void drawPlayer();
-    void handleMovement();
+    void handleMovement_c(SDL_GameController *_c);
+    void handleMovement_kb();
   private:
     void cube();
     void wrapRotation(float &io_a);

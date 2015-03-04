@@ -12,6 +12,7 @@ class SDL_GL
 {
   public:
     SDL_Window *win;
+    SDL_GameController *controller;
 
     SDL_GL();
     ~SDL_GL();

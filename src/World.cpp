@@ -3,6 +3,7 @@
 
 #include "World.h"
 #include "Icosahedron.h"
+#include <SDL.h>
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
@@ -18,39 +19,20 @@ World::~World()
 
 void World::drawWorld(Universe _u) const
 {
-  Mat4 Transform;
-
   // TODO(Teemu): Universe/world rotation
 
-  /*float sinX = sinf(GLFunctions::radians(_u.rX));
-  float sinY = sinf(GLFunctions::radians(_u.rY));
-  float sinZ = sinf(GLFunctions::radians(_u.rZ));
-
-  float cosX = cosf(GLFunctions::radians(_u.rX));
-  float cosY = cosf(GLFunctions::radians(_u.rY));
-  float cosZ = cosf(GLFunctions::radians(_u.rZ));
-
-  Transform.m_00 = cosY * cosZ;
-  Transform.m_01 = cosZ * sinX * sinY - cosX * sinZ;
-  Transform.m_02 = cosX * cosZ * sinY + sinX * sinZ;
-  Transform.m_10 = cosY * sinZ;
-  Transform.m_11 = cosX * cosZ + sinX * sinY * sinZ;
-  Transform.m_12 = -cosZ * sinX + cosX * sinY * sinZ;
-  Transform.m_20 = -sinY;
-  Transform.m_21 = cosY * sinX;
-  Transform.m_22 = cosX * cosY;*/
-
-  //std::cout << rotX << " " << rotY << " " << rotZ << "\n";
   glPushMatrix();
     //glLoadIdentity();
     //glTranslatef(0, 0, -4);
-    //glMultMatrixf(_u.transformation.m_openGL);
+    //glMultMatrixf(Transform.m_openGL);
+
+    glRotatef(_u.rot, _u.r.m_x, _u.r.m_y, _u.r.m_z);
 
     glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
       planet();
 
-    glScalef(1.225f, 1.225f, 1.225f);
-      atmosphere();
+    //glScalef(1.225f, 1.225f, 1.225f);
+    //  atmosphere();
   glPopMatrix();
 }
 
@@ -66,7 +48,7 @@ void World::updateCamera()
 void World::planet() const
 {
   glColor3f(1.0, 1.0, 1.0);
-  tSphere(2);
+  tSphere(5);
 }
 
 void World::atmosphere() const

@@ -1,3 +1,5 @@
+#include <SDL.h>
+
 #include "NCCA/GLFunctions.h"
 #include "Defs.h"
 #include "Sdl_gl.h"
@@ -5,9 +7,10 @@
 SDL_GL::SDL_GL()
 {
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
-  {
     SDLErrorExit("Couldn't initialise SDL");
-  }
+
+  if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) == -1)
+    SDLErrorExit("Couldn't initialise SDL controller");
 
   win = SDL_CreateWindow("SS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
@@ -20,6 +23,14 @@ SDL_GL::SDL_GL()
   if(!gl)
   {
     SDLErrorExit("Problem creating OpenGL context");
+  }
+
+  controller = NULL;
+
+  for(int i = 0; i < SDL_NumJoysticks(); i++)
+  {
+    if((controller = SDL_GameControllerOpen(i)))
+      break;
   }
 
   act = true;
@@ -95,6 +106,7 @@ bool SDL_GL::isActive() const
 void SDL_GL::handleInput(Player &io_p, Universe &io_u)
 {
   SDL_Event event;
+  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
   while( SDL_PollEvent(&event) )
   {
@@ -120,7 +132,33 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
     } // end of event switch
   } // end of poll events
 
-  io_p.handleMovement();
+  if(controller != NULL)
+    io_p.handleMovement_c(controller);
+  else
+    io_p.handleMovement_kb();
 
-  //std::cout << angle << " " << x.m_x << " " << x.m_y << " " << x.m_z << "\n";
+  if((!controller && (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ||
+     keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])) ||
+     (fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY)) > sensitivity ||
+     fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX)) > sensitivity))
+  {
+    io_u.v1 = io_p.norm;
+    io_u.v2.set(0, 0, 1);
+
+    //io_u.angle += acosf(io_u.v1.dot(io_u.v2) / io_u.v1.length()*io_u.v2.length()) * 180/PI;
+
+    io_u.r = (io_u.v1.cross(io_u.v2)) / (io_u.v2.length()*io_u.v1.length());
+
+    io_u.r.normalize();
+
+    ++io_u.rot;
+  }
+
+  glPushMatrix();
+    glBegin(GL_LINE_STRIP);
+      glVertex3f(0, 0, 0);
+      io_u.r.vertexGL();
+    glEnd();
+  glPopMatrix();
+
 }

@@ -112,7 +112,7 @@ Vec4 Vec4::operator /(float _rhs)
               m_w);
 }
 
-Vec4 Vec4::sphericalCoords(float &_i, float &_j, float _offset, int _ret)
+Vec4 Vec4::sphericalCoords(float &_i, float &_j, float _offset)
 {
   //  Sphere code based on a function Written by Paul Bourke.
   //  http://astronomy.swin.edu.au/~pbourke/opengl/sphere/
@@ -130,5 +130,5 @@ Vec4 Vec4::sphericalCoords(float &_i, float &_j, float _offset, int _ret)
   normal.set(cosf(theta) * cosf(phi),sinf(theta),cosf(theta) * sinf(phi));
   vertex = normal * (WORLDRADIUS + _offset);
 
-  return (_ret == 1 ? vertex : normal);
+  return vertex;
 }
