@@ -27,13 +27,15 @@ class Vec4
     // Normalize this vector
     void normalize();
 
-    static Vec4 sphericalCoords(int &_i, int &_j, float _offset);
+    static Vec4 sphericalCoords(float &_i, float &_j, float _offset, int _ret);
 
     // Operator overload, we can build in our own calculation stuff
     // Usage: V1 * Mat4
     Vec4 operator *(const Mat4 &_rhs);
     // * a scalar
     Vec4 operator *(float _rhs);
+    // / a scalar
+    Vec4 operator /(float _rhs);
     // V1 *= 2
     void operator *=(float _rhs);
     // V1 + V2

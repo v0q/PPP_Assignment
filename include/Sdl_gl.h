@@ -5,7 +5,8 @@
 #include <OpenGL/gl.h>
 #include <iostream>
 
-#include "Player.h"
+#include "Universe.h"
+#include "World.h"
 
 class SDL_GL
 {
@@ -18,7 +19,7 @@ class SDL_GL
     void enableLighting() const;
 
     bool isActive() const;
-    void handleInput(Player &_player);
+    void handleInput(Player &io_p, Universe &io_u);
 
   private:
     SDL_GLContext gl;

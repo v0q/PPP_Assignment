@@ -48,7 +48,7 @@ void GLFunctions::perspective(float _fovy,float _aspect, float _zNear, float _zF
   result.loadProjection();
 }
 
- float GLFunctions::radians(float _deg )
+float GLFunctions::radians(float _deg )
 {
   return (_deg/180.0f) * M_PI;
 }

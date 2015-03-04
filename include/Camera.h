@@ -19,7 +19,7 @@ class Camera
     // Aspect ratio
     float a;
 
-    Camera(): ex(1.0f), ey(1.0f), ez(4.0f),
+    Camera(): ex(0.0f), ey(0.0f), ez(4.0f),
               lx(0.0f), ly(0.0f), lz(0.0f),
               ux(0.0f), uy(1.0f), uz(0.0f),
               fov(65.0f),

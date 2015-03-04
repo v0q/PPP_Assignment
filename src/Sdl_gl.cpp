@@ -1,6 +1,6 @@
+#include "NCCA/GLFunctions.h"
 #include "Defs.h"
 #include "Sdl_gl.h"
-#include "World.h"
 
 SDL_GL::SDL_GL()
 {
@@ -67,8 +67,20 @@ SDL_GLContext SDL_GL::createOpenGLContext()
 
 void SDL_GL::enableLighting() const
 {
+  GLfloat mat_specular[] = { 0.5, 0.5, 0.5, 1.0 };
+  GLfloat mat_shininess[] = { 100.0 };
+  GLfloat light_position[] = { 0.5, 0.75, 1.5, 0.0 };
+  GLfloat light_position2[] = { 0.0, 0.0, 3, 0.0 };
+  glShadeModel (GL_SMOOTH);
+
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  glLightfv(GL_LIGHT1, GL_POSITION, light_position2);
+
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
   glColor3f(1,1,0);
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
@@ -80,12 +92,9 @@ bool SDL_GL::isActive() const
   return act;
 }
 
-void SDL_GL::handleInput(Player &_player)
+void SDL_GL::handleInput(Player &io_p, Universe &io_u)
 {
   SDL_Event event;
-  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-  static int i = 70, j = 53;
-
 
   while( SDL_PollEvent(&event) )
   {
@@ -111,14 +120,7 @@ void SDL_GL::handleInput(Player &_player)
     } // end of event switch
   } // end of poll events
 
-  if(keystate[SDL_SCANCODE_UP])
-    i = (i + 1) % MOVEPRECISION;
-  else if(keystate[SDL_SCANCODE_DOWN])
-    i = (i - 1) % MOVEPRECISION;
-  if(keystate[SDL_SCANCODE_LEFT])
-    j = (j + 1) % MOVEPRECISION;
-  else if(keystate[SDL_SCANCODE_RIGHT])
-    j = (j - 1) % MOVEPRECISION;
+  io_p.handleMovement();
 
-  _player.pos = Vec4::sphericalCoords(i, j, PLAYEROFFSET);
+  //std::cout << angle << " " << x.m_x << " " << x.m_y << " " << x.m_z << "\n";
 }

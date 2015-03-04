@@ -9,6 +9,12 @@ class Mat4
     Mat4(float _s=1.0f);
     // Copy constructor
     Mat4(const Mat4 &_rhs);
+
+    // * operator
+    void operator *=(const Mat4 &_rhs);
+
+    void normalize();
+
     // Set to identity
     void identity();
     // Load gl model view

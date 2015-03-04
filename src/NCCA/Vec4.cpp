@@ -76,6 +76,16 @@ Vec4 Vec4::operator -(const Vec4 &_rhs)
               );
 }
 
+Vec4 Vec4::operator +(const Vec4 &_rhs)
+{
+  return Vec4(
+              m_x + _rhs.m_x,
+              m_y + _rhs.m_y,
+              m_z + _rhs.m_z,
+              m_w
+              );
+}
+
 Vec4 Vec4::operator *(float _rhs)
 {
   return Vec4(
@@ -85,22 +95,40 @@ Vec4 Vec4::operator *(float _rhs)
               m_w);
 }
 
-
-Vec4 Vec4::sphericalCoords(int &_i, int &_j, float _offset)
+void Vec4::operator *=(float _rhs)
 {
+  m_x *= _rhs;
+  m_y *= _rhs;
+  m_z *= _rhs;
+}
+
+
+Vec4 Vec4::operator /(float _rhs)
+{
+  return Vec4(
+              m_x / _rhs,
+              m_y / _rhs,
+              m_z / _rhs,
+              m_w);
+}
+
+Vec4 Vec4::sphericalCoords(float &_i, float &_j, float _offset, int _ret)
+{
+  //  Sphere code based on a function Written by Paul Bourke.
+  //  http://astronomy.swin.edu.au/~pbourke/opengl/sphere/
+  // the next part of the code calculates the P,N,UV of the sphere for tri_strips
+
+  float theta = 0.0;
+  float phi = 0.0;
   Vec4 normal;
   Vec4 vertex;
-  float theta = 0.0f;
-  float phi = 0.0f;
 
-  // now fill in a vertData structure and add to the data list for our sphere
   theta = (_i + 1) * TWO_PI / MOVEPRECISION - PI2;
+
   phi = _j * TWO_PI / MOVEPRECISION;
 
-  normal.set(cosf(theta) * cosf(phi),
-                  sinf(theta),
-                  cosf(theta) * sinf(phi));
+  normal.set(cosf(theta) * cosf(phi),sinf(theta),cosf(theta) * sinf(phi));
   vertex = normal * (WORLDRADIUS + _offset);
 
-  return vertex;
+  return (_ret == 1 ? vertex : normal);
 }
