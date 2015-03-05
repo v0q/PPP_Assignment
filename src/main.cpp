@@ -11,7 +11,7 @@ int main()
   SDL_GL sdlgl;
   World world;
   Universe rotation(0.0f, 0.0f, 0.0f);
-  Player player(0.0f, 0.0f, 0.0f);
+  Player player(0.0f, 0.0f, WORLDRADIUS+PLAYEROFFSET);
 
   world.updateCamera();
   sdlgl.enableLighting();

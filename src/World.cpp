@@ -22,9 +22,8 @@ void World::drawWorld(Universe _u) const
   // TODO(Teemu): Universe/world rotation
 
   glPushMatrix();
-    //glLoadIdentity();
-    //glTranslatef(0, 0, -4);
-    //glMultMatrixf(Transform.m_openGL);
+    glLoadIdentity();
+    glTranslatef(0, 0, -4);
 
     glRotatef(_u.rot, _u.r.m_x, _u.r.m_y, _u.r.m_z);
 
@@ -48,7 +47,7 @@ void World::updateCamera()
 void World::planet() const
 {
   glColor3f(1.0, 1.0, 1.0);
-  tSphere(5);
+  tSphere(2);
 }
 
 void World::atmosphere() const
@@ -65,7 +64,6 @@ void World::atmosphere() const
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glDisable(GL_BLEND);
-
 
 }
 

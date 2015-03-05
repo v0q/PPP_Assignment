@@ -3,8 +3,8 @@
 
 #include <cmath>
 
-#define SCREENWIDTH 1680
-#define SCREENHEIGHT 1050
+#define SCREENWIDTH 720//1680
+#define SCREENHEIGHT 720//1050
 #define WORLDRADIUS 2.1f
 #define PRECISION 26
 #define MOVEPRECISION 400

@@ -137,6 +137,11 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
   else
     io_p.handleMovement_kb();
 
+
+  // Get the players coordinates and normal on the surface of the sphere
+  io_p.norm = Vec4(io_p.pos.m_x, io_p.pos.m_y, io_p.pos.m_z);
+  io_p.norm.normalize();
+
   if((!controller && (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ||
      keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])) ||
      (fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY)) > sensitivity ||
@@ -151,7 +156,7 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
 
     io_u.r.normalize();
 
-    ++io_u.rot;
+    io_u.rot += 3;
   }
 
   glPushMatrix();
