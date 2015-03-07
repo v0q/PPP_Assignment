@@ -30,8 +30,8 @@ void World::drawWorld(Universe _u) const
     glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
       planet();
 
-    //glScalef(1.225f, 1.225f, 1.225f);
-    //  atmosphere();
+    glScalef(1.225f, 1.225f, 1.225f);
+      atmosphere();
   glPopMatrix();
 }
 

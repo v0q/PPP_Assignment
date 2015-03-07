@@ -12,14 +12,24 @@ Player::~Player()
 void Player::drawPlayer()
 {
   glPushMatrix();
-    glColor3f(1.0f, 0.0, 0.0f);
     glPointSize(15.0f);
 
     // Move player to the correct position and rotate
     glTranslatef(pos.m_x, pos.m_y, pos.m_z);
-    glRotatef(rot, 0, 0, 1);
 
+    glBegin(GL_POINTS);
+      glColor3f(0, 0, 0);
+      glVertex3f(0.1*cosf(aimDir), 0.1*sinf(aimDir), 0);
+    glEnd();
+
+    glRotatef(rot, 0, 0, 1);
+    glColor3f(1.0f, 0.0, 0.0f);
     cube();
+
+    /*
+     * x^2 + y^2 = 1
+     *
+     */
 
   glPopMatrix();
 }
@@ -94,6 +104,8 @@ void Player::handleMovement_kb()
   }
 
   wrapRotation(rot);
+
+  aim_kb();
 }
 
 void Player::handleMovement_c(SDL_GameController *_c)
@@ -138,6 +150,37 @@ void Player::handleMovement_c(SDL_GameController *_c)
   }
 
   wrapRotation(rot);
+
+  aim_c(_c);
+}
+
+void Player::aim_c(SDL_GameController *_c)
+{
+  float x = SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTX);
+  float y = -SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTY);
+  x = (fabs(x) < sensitivity ? 0 : x/32767.0);
+  y = (fabs(y) < sensitivity ? 0 : y/32767.0);
+
+  aimDir = atan2f(y, x);
+
+  if(x != 0 || y != 0)
+  {
+  }
+}
+
+void Player::aim_kb()
+{
+  float fx, fy;
+  int x, y;
+
+  // Get the current mouse positition and "trap" the mouse inside the game
+  SDL_GetMouseState(&x, &y);
+  SDL_SetRelativeMouseMode(SDL_TRUE);
+
+  fx = x/(float)SCREENWIDTH * 2.0 - 1.0;
+  fy = -y/(float)SCREENHEIGHT * 2.0 + 1.0;
+
+  aimDir = atan2f(fy, fx);
 }
 
 void Player::cube()
