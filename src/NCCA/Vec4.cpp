@@ -86,6 +86,13 @@ Vec4 Vec4::operator +(const Vec4 &_rhs)
               );
 }
 
+void Vec4::operator +=(const Vec4 &_rhs)
+{
+  m_x += _rhs.m_x;
+  m_y += _rhs.m_y;
+  m_z += _rhs.m_z;
+}
+
 Vec4 Vec4::operator *(float _rhs)
 {
   return Vec4(

@@ -2,6 +2,7 @@
 #define PLAYER_H__
 
 #include <SDL.h>
+#include <vector>
 #include "Projectile.h"
 #include "NCCA/Vec4.h"
 #define PLAYEROFFSET 0.1f
@@ -18,15 +19,14 @@ class Player
     ~Player();
 
     void drawPlayer();
-    void handleMovement_c(SDL_GameController *_c);
-    void handleMovement_kb();
+    void handleMovement(SDL_GameController *_c);
+
   private:
     float aimDir;
     void cube();
     void wrapRotation(float &io_a);
-    void aim_c(SDL_GameController *_c);
-    void aim_kb();
-    Projectile *p;
+    void shoot(SDL_GameController *_c);
+    std::vector <Projectile> p;
 };
 
 #endif

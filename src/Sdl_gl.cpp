@@ -132,10 +132,7 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
     } // end of event switch
   } // end of poll events
 
-  if(controller != NULL)
-    io_p.handleMovement_c(controller);
-  else
-    io_p.handleMovement_kb();
+  io_p.handleMovement(controller);
 
 
   // Get the players coordinates and normal on the surface of the sphere

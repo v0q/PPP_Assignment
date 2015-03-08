@@ -30,7 +30,7 @@ void World::drawWorld(Universe _u) const
     glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
       planet();
 
-    glScalef(1.225f, 1.225f, 1.225f);
+    glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
       atmosphere();
   glPopMatrix();
 }
@@ -59,7 +59,6 @@ void World::atmosphere() const
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glColor4f(0.114, 0.431, 0.506, 0.3);
 
-    //sphere(WORLDRADIUS*1.25f);
     tSphere(4);
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -110,13 +109,13 @@ void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c) const
   glEnd();
 }
 
-void World::tSphere(int _i) const
+void World::tSphere(int _d) const
 {
   for(int k = 0; k < 20; ++k)
   {
     icosHedron[k][0].normalize();
     icosHedron[k][1].normalize();
     icosHedron[k][2].normalize();
-    subd(icosHedron[k][0], icosHedron[k][1], icosHedron[k][2], _i);
+    subd(icosHedron[k][0], icosHedron[k][1], icosHedron[k][2], _d);
   }
 }

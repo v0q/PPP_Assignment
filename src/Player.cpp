@@ -34,7 +34,7 @@ void Player::drawPlayer()
   glPopMatrix();
 }
 
-void Player::handleMovement_kb()
+void Player::handleMovement(SDL_GameController *_c)
 {
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
@@ -67,15 +67,26 @@ void Player::handleMovement_kb()
    * Right: 1
    * Right top/bottom: 0.5
    */
-  if(keystate[SDL_SCANCODE_UP])
-    ud = (keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT] ? 0.5 : 1);
-  else if(keystate[SDL_SCANCODE_DOWN])
-    ud = (keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT] ? -0.5 : -1);
+  if(_c != NULL)
+  {
+    ud = -SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_LEFTY);
+    lr = SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_LEFTX);
 
-  if(keystate[SDL_SCANCODE_LEFT])
-    lr = (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ? -0.5 : -1);
-  else if(keystate[SDL_SCANCODE_RIGHT])
-    lr = (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ? 0.5 : 1);
+    ud = (fabs(ud) < sensitivity ? 0 : ud/32767.0);
+    lr = (fabs(lr) < sensitivity ? 0 : lr/32767.0);
+  }
+  else
+  {
+    if(keystate[SDL_SCANCODE_UP])
+      ud = (keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT] ? 0.5 : 1);
+    else if(keystate[SDL_SCANCODE_DOWN])
+      ud = (keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT] ? -0.5 : -1);
+
+    if(keystate[SDL_SCANCODE_LEFT])
+      lr = (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ? -0.5 : -1);
+    else if(keystate[SDL_SCANCODE_RIGHT])
+      lr = (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ? 0.5 : 1);
+  }
 
   xDest = sinf(atan2f(lr, ud)) * localRadius;
   yDest = sinf(atan2f(ud,lr)) * localRadius;
@@ -86,6 +97,9 @@ void Player::handleMovement_kb()
             (pos.m_y < yDest ? pos.m_y + yMove : pos.m_y));
   pos.m_x = (pos.m_x > xDest ? pos.m_x - xMove :
             (pos.m_x < xDest ? pos.m_x + xMove : pos.m_x));
+
+  pos.normalize();
+  pos *= (WORLDRADIUS+PLAYEROFFSET);
 
   // Check whether player is moving somewhere and
   // handle the possible rotation required
@@ -105,82 +119,75 @@ void Player::handleMovement_kb()
 
   wrapRotation(rot);
 
-  aim_kb();
+  shoot(_c);
 }
 
-void Player::handleMovement_c(SDL_GameController *_c)
+void Player::shoot(SDL_GameController *_c)
 {
-  // Variables for controlling & smoothing the player movement
-  static float dir;
-  const float localRadius = 0.5f;
-  const int retSteps = 25;
-  const int angleStep = 8;
-  float ud = -SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_LEFTY);
-  float lr = SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_LEFTX);
-  float xDest, xMove;
-  float yDest, yMove;
+  bool shoot = false;
+  float x, y;
 
-  ud = (fabs(ud) < sensitivity ? 0 : ud/32767.0);
-  lr = (fabs(lr) < sensitivity ? 0 : lr/32767.0);
-
-  xDest = sinf(atan2f(lr, ud)) * localRadius;
-  yDest = sinf(atan2f(ud,lr)) * localRadius;
-  yMove = fabs(yDest - pos.m_y)/(float)retSteps;
-  xMove = fabs(xDest - pos.m_x)/(float)retSteps;
-
-  pos.m_y = (pos.m_y > yDest ? pos.m_y - yMove :
-            (pos.m_y < yDest ? pos.m_y + yMove : pos.m_y));
-  pos.m_x = (pos.m_x > xDest ? pos.m_x - xMove :
-            (pos.m_x < xDest ? pos.m_x + xMove : pos.m_x));
-
-  // Check whether player is moving somewhere and
-  // handle the possible rotation required
-  if(ud != 0 || lr != 0)
+  if(_c != NULL)
   {
-    // Map the ud & lr coords to angles and substract 90 degrees to have top be 0
-    dir = atan2f(ud, lr) * 180/PI - 90;
-    wrapRotation(dir);
+    x = SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTX);
+    y = -SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTY);
 
-    float distance = dir - rot;
-    float aStep = angleStep;
-    if(fabs(distance) < angleStep)
-      aStep = fabs(distance);
-    rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
-          ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
+    x = (fabs(y) < sensitivity ? 0 : x/32767.0);
+    y = (fabs(y) < sensitivity ? 0 : y/32767.0);
+
+    if(x != 0 || y != 0)
+      shoot = true;
   }
+  else
+  {
 
-  wrapRotation(rot);
+    int kx, ky;
+    // Get the current mouse positition and "trap" the mouse inside the game
+    SDL_GetMouseState(&kx, &ky);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 
-  aim_c(_c);
-}
+    x = kx/(float)SCREENWIDTH * 2.0 - 1.0;
+    y = -ky/(float)SCREENHEIGHT * 2.0 + 1.0;
 
-void Player::aim_c(SDL_GameController *_c)
-{
-  float x = SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTX);
-  float y = -SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTY);
-  x = (fabs(x) < sensitivity ? 0 : x/32767.0);
-  y = (fabs(y) < sensitivity ? 0 : y/32767.0);
-
-  aimDir = atan2f(y, x);
+    if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+      shoot = true;
+  }
 
   if(x != 0 || y != 0)
+    aimDir = atan2f(y, x);
+
+  if(shoot)
   {
+    p.push_back(Projectile(pos.m_x + 0.1*cosf(aimDir),
+                       pos.m_y + 0.1*sinf(aimDir),
+                       WORLDRADIUS+PLAYEROFFSET,
+                       cosf(aimDir), sinf(aimDir), 0));
   }
-}
 
-void Player::aim_kb()
-{
-  float fx, fy;
-  int x, y;
-
-  // Get the current mouse positition and "trap" the mouse inside the game
-  SDL_GetMouseState(&x, &y);
-  SDL_SetRelativeMouseMode(SDL_TRUE);
-
-  fx = x/(float)SCREENWIDTH * 2.0 - 1.0;
-  fy = -y/(float)SCREENHEIGHT * 2.0 + 1.0;
-
-  aimDir = atan2f(fy, fx);
+  for(int i = 0; i < (int)p.size(); ++i)
+  {
+    if(p[i].life > 0)
+    {
+      Vec4 tmp;
+      p[i].pos += p[i].dir*p[i].speed;
+      tmp = p[i].pos;
+      if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
+      {
+        p[i].pos.normalize();
+        p[i].pos *= (WORLDRADIUS*ASPHERERADIUS);
+      }
+      glPushMatrix();
+        glPointSize(15);
+        glColor3f(0, 1, 0);
+        glBegin(GL_POINTS);
+          p[i].pos.vertexGL();
+        glEnd();
+      glPopMatrix();
+      --p[i].life;
+    }
+    else
+      p.erase(p.begin() + i);
+  }
 }
 
 void Player::cube()

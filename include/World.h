@@ -21,8 +21,7 @@ class World
   private:
     void planet() const;
     void atmosphere() const;
-    void sphere(float _radius) const;
-    void tSphere(int _i) const;
+    void tSphere(int _d) const;
     void drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c) const;
 
 };
