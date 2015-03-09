@@ -77,15 +77,15 @@ void Player::handleMovement(SDL_GameController *_c)
   }
   else
   {
-    if(keystate[SDL_SCANCODE_UP])
-      ud = (keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT] ? 0.5 : 1);
-    else if(keystate[SDL_SCANCODE_DOWN])
-      ud = (keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT] ? -0.5 : -1);
+    if(keystate[SDL_SCANCODE_W])
+      ud = (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ? 0.5 : 1);
+    else if(keystate[SDL_SCANCODE_S])
+      ud = (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ? -0.5 : -1);
 
-    if(keystate[SDL_SCANCODE_LEFT])
-      lr = (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ? -0.5 : -1);
-    else if(keystate[SDL_SCANCODE_RIGHT])
-      lr = (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ? 0.5 : 1);
+    if(keystate[SDL_SCANCODE_A])
+      lr = (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ? -0.5 : -1);
+    else if(keystate[SDL_SCANCODE_D])
+      lr = (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ? 0.5 : 1);
   }
 
   xDest = sinf(atan2f(lr, ud)) * localRadius;
@@ -125,7 +125,7 @@ void Player::handleMovement(SDL_GameController *_c)
 void Player::shoot(SDL_GameController *_c)
 {
   bool shoot = false;
-  float x, y;
+  float x = 0, y = 0;
 
   if(_c != NULL)
   {
@@ -140,20 +140,16 @@ void Player::shoot(SDL_GameController *_c)
   }
   else
   {
+    const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
-    int kx, ky;
-    // Get the current mouse positition and "trap" the mouse inside the game
-    SDL_GetMouseState(&kx, &ky);
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    aimDir = fmod((keystate[SDL_SCANCODE_LEFT] ? aimDir + 0.1f :
+             (keystate[SDL_SCANCODE_RIGHT] ? aimDir - 0.1f : aimDir)), TWO_PI);
 
-    x = kx/(float)SCREENWIDTH * 2.0 - 1.0;
-    y = -ky/(float)SCREENHEIGHT * 2.0 + 1.0;
-
-    if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+    if(keystate[SDL_SCANCODE_SPACE])
       shoot = true;
   }
 
-  if(x != 0 || y != 0)
+  if((x != 0 || y != 0) && _c)
     aimDir = atan2f(y, x);
 
   if(shoot)
@@ -168,17 +164,15 @@ void Player::shoot(SDL_GameController *_c)
   {
     if(p[i].life > 0)
     {
-      Vec4 tmp;
       p[i].pos += p[i].dir*p[i].speed;
-      tmp = p[i].pos;
       if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
       {
         p[i].pos.normalize();
         p[i].pos *= (WORLDRADIUS*ASPHERERADIUS);
       }
       glPushMatrix();
-        glPointSize(15);
-        glColor3f(0, 1, 0);
+        glPointSize(25);
+        glColor3f(1, 0, 0);
         glBegin(GL_POINTS);
           p[i].pos.vertexGL();
         glEnd();

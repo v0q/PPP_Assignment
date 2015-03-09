@@ -122,8 +122,8 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
         {
           // if it's the escape key act
           case SDLK_ESCAPE : act = false; break;
-          case SDLK_w : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
-          case SDLK_s : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
+          case SDLK_k : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
+          case SDLK_l : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
           default : break;
         } // end of key process
       } // end of keydown
@@ -139,8 +139,8 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
   io_p.norm = Vec4(io_p.pos.m_x, io_p.pos.m_y, io_p.pos.m_z);
   io_p.norm.normalize();
 
-  if((!controller && (keystate[SDL_SCANCODE_UP] || keystate[SDL_SCANCODE_DOWN] ||
-     keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])) ||
+  if((!controller && (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ||
+     keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D])) ||
      (fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY)) > sensitivity ||
      fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX)) > sensitivity))
   {
