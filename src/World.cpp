@@ -1,9 +1,10 @@
-#include <OpenGL/gl.h>
 #include <iostream>
+#include <OpenGL/gl.h>
+#include <SDL.h>
 
 #include "World.h"
+#include "Defs.h"
 #include "Icosahedron.h"
-#include <SDL.h>
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
@@ -17,31 +18,17 @@ World::~World()
 
 }
 
-void World::drawWorld(Universe _u) const
+void World::drawWorld() const
 {
   // TODO(Teemu): Universe/world rotation
 
   glPushMatrix();
-    glLoadIdentity();
-    glTranslatef(0, 0, -4);
-
-    glRotatef(_u.rot, _u.r.m_x, _u.r.m_y, _u.r.m_z);
-
     glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
       planet();
 
-    glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
-      atmosphere();
+    //glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
+    //  atmosphere();
   glPopMatrix();
-}
-
-void World::updateCamera()
-{
-  GLFunctions::lookAt(Vec4(cam.ex, cam.ex, cam.ez),
-                      Vec4(cam.lx, cam.ly, cam.lz),
-                      Vec4(cam.ux, cam.uy, cam.uz));
-
-  GLFunctions::perspective(cam.fov, cam.a, cam.n, cam.f);
 }
 
 void World::planet() const

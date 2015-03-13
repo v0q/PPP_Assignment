@@ -12,6 +12,7 @@ class Mat4
 
     // * operator
     void operator *=(const Mat4 &_rhs);
+    Mat4 operator *(double _rhs);
 
     void normalize();
 

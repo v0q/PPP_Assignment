@@ -53,7 +53,7 @@ class Vec4
     // Call glVertex3f with components
     void vertexGL();
 
-    static Vec4 sphericalCoords(float &_i, float &_j, float _offset);
+    //static Vec4 sphericalCoords(float &_i, float &_j, float _offset);
 
     union
     {

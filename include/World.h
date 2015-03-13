@@ -3,20 +3,15 @@
 
 #include <string>
 #include <cmath>
-#include "Camera.h"
 #include "Player.h"
-#include "Universe.h"
 
 class World
 {
   public:
     World();
     ~World();
-    void drawWorld(Universe _u) const;
-    void updateCamera();
+    void drawWorld() const;
     void subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d) const;
-
-    Camera cam;
 
   private:
     void planet() const;

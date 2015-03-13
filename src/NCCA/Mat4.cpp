@@ -61,6 +61,29 @@ void Mat4::operator *=(const Mat4 &_rhs)
          m_m[3][3] * _rhs.m_m[3][3];
 }
 
+Mat4 Mat4::operator *(double _rhs)
+{
+  Mat4 r;
+  r.m_00 = m_00 * _rhs;
+  r.m_01 = m_01 * _rhs;
+  r.m_02 = m_02 * _rhs;
+  r.m_03 = m_03 * _rhs;
+  r.m_10 = m_10 * _rhs;
+  r.m_11 = m_11 * _rhs;
+  r.m_12 = m_12 * _rhs;
+  r.m_13 = m_13 * _rhs;
+  r.m_20 = m_20 * _rhs;
+  r.m_21 = m_21 * _rhs;
+  r.m_22 = m_22 * _rhs;
+  r.m_23 = m_23 * _rhs;
+  r.m_30 = m_30 * _rhs;
+  r.m_31 = m_31 * _rhs;
+  r.m_32 = m_32 * _rhs;
+  r.m_33 = m_33 * _rhs;
+
+  return r;
+}
+
 void Mat4::normalize()
 {
   float c_1, c_2, c_3, c_4;

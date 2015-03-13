@@ -5,9 +5,9 @@
 #include "NCCA/Mat4.h"
 #include "NCCA/GLFunctions.h"
 
-void GLFunctions::lookAt(Vec4 _eye, Vec4 _look, Vec4 _up)
+Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, Vec4 _up)
 {
-  Vec4 n =   _look-_eye;
+  Vec4 n = _look-_eye;
   Vec4 u = _up;
   Vec4 v = n.cross(u);
   u = v.cross(n);
@@ -28,7 +28,7 @@ void GLFunctions::lookAt(Vec4 _eye, Vec4 _look, Vec4 _up)
   mv.m_30=-_eye.dot(v);
   mv.m_31=-_eye.dot(u);
   mv.m_32= _eye.dot(n);
-  mv.loadModelView();
+  return mv;
 }
 
 

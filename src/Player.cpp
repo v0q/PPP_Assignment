@@ -1,40 +1,37 @@
 #include <OpenGl/gl.h>
 #include <iostream>
-#include "Player.h"
+
 #include "Defs.h"
+#include "NCCA/GLFunctions.h"
+#include "Camera.h"
+#include "Player.h"
 #include "World.h"
-
-Player::~Player()
-{
-
-}
 
 void Player::drawPlayer()
 {
   glPushMatrix();
+
+    glMultMatrixf(orientation.m_openGL);
+    glLoadIdentity();
+
     glPointSize(15.0f);
 
     // Move player to the correct position and rotate
-    glTranslatef(pos.m_x, pos.m_y, pos.m_z);
+    glTranslatef(xMov, yMov, -pos.length()+WORLDRADIUS+PLAYEROFFSET);
+    glRotatef(rot, 0, 0, 1);
 
     glBegin(GL_POINTS);
       glColor3f(0, 0, 0);
       glVertex3f(0.1*cosf(aimDir), 0.1*sinf(aimDir), 0);
     glEnd();
 
-    glRotatef(rot, 0, 0, 1);
     glColor3f(1.0f, 0.0, 0.0f);
     cube();
-
-    /*
-     * x^2 + y^2 = 1
-     *
-     */
 
   glPopMatrix();
 }
 
-void Player::handleMovement(SDL_GameController *_c)
+void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
 {
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
@@ -53,19 +50,30 @@ void Player::handleMovement(SDL_GameController *_c)
   float xDest, xMove;
   float yDest, yMove;
 
+  // Using the cross product we calculate the new up and side vectors for the camera
+  // to control the correct movement of the camera and the player
+  _cam.eye.normalize();
+
+  _cam.w = _cam.eye;
+  _cam.w = _cam.w.cross(_cam.up);
+  _cam.up = _cam.w.cross(_cam.eye);
+  _cam.w.normalize();
+  _cam.up.normalize();
+
+
   /*
    * Handle keyboard direction (trying to imitate controller stick coordinates
    * Y-axis (U/D):
    * Top: 1
-   * Top left/right: 0.5
+   * Top left/right: sin(45)
    * Bottom: -1
-   * Bottom left/right: 0.5
+   * Bottom left/right: -sin(45)
    *
    * X-axis (L/R):
    * Left: -1
-   * Left top/bottom: -0.5
+   * Left top/bottom: -sin(45)
    * Right: 1
-   * Right top/bottom: 0.5
+   * Right top/bottom: sin(45)
    */
   if(_c != NULL)
   {
@@ -78,46 +86,84 @@ void Player::handleMovement(SDL_GameController *_c)
   else
   {
     if(keystate[SDL_SCANCODE_W])
-      ud = (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ? 0.5 : 1);
+      ud = (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ? sinf(PI4) : 1);
     else if(keystate[SDL_SCANCODE_S])
-      ud = (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ? -0.5 : -1);
+      ud = (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ? -sinf(PI4) : -1);
 
     if(keystate[SDL_SCANCODE_A])
-      lr = (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ? -0.5 : -1);
+      lr = (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ? -sinf(PI4) : -1);
     else if(keystate[SDL_SCANCODE_D])
-      lr = (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ? 0.5 : 1);
+      lr = (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ? sinf(PI4) : 1);
   }
 
+  // Calculate the player movement "inside a circle"
+  // in front of the camera
   xDest = sinf(atan2f(lr, ud)) * localRadius;
-  yDest = sinf(atan2f(ud,lr)) * localRadius;
-  yMove = fabs(yDest - pos.m_y)/(float)retSteps;
-  xMove = fabs(xDest - pos.m_x)/(float)retSteps;
+  yDest = sinf(atan2f(ud, lr)) * localRadius;
+  yMove = (yDest - yMov)/(float)retSteps;
+  xMove = (xDest - xMov)/(float)retSteps;
 
-  pos.m_y = (pos.m_y > yDest ? pos.m_y - yMove :
-            (pos.m_y < yDest ? pos.m_y + yMove : pos.m_y));
-  pos.m_x = (pos.m_x > xDest ? pos.m_x - xMove :
-            (pos.m_x < xDest ? pos.m_x + xMove : pos.m_x));
+  yMov = (yMov > yDest ? yMov + yMove :
+          (yMov < yDest ? yMov + yMove : yMov));
+  xMov = (xMov > xDest ? xMov + xMove :
+          (xMov < xDest ? xMov + xMove : xMov));
 
-  pos.normalize();
-  pos *= (WORLDRADIUS+PLAYEROFFSET);
+  // Move the camera to the direction of the up and the left vector
+  // based on the player's desired direction
+  // Also when check whether the player's smoothing towards the center is happening
+  // and smooth the camera's movement as well
+  if(ud)
+  {
+    _cam.eye.m_x += ud * _cam.up.m_x * MOVESPEED;
+    _cam.eye.m_y += ud * _cam.up.m_y * MOVESPEED;
+    _cam.eye.m_z += ud * _cam.up.m_z * MOVESPEED;
+  }
+  else
+  {
+    _cam.eye.m_x -= _cam.up.m_x * yMove;
+    _cam.eye.m_y -= _cam.up.m_y * yMove;
+    _cam.eye.m_z -= _cam.up.m_z * yMove;
+  }
+  if(lr)
+  {
+    _cam.eye.m_x -= lr * _cam.w.m_x * MOVESPEED;
+    _cam.eye.m_y -= lr * _cam.w.m_y * MOVESPEED;
+    _cam.eye.m_z -= lr * _cam.w.m_z * MOVESPEED;
+  }
+  else
+  {
+    _cam.eye.m_x += _cam.w.m_x * xMove;
+    _cam.eye.m_y += _cam.w.m_y * xMove;
+    _cam.eye.m_z += _cam.w.m_z * xMove;
+  }
+
+  //
+  _cam.eye.normalize();
+  norm = _cam.eye;
+  norm.normalize();
+
+  _cam.eye *= 4;
+  pos = _cam.eye;
+
+  orientation = GLFunctions::orientation(_cam.eye, _cam.look, _cam.up);
 
   // Check whether player is moving somewhere and
-  // handle the possible rotation required
-  if(ud != 0 || lr != 0)
-  {
-    // Map the ud & lr coords to angles and substract 90 degrees to have top be 0
-    dir = atan2f(ud, lr) * 180/PI - 90;
-    wrapRotation(dir);
+    // handle the possible rotation required
+    if(ud != 0 || lr != 0)
+    {
+      // Map the ud & lr coords to angles and substract 90 degrees to have top be 0
+      dir = atan2f(ud, lr) * 180/PI - 90;
+      wrapRotation(dir);
 
-    float distance = dir - rot;
-    float aStep = angleStep;
-    if(fabs(distance) < angleStep)
-      aStep = fabs(distance);
-    rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
-          ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
-  }
+      float distance = dir - rot;
+      float aStep = angleStep;
+      if(fabs(distance) < angleStep)
+        aStep = fabs(distance);
+      rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
+            ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
+    }
 
-  wrapRotation(rot);
+    wrapRotation(rot);
 
   shoot(_c);
 }
@@ -132,7 +178,7 @@ void Player::shoot(SDL_GameController *_c)
     x = SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTX);
     y = -SDL_GameControllerGetAxis(_c, SDL_CONTROLLER_AXIS_RIGHTY);
 
-    x = (fabs(y) < sensitivity ? 0 : x/32767.0);
+    x = (fabs(x) < sensitivity ? 0 : x/32767.0);
     y = (fabs(y) < sensitivity ? 0 : y/32767.0);
 
     if(x != 0 || y != 0)
@@ -150,38 +196,40 @@ void Player::shoot(SDL_GameController *_c)
   }
 
   if((x != 0 || y != 0) && _c)
-    aimDir = atan2f(y, x);
+    aimDir = atan2f(y, x) - (rot * PI / 180);
 
   if(shoot)
   {
-    p.push_back(Projectile(pos.m_x + 0.1*cosf(aimDir),
+    /*p.push_back(Projectile(pos.m_x + 0.1*cosf(aimDir),
                        pos.m_y + 0.1*sinf(aimDir),
                        WORLDRADIUS+PLAYEROFFSET,
-                       cosf(aimDir), sinf(aimDir), 0));
+                       cosf(aimDir), sinf(aimDir), 0));*/
+    p.push_back(Projectile(pos.m_x, pos.m_y, pos.m_z,
+                           cosf(aimDir), sinf(aimDir), 0));
   }
 
-  for(int i = 0; i < (int)p.size(); ++i)
-  {
-    if(p[i].life > 0)
+  glPushMatrix();
+    glPointSize(25);
+    glColor3f(1, 0, 0);
+    glBegin(GL_POINTS);
+    for(int i = 0; i < (int)p.size(); ++i)
     {
-      p[i].pos += p[i].dir*p[i].speed;
-      if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
+      if(p[i].life > 0)
       {
-        p[i].pos.normalize();
-        p[i].pos *= (WORLDRADIUS*ASPHERERADIUS);
+        p[i].pos += p[i].dir*p[i].speed;
+        if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
+        {
+          p[i].pos.normalize();
+          p[i].pos *= (WORLDRADIUS*ASPHERERADIUS);
+        }
+        p[i].pos.vertexGL();
+        --p[i].life;
       }
-      glPushMatrix();
-        glPointSize(25);
-        glColor3f(1, 0, 0);
-        glBegin(GL_POINTS);
-          p[i].pos.vertexGL();
-        glEnd();
-      glPopMatrix();
-      --p[i].life;
+      else
+        p.erase(p.begin() + i);
     }
-    else
-      p.erase(p.begin() + i);
-  }
+    glEnd();
+  glPopMatrix();
 }
 
 void Player::cube()
@@ -241,4 +289,3 @@ void Player::wrapRotation(float &io_a)
   else
     io_a = fmod(io_a, 360);
 }
-

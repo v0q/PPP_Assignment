@@ -2,16 +2,20 @@
 #define CAMERA_H__
 
 #include "Defs.h"
+#include "NCCA/Vec4.h"
+#define CAMRADIUS 4
 
 class Camera
 {
   public:
     // Eye level
-    float ex, ey, ez;
+    Vec4 eye;
     // Look at
-    float lx, ly, lz;
+    Vec4 look;
     // Up
-    float ux, uy, uz;
+    Vec4 up;
+    // Left vector
+    Vec4 w;
     // Field-of-view
     float fov;
     // Near, far
@@ -19,16 +23,21 @@ class Camera
     // Aspect ratio
     float a;
 
-    Camera(): ex(0.0f), ey(0.0f), ez(4.0f),
-              lx(0.0f), ly(0.0f), lz(0.0f),
-              ux(0.0f), uy(1.0f), uz(0.0f),
+    Mat4 orient;
+
+    Camera(): eye(0.0f, 0.0f, 4.0f),
+              look(0.0f, 0.0f, 0.0f),
+              up(0.0f, 1.0f, 0.0f),
               fov(65.0f),
               n(0.5f), f(200.0f),
               a(SCREENWIDTH / (float)SCREENHEIGHT) {}
+    ~Camera() {}
 
-    void setEye(float &_x, float &_y, float &_z) { ex = _x; ey = _y; ez = _z; }
-    void setUp(float &_x, float &_y, float &_z) { ux = _x; uy = _y; uz = _z; }
+    /*void setEye(float &_x, float &_y, float &_z) { ex = _x; ey = _y; ez = _z; }
+    void setUp(float &_x, float &_y, float &_z) { ux = _x; uy = _y; uz = _z; }*/
 
+    void initCamera();
+    void updateCamera();
 };
 
 #endif

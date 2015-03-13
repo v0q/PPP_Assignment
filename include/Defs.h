@@ -7,8 +7,7 @@
 #define SCREENHEIGHT 720//1050
 #define WORLDRADIUS 2.1f
 #define ASPHERERADIUS 1.225f
-#define PRECISION 26
-#define MOVEPRECISION 400
+#define MOVESPEED 0.05f
 
 const static float TWO_PI = float(2 * M_PI);
 const static float PI = float(M_PI);

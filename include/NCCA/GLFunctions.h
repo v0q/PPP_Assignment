@@ -9,7 +9,7 @@
 class GLFunctions
 {
   public :
-    static void lookAt(Vec4 _eye, Vec4 _look, Vec4 _up);
+    static Mat4 orientation(Vec4 _eye, Vec4 _look, Vec4 _up);
     static void perspective(float _fovy,float _aspect, float _zNear, float _zFar);
     static float radians(float _deg );
   private :

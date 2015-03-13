@@ -38,6 +38,8 @@ SDL_GL::SDL_GL()
 
 SDL_GL::~SDL_GL()
 {
+  if(!controller)
+    SDL_GameControllerClose(controller);
   SDL_Quit();
 }
 
@@ -103,10 +105,9 @@ bool SDL_GL::isActive() const
   return act;
 }
 
-void SDL_GL::handleInput(Player &io_p, Universe &io_u)
+void SDL_GL::handleInput(Player &io_p, Camera &_cam)
 {
   SDL_Event event;
-  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
   while( SDL_PollEvent(&event) )
   {
@@ -132,35 +133,5 @@ void SDL_GL::handleInput(Player &io_p, Universe &io_u)
     } // end of event switch
   } // end of poll events
 
-  io_p.handleMovement(controller);
-
-
-  // Get the players coordinates and normal on the surface of the sphere
-  io_p.norm = Vec4(io_p.pos.m_x, io_p.pos.m_y, io_p.pos.m_z);
-  io_p.norm.normalize();
-
-  if((!controller && (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S] ||
-     keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D])) ||
-     (fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY)) > sensitivity ||
-     fabs(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX)) > sensitivity))
-  {
-    io_u.v1 = io_p.norm;
-    io_u.v2.set(0, 0, 1);
-
-    //io_u.angle += acosf(io_u.v1.dot(io_u.v2) / io_u.v1.length()*io_u.v2.length()) * 180/PI;
-
-    io_u.r = (io_u.v1.cross(io_u.v2)) / (io_u.v2.length()*io_u.v1.length());
-
-    io_u.r.normalize();
-
-    io_u.rot += 3;
-  }
-
-  glPushMatrix();
-    glBegin(GL_LINE_STRIP);
-      glVertex3f(0, 0, 0);
-      io_u.r.vertexGL();
-    glEnd();
-  glPopMatrix();
-
+  io_p.handleMovement(controller, _cam);
 }
