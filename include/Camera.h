@@ -3,7 +3,7 @@
 
 #include "Defs.h"
 #include "NCCA/Vec4.h"
-#define CAMRADIUS 4
+#define CAMRADIUS 6
 
 class Camera
 {

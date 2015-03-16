@@ -3,11 +3,11 @@
 
 #include <cmath>
 
-#define SCREENWIDTH 720//1680
-#define SCREENHEIGHT 720//1050
-#define WORLDRADIUS 2.1f
+#define SCREENWIDTH 1680
+#define SCREENHEIGHT 1050
+#define WORLDRADIUS 3.0f
 #define ASPHERERADIUS 1.225f
-#define MOVESPEED 0.05f
+#define MOVESPEED 0.015f
 
 const static float TWO_PI = float(2 * M_PI);
 const static float PI = float(M_PI);

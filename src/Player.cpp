@@ -6,11 +6,10 @@
 #include "Camera.h"
 #include "Player.h"
 #include "World.h"
+#include <ctime>
 
 void Player::drawPlayer()
 {
-  glPushMatrix();
-
     glMultMatrixf(orientation.m_openGL);
     glLoadIdentity();
 
@@ -18,17 +17,16 @@ void Player::drawPlayer()
 
     // Move player to the correct position and rotate
     glTranslatef(xMov, yMov, -pos.length()+WORLDRADIUS+PLAYEROFFSET);
-    glRotatef(rot, 0, 0, 1);
 
     glBegin(GL_POINTS);
       glColor3f(0, 0, 0);
       glVertex3f(0.1*cosf(aimDir), 0.1*sinf(aimDir), 0);
     glEnd();
 
+    glRotatef(rot, 0, 0, 1);
+
     glColor3f(1.0f, 0.0, 0.0f);
     cube();
-
-  glPopMatrix();
 }
 
 void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
@@ -137,38 +135,35 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
     _cam.eye.m_z += _cam.w.m_z * xMove;
   }
 
-  //
   _cam.eye.normalize();
-  norm = _cam.eye;
-  norm.normalize();
 
-  _cam.eye *= 4;
+  _cam.eye *= CAMRADIUS;
   pos = _cam.eye;
 
   orientation = GLFunctions::orientation(_cam.eye, _cam.look, _cam.up);
 
   // Check whether player is moving somewhere and
-    // handle the possible rotation required
-    if(ud != 0 || lr != 0)
-    {
-      // Map the ud & lr coords to angles and substract 90 degrees to have top be 0
-      dir = atan2f(ud, lr) * 180/PI - 90;
-      wrapRotation(dir);
+  // handle the possible rotation required
+  if(ud != 0 || lr != 0)
+  {
+    // Map the ud & lr coords to angles and substract 90 degrees to have top be 0
+    dir = atan2f(ud, lr) * 180/PI - 90;
+    wrapRotation(dir);
 
-      float distance = dir - rot;
-      float aStep = angleStep;
-      if(fabs(distance) < angleStep)
-        aStep = fabs(distance);
-      rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
-            ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
-    }
+    float distance = dir - rot;
+    float aStep = angleStep;
+    if(fabs(distance) < angleStep)
+      aStep = fabs(distance);
+    rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
+          ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
+  }
 
-    wrapRotation(rot);
+  wrapRotation(rot);
 
-  shoot(_c);
+  shoot(_c, _cam.up, _cam.w);
 }
 
-void Player::shoot(SDL_GameController *_c)
+void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
 {
   bool shoot = false;
   float x = 0, y = 0;
@@ -196,81 +191,124 @@ void Player::shoot(SDL_GameController *_c)
   }
 
   if((x != 0 || y != 0) && _c)
-    aimDir = atan2f(y, x) - (rot * PI / 180);
+    aimDir = atan2f(y, x);
 
   if(shoot)
   {
-    /*p.push_back(Projectile(pos.m_x + 0.1*cosf(aimDir),
-                       pos.m_y + 0.1*sinf(aimDir),
-                       WORLDRADIUS+PLAYEROFFSET,
-                       cosf(aimDir), sinf(aimDir), 0));*/
-    p.push_back(Projectile(pos.m_x, pos.m_y, pos.m_z,
-                           cosf(aimDir), sinf(aimDir), 0));
+    Vec4 n = pos;
+    n.normalize();
+
+    // Create new projectiles when the player's shooting
+    // As the player's movement is done with glTranslate we have to add the x and y movement to the coordinates along the left/up vectors
+    // Also we're substracting the player's width/height to have the projectile in the correct position
+    /*
+    n.m_x * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov * _l.m_x * PLAYERWIDTH/0.5f - yMov * _u.m_x * PLAYERHEIGHT/0.5f,
+    n.m_y * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov * _l.m_y * PLAYERWIDTH/0.5f - yMov * _u.m_y * PLAYERHEIGHT/0.5f,
+    n.m_z * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov * _l.m_z * PLAYERWIDTH/0.5f - yMov * _u.m_z * PLAYERHEIGHT/0.5f,
+     */
+    p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
+                           n.m_y * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
+                           n.m_z * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
+                           _u, _l,
+                           n.m_x, n.m_y, n.m_z,
+                           aimDir));
   }
 
-  glPushMatrix();
-    glPointSize(25);
-    glColor3f(1, 0, 0);
-    glBegin(GL_POINTS);
-    for(int i = 0; i < (int)p.size(); ++i)
+  glBegin(GL_POINTS);
+  for(int i = 0; i < (int)p.size(); ++i)
+  {
+    if(p[i].life > 0)
     {
-      if(p[i].life > 0)
+      float lMul = PROJECTILESPEED * cosf(p[i].dir);
+      float uMul = PROJECTILESPEED * sinf(p[i].dir);
+
+      p[i].pos.m_x -= lMul * p[i].left.m_x;
+      p[i].pos.m_y -= lMul * p[i].left.m_y;
+      p[i].pos.m_z -= lMul * p[i].left.m_z;
+
+      p[i].pos.m_x += uMul * p[i].up.m_x;
+      p[i].pos.m_y += uMul * p[i].up.m_y;
+      p[i].pos.m_z += uMul * p[i].up.m_z;
+
+      if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
       {
-        p[i].pos += p[i].dir*p[i].speed;
-        if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
-        {
-          p[i].pos.normalize();
-          p[i].pos *= (WORLDRADIUS*ASPHERERADIUS);
-        }
-        p[i].pos.vertexGL();
-        --p[i].life;
+        p[i].pos.normalize();
+        p[i].left = p[i].pos;
+        p[i].left = p[i].left.cross(p[i].up);
+        p[i].up = p[i].left.cross(p[i].pos);
+        p[i].left.normalize();
+        p[i].up.normalize();
+        p[i].pos *= WORLDRADIUS*ASPHERERADIUS;
       }
-      else
-        p.erase(p.begin() + i);
+
+      glColor3f(1, 0, 0);
+      p[i].normal.normalGL();
+      p[i].pos.vertexGL();
+      --p[i].life;
     }
-    glEnd();
-  glPopMatrix();
+    else
+      p.erase(p.begin() + i);
+  }
+  glEnd();
 }
 
 void Player::cube()
 {
-  float r = 0.05f;
+  float r = PLAYERWIDTH;
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLES);
     norm.normalGL();
     // Side 1
-    glVertex3f(-r, r, r/2);
     glVertex3f(r, r, r/2);
+    glVertex3f(-r, r, r/2);
+    glVertex3f(r, -r, r/2);
+
+    glVertex3f(-r, r, r/2);
     glVertex3f(r, -r, r/2);
     glVertex3f(-r, -r, r/2);
 
     // Side 2
-    glVertex3f(-r, r, -r/2);
     glVertex3f(r, r, -r/2);
+    glVertex3f(-r, r, -r/2);
+    glVertex3f(r, -r, -r/2);
+
+    glVertex3f(-r, r, -r/2);
     glVertex3f(r, -r, -r/2);
     glVertex3f(-r, -r, -r/2);
 
     // Side 3
-    glVertex3f(-r, r, r/2);
     glVertex3f(-r, r, -r/2);
+    glVertex3f(-r, r, r/2);
+    glVertex3f(-r, -r, -r/2);
+
+    glVertex3f(-r, r, r/2);
     glVertex3f(-r, -r, -r/2);
     glVertex3f(-r, -r, r/2);
 
     // Side 4
-    glVertex3f(r, r, r/2);
     glVertex3f(r, r, -r/2);
+    glVertex3f(r, r, r/2);
+    glVertex3f(r, -r, -r/2);
+
+    glVertex3f(r, r, r/2);
     glVertex3f(r, -r, -r/2);
     glVertex3f(r, -r, r/2);
 
     // Side 5
-    glVertex3f(-r, r, r/2);
     glVertex3f(-r, r, -r/2);
+    glVertex3f(-r, r, r/2);
+    glVertex3f(r, r, -r/2);
+
+    glVertex3f(-r, r, r/2);
     glVertex3f(r, r, -r/2);
     glVertex3f(r, r, r/2);
 
     // Side 6
-    glVertex3f(-r, -r, r/2);
     glVertex3f(-r, -r, -r/2);
+    glVertex3f(-r, -r, r/2);
+    glVertex3f(r, -r, -r/2);
+
+    glVertex3f(-r, -r, r/2);
     glVertex3f(r, -r, -r/2);
     glVertex3f(r, -r, r/2);
 

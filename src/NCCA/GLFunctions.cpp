@@ -16,18 +16,18 @@ Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, Vec4 _up)
   u.normalize();
 
   Mat4 mv(1.0f);
-  mv.m_00= v.m_x;
-  mv.m_10= v.m_y;
-  mv.m_20= v.m_z;
-  mv.m_01= u.m_x;
-  mv.m_11= u.m_y;
-  mv.m_21= u.m_z;
-  mv.m_02=-n.m_x;
-  mv.m_12=-n.m_y;
-  mv.m_22=-n.m_z;
-  mv.m_30=-_eye.dot(v);
-  mv.m_31=-_eye.dot(u);
-  mv.m_32= _eye.dot(n);
+  mv.m_00 = v.m_x;
+  mv.m_10 = v.m_y;
+  mv.m_20 = v.m_z;
+  mv.m_01 = u.m_x;
+  mv.m_11 = u.m_y;
+  mv.m_21 = u.m_z;
+  mv.m_02 = -n.m_x;
+  mv.m_12 = -n.m_y;
+  mv.m_22 = -n.m_z;
+  mv.m_30 = -_eye.dot(v);
+  mv.m_31 = -_eye.dot(u);
+  mv.m_32 = _eye.dot(n);
   return mv;
 }
 
