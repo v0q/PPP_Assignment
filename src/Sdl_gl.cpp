@@ -86,7 +86,7 @@ void SDL_GL::enableLighting() const
   GLfloat mat_specular[] = { 0.5, 0.5, 0.5, 1.0 };
   GLfloat mat_shininess[] = { 100.0 };
   GLfloat light_position[] = { 0.5, 0.75, 1.5, 0.0 };
-  GLfloat light_position2[] = { 0.0, 0.0, 3, 0.0 };
+  GLfloat light_position2[] = { 0.0, 0.0, -3, 0.0 };
   glShadeModel (GL_SMOOTH);
 
   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);

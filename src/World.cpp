@@ -2,45 +2,63 @@
 #include <OpenGL/gl.h>
 #include <SDL.h>
 
-#include "World.h"
 #include "Defs.h"
+#include "World.h"
 #include "Icosahedron.h"
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
-void World::drawWorld() const
+void World::drawWorld()
 {
-  planet();
-  atmosphere();
-  skybox();
+  generate_Asteroids();
+  partByDist();
+  glCallLists(w_displayList.size(), GL_UNSIGNED_INT, &w_displayList[0]);
 }
 
-void World::planet() const
+void World::planet()
 {
-  glColor3f(1.0, 1.0, 1.0);
-  glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
-  tSphere(3, 1);
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+
+    glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
+      glColor3f(1.0, 1.0, 1.0);
+      tSphere(3, 1);
+
+  glEndList();
+  w_displayList.push_back(id);
 }
 
-void World::atmosphere() const
+void World::atmosphere()
 {
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glColor4f(0.114, 0.431, 0.506, 0.3);
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
 
-    glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
-    tSphere(4, 1);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glColor4f(0.114, 0.431, 0.506, 0.3);
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
+        tSphere(4, 1);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  glEndList();
+  w_displayList.push_back(id);
 }
 
-void World::skybox() const
+void World::skybox()
 {
-  glScalef(SKYBOXRADIUS, SKYBOXRADIUS, SKYBOXRADIUS);
-    glColor3f(0.4, 0.4, 0.4);
-    tSphere(3, -1);
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+
+    glScalef(SKYBOXRADIUS, SKYBOXRADIUS, SKYBOXRADIUS);
+      glColor3f(0.4, 0.4, 0.4);
+      tSphere(3, -1);
+
+  glEndList();
+  w_displayList.push_back(id);
 }
 
-void World::subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d, int _dir) const
+void World::subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d, int _ndir) const
 {
   Vec4 v[3];
 
@@ -55,25 +73,25 @@ void World::subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d, int _dir) const
     v[1].normalize();
     v[2].normalize();
 
-    subd(_a, v[0], v[1], _d - 1, _dir);
-    subd(v[0], _b, v[2], _d - 1, _dir);
-    subd(v[1], v[2], _c, _d - 1, _dir);
-    subd(v[0], v[1], v[2], _d - 1, _dir);
+    subd(_a, v[0], v[1], _d - 1, _ndir);
+    subd(v[0], _b, v[2], _d - 1, _ndir);
+    subd(v[1], v[2], _c, _d - 1, _ndir);
+    subd(v[0], v[1], v[2], _d - 1, _ndir);
 
     if(_d == 1)
     {
-      drawTriangle(_a, v[0], v[1], _dir);
-      drawTriangle(v[0], _b, v[2], _dir);
-      drawTriangle(v[1], v[2], _c, _dir);
-      drawTriangle(v[0], v[1], v[2], _dir);
+      drawTriangle(_a, v[0], v[1], _ndir);
+      drawTriangle(v[0], _b, v[2], _ndir);
+      drawTriangle(v[1], v[2], _c, _ndir);
+      drawTriangle(v[0], v[1], v[2], _ndir);
     }
   }
 }
 
-void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _dir) const
+void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
 {
   Vec4 normal;
-  normal = (_a + _b + _c) * _dir;
+  normal = (_a + _b + _c) * _ndir;
   normal.normalize();
 
   glBegin(GL_TRIANGLES);
@@ -85,14 +103,14 @@ void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _dir) const
   glEnd();
 }
 
-void World::tSphere(int _d, int _dir) const
+void World::tSphere(int _d, int _ndir) const
 {
   for(int k = 0; k < 20; ++k)
   {
     icosHedron[k][0].normalize();
     icosHedron[k][1].normalize();
     icosHedron[k][2].normalize();
-    subd(icosHedron[k][0], icosHedron[k][1], icosHedron[k][2], _d, _dir);
+    subd(icosHedron[k][0], icosHedron[k][1], icosHedron[k][2], _d, _ndir);
   }
 }
 
@@ -105,7 +123,7 @@ void World::initStars(int _a)
            std::rand()/(float)RAND_MAX * 2 - 1);
 
     s.normalize();
-    s *= fmod(std::rand(),SKYBOXRADIUS-WORLDRADIUS*ASPHERERADIUS) + WORLDRADIUS*ASPHERERADIUS*ASPHERERADIUS;
+    s *= fmod(std::rand(),SKYBOXRADIUS-WORLDRADIUS*ASPHERERADIUS) + 3*WORLDRADIUS*ASPHERERADIUS;
     s.m_w = 1 - (s.length()/SKYBOXRADIUS);
     stars.push_back(s);
   }
@@ -122,4 +140,37 @@ void World::drawStars(Vec4 _c) const
         glVertex3f(stars[i].m_x, stars[i].m_y, stars[i].m_z);
       }
   glEnd();
+}
+
+void World::generate_Asteroids()
+{
+  if(std::rand()/(float)RAND_MAX > 0.85 && (int)asteroids.size() < max_asteroids)
+  {
+    Vec4 aPos(std::rand()/(float)RAND_MAX * 2 - 1, std::rand()/(float)RAND_MAX  * 2 - 1, std::rand()/(float)RAND_MAX  * 2 - 1);
+    aPos.normalize();
+
+    Vec4 aDir = aPos * - 1;
+
+    aPos *= SKYBOXRADIUS;
+    asteroids.push_back(Asteroid(aPos, aDir,
+                                 fmod(std::rand(), 5.0) + 1.0f,
+                                 fmod(std::rand(), 0.035) + 0.015f));
+  }
+
+  for(int i = 0; i < (int)asteroids.size(); ++i)
+  {
+    if(asteroids[i].life > 0)
+      asteroids[i].draw();
+    else
+      asteroids.erase(asteroids.begin() + i);
+  }
+}
+
+void World::partByDist()
+{
+  for(int i = 0; i < (int)asteroids.size(); ++i)
+    if(fabs(asteroids[i].pos.length() - WORLDRADIUS*ASPHERERADIUS) < 0.05)
+      a_ColIndices.push_back(i);
+  a_ColIndices.sort();
+  a_ColIndices.unique();
 }

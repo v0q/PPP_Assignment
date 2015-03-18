@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Camera.h"
+#include "Player.h"
 #include "World.h"
 
 class SDL_GL

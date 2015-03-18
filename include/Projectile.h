@@ -15,7 +15,7 @@ class Projectile
                pos(_px, _py, _pz),
                up(_u), left(_l),
                normal(_nx, _ny, _nz),
-               dir(_d), life(35){}
+               dir(_d), life(35) {}
     ~Projectile() {}
     Vec4 pos, up, left, normal;
     float dir;

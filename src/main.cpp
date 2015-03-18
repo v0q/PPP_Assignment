@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "World.h"
 #include "Player.h"
+#include "Asteroids.h"
+#include "frames.h"
 
 int main()
 {
@@ -18,9 +20,12 @@ int main()
   sdlgl.enableLighting();
   glClearColor (0.4, 0.4, 0.4, 0.4);
 
+  std::srand(time(NULL));
+
   while(sdlgl.isActive())
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    frameStart();
 
     cam.updateCamera();
 
@@ -28,8 +33,11 @@ int main()
 
     world.drawStars((cam.eye-cam.look));
     world.drawWorld();
-    player.drawPlayer();
 
+    player.drawPlayer();
+    player.checkCollisions(world.asteroids, world.a_ColIndices);
+
+    frameEnd(GLUT_BITMAP_HELVETICA_18, 1.0, 1.0, 1.0, 0.05, 0.95);
     SDL_GL_SwapWindow(sdlgl.win);
   }
 

@@ -24,9 +24,10 @@ void Player::drawPlayer()
     glEnd();
 
     glRotatef(rot, 0, 0, 1);
+    glRotatef(turn, 0, 1, 0);
 
     glColor3f(1.0f, 0.0, 0.0f);
-    cube();
+    glCallLists(m_displayList.size(), GL_UNSIGNED_INT, &m_displayList[0]);
 }
 
 void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
@@ -48,6 +49,8 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
   float xDest, xMove;
   float yDest, yMove;
 
+  turn = 0;
+
   // Using the cross product we calculate the new up and side vectors for the camera
   // to control the correct movement of the camera and the player
   _cam.eye.normalize();
@@ -57,7 +60,6 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
   _cam.up = _cam.w.cross(_cam.eye);
   _cam.w.normalize();
   _cam.up.normalize();
-
 
   /*
    * Handle keyboard direction (trying to imitate controller stick coordinates
@@ -156,6 +158,8 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
       aStep = fabs(distance);
     rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
           ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
+    turn = ((distance > 0 && distance <= 180) || distance < -180 ? 35 :
+          ((distance >= -180 && distance < 0) || distance > 180 ? -35 : 0));
   }
 
   wrapRotation(rot);
@@ -206,9 +210,9 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
     n.m_y * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov * _l.m_y * PLAYERWIDTH/0.5f - yMov * _u.m_y * PLAYERHEIGHT/0.5f,
     n.m_z * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov * _l.m_z * PLAYERWIDTH/0.5f - yMov * _u.m_z * PLAYERHEIGHT/0.5f,
      */
-    p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
-                           n.m_y * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
-                           n.m_z * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
+    p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
+                           n.m_y * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
+                           n.m_z * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
                            _u, _l,
                            n.m_x, n.m_y, n.m_z,
                            aimDir));
@@ -252,72 +256,86 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
   glEnd();
 }
 
-void Player::cube()
+void Player::ship()
 {
-  float r = PLAYERWIDTH;
+  //float r = PLAYERWIDTH;
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
 
-  glBegin(GL_TRIANGLES);
-    norm.normalGL();
-    // Side 1
-    glVertex3f(r, r, r/2);
-    glVertex3f(-r, r, r/2);
-    glVertex3f(r, -r, r/2);
+    glBegin(GL_LINE_STRIP);
+      glColor3f(1,0,0);
+      glVertex3f(0,0,0);
+      glVertex3f(0,1,0);
+    glEnd();
 
-    glVertex3f(-r, r, r/2);
-    glVertex3f(r, -r, r/2);
-    glVertex3f(-r, -r, r/2);
+    glRotatef(-90, 1, 0, 0);
+    glScalef(0.007, 0.007, 0.007);
 
-    // Side 2
-    glVertex3f(r, r, -r/2);
-    glVertex3f(-r, r, -r/2);
-    glVertex3f(r, -r, -r/2);
+    glBegin(GL_TRIANGLES);
+      for(int i = 0; i < (int)mInd.size(); ++i)
+      {
+        mNorms[mInd[i] - 1].normalGL();
+        mVerts[mInd[i] - 1].vertexGL();
+      }
+      /*norm.normalGL();
+      // Side 1
+      glVertex3f(r, r, r/2);
+      glVertex3f(-r, r, r/2);
+      glVertex3f(r, -r, r/2);
 
-    glVertex3f(-r, r, -r/2);
-    glVertex3f(r, -r, -r/2);
-    glVertex3f(-r, -r, -r/2);
+      glVertex3f(-r, r, r/2);
+      glVertex3f(r, -r, r/2);
+      glVertex3f(-r, -r, r/2);
 
-    // Side 3
-    glVertex3f(-r, r, -r/2);
-    glVertex3f(-r, r, r/2);
-    glVertex3f(-r, -r, -r/2);
+      // Side 2
+      glVertex3f(r, r, -r/2);
+      glVertex3f(-r, r, -r/2);
+      glVertex3f(r, -r, -r/2);
 
-    glVertex3f(-r, r, r/2);
-    glVertex3f(-r, -r, -r/2);
-    glVertex3f(-r, -r, r/2);
+      glVertex3f(-r, r, -r/2);
+      glVertex3f(r, -r, -r/2);
+      glVertex3f(-r, -r, -r/2);
 
-    // Side 4
-    glVertex3f(r, r, -r/2);
-    glVertex3f(r, r, r/2);
-    glVertex3f(r, -r, -r/2);
+      // Side 3
+      glVertex3f(-r, r, -r/2);
+      glVertex3f(-r, r, r/2);
+      glVertex3f(-r, -r, -r/2);
 
-    glVertex3f(r, r, r/2);
-    glVertex3f(r, -r, -r/2);
-    glVertex3f(r, -r, r/2);
+      glVertex3f(-r, r, r/2);
+      glVertex3f(-r, -r, -r/2);
+      glVertex3f(-r, -r, r/2);
 
-    // Side 5
-    glVertex3f(-r, r, -r/2);
-    glVertex3f(-r, r, r/2);
-    glVertex3f(r, r, -r/2);
+      // Side 4
+      glVertex3f(r, r, -r/2);
+      glVertex3f(r, r, r/2);
+      glVertex3f(r, -r, -r/2);
 
-    glVertex3f(-r, r, r/2);
-    glVertex3f(r, r, -r/2);
-    glVertex3f(r, r, r/2);
+      glVertex3f(r, r, r/2);
+      glVertex3f(r, -r, -r/2);
+      glVertex3f(r, -r, r/2);
 
-    // Side 6
-    glVertex3f(-r, -r, -r/2);
-    glVertex3f(-r, -r, r/2);
-    glVertex3f(r, -r, -r/2);
+      // Side 5
+      glVertex3f(-r, r, -r/2);
+      glVertex3f(-r, r, r/2);
+      glVertex3f(r, r, -r/2);
 
-    glVertex3f(-r, -r, r/2);
-    glVertex3f(r, -r, -r/2);
-    glVertex3f(r, -r, r/2);
+      glVertex3f(-r, r, r/2);
+      glVertex3f(r, r, -r/2);
+      glVertex3f(r, r, r/2);
 
-  glEnd();
-  glBegin(GL_LINE_STRIP);
-    glColor3f(1,0,0);
-    glVertex3f(0,0,0);
-    glVertex3f(0,1,0);
-  glEnd();
+      // Side 6
+      glVertex3f(-r, -r, -r/2);
+      glVertex3f(-r, -r, r/2);
+      glVertex3f(r, -r, -r/2);
+
+      glVertex3f(-r, -r, r/2);
+      glVertex3f(r, -r, -r/2);
+      glVertex3f(r, -r, r/2);*/
+
+    glEnd();
+
+  glEndList();
+  m_displayList.push_back(id);
 }
 
 void Player::wrapRotation(float &io_a)
@@ -326,4 +344,23 @@ void Player::wrapRotation(float &io_a)
     io_a = 360 - fabs(fmod(io_a, 360));
   else
     io_a = fmod(io_a, 360);
+}
+
+void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aInd)
+{
+  float dist;
+  auto it = io_aInd.begin();
+
+  for(it; it != io_aInd.end(); ++it)
+  {
+    for(int i = 0; i < (int)p.size(); ++i)
+    {
+      dist = sqrt(
+            (io_a[*it].pos.m_x - p[i].pos.m_x)*(io_a[*it].pos.m_x - p[i].pos.m_x) +
+            (io_a[*it].pos.m_y - p[i].pos.m_y)*(io_a[*it].pos.m_y - p[i].pos.m_y) +
+            (io_a[*it].pos.m_z - p[i].pos.m_z)*(io_a[*it].pos.m_z - p[i].pos.m_z));
+      if(dist < 0.2)
+        io_a[*it].life = 0;
+    }
+  }
 }

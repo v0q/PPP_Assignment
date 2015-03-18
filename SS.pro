@@ -20,9 +20,11 @@ INCLUDEPATH += ./include
 INCLUDEPATH += /usr/local/include
 
 QMAKE_CXXFLAGS += $$system(sdl2-config  --cflags)
+QMAKE_CXXFLAGS += -std=c++11
 
 LIBS += $$system(sdl2-config  --libs)
 LIBS += -L/usr/local/lib
 
-macx:LIBS+= -framework OpenGL
-macx:DEFINES+=DARWIN
+macx:LIBS += -framework OpenGL
+macx:LIBS += -framework glut
+macx:DEFINES +=DARWIN
