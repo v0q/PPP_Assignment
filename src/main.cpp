@@ -34,10 +34,13 @@ int main()
     world.drawStars((cam.eye-cam.look));
     world.drawWorld();
 
-    player.drawPlayer();
-    player.checkCollisions(world.asteroids, world.a_ColIndices);
+    if(player.isAlive())
+    {
+      player.drawPlayer();
+      player.checkCollisions(world.asteroids, world.a_ColIndices);
+    }
 
-    frameEnd(GLUT_BITMAP_HELVETICA_18, 1.0, 1.0, 1.0, 0.05, 0.95);
+    frameEnd(GLUT_BITMAP_HELVETICA_18, 1.0, 1.0, 1.0, 0.05, 0.95, player.score);
     SDL_GL_SwapWindow(sdlgl.win);
   }
 

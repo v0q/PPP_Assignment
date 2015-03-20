@@ -80,6 +80,7 @@ SDL_GLContext SDL_GL::createOpenGLContext()
 
 void SDL_GL::enableLighting() const
 {
+  glEnable(GL_TEXTURE_2D);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -136,5 +137,6 @@ void SDL_GL::handleInput(Player &io_p, Camera &_cam)
     } // end of event switch
   } // end of poll events
 
-  io_p.handleMovement(controller, _cam);
+  if(io_p.isAlive())
+    io_p.handleMovement(controller, _cam);
 }

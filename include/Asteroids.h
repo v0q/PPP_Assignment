@@ -8,11 +8,12 @@ class Asteroid
 {
   public:
     Asteroid(Vec4 &_p, Vec4 &_d,
-             float _s, float _sp) :
+             float _s, float _sp,
+             float _l) :
              pos(_p),
              dir(_d),
              size(_s), speed(_sp),
-             rot(0.0), life(100) {}
+             rot(0.0), life(_l) {}
     ~Asteroid() {}
 
     Vec4 pos, dir;

@@ -62,7 +62,7 @@ void frameStart(void) {
 }
 
 void frameEnd(void *font, GLclampf r, GLclampf g, GLclampf b,
-              GLfloat x, GLfloat y) {
+              GLfloat x, GLfloat y, int _s) {
   /* font: font to use, e.g., GLUT_BITMAP_HELVETICA_10
      r, g, b: text colour
      x, y: text position in window: range [0,0] (bottom left of window)
@@ -86,7 +86,7 @@ void frameEnd(void *font, GLclampf r, GLclampf g, GLclampf b,
     elapsedTime = frameEndTime.tv_sec - frameStartTime.tv_sec +
                ((frameEndTime.tv_usec - frameStartTime.tv_usec)/1.0E6);
   }
-  sprintf(str, "%2.01ffps", 1.0/elapsedTime);
+  sprintf(str, "Score: %d - %2.01ffps", _s, 1.0/elapsedTime);
 
  lightingOn = glIsEnabled(GL_LIGHTING);        /* lighting on? */
  if (lightingOn) glDisable(GL_LIGHTING);

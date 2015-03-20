@@ -1,12 +1,20 @@
 #include <OpenGl/gl.h>
 #include <iostream>
+#include <ctime>
 
 #include "Defs.h"
-#include "NCCA/GLFunctions.h"
 #include "Camera.h"
 #include "Player.h"
 #include "World.h"
-#include <ctime>
+#include "NCCA/GLFunctions.h"
+
+bool Player::isAlive()
+{
+  if(life > 0)
+    return true;
+  else
+    return false;
+}
 
 void Player::drawPlayer()
 {
@@ -158,8 +166,8 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
       aStep = fabs(distance);
     rot = ((distance > 0 && distance <= 180) || distance < -180 ? rot + aStep :
           ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
-    turn = ((distance > 0 && distance <= 180) || distance < -180 ? 35 :
-          ((distance >= -180 && distance < 0) || distance > 180 ? -35 : 0));
+    turn = ((distance > 0 && distance <= 180) || distance < -180 ? -25 :
+          ((distance >= -180 && distance < 0) || distance > 180 ? 25 : 0));
   }
 
   wrapRotation(rot);
@@ -204,12 +212,7 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
 
     // Create new projectiles when the player's shooting
     // As the player's movement is done with glTranslate we have to add the x and y movement to the coordinates along the left/up vectors
-    // Also we're substracting the player's width/height to have the projectile in the correct position
-    /*
-    n.m_x * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov * _l.m_x * PLAYERWIDTH/0.5f - yMov * _u.m_x * PLAYERHEIGHT/0.5f,
-    n.m_y * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov * _l.m_y * PLAYERWIDTH/0.5f - yMov * _u.m_y * PLAYERHEIGHT/0.5f,
-    n.m_z * (WORLDRADIUS + PLAYEROFFSET) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov * _l.m_z * PLAYERWIDTH/0.5f - yMov * _u.m_z * PLAYERHEIGHT/0.5f,
-     */
+    // Also adds a little "correction" to balance the offset presented by the movement speed
     p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
                            n.m_y * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
                            n.m_z * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
@@ -223,8 +226,31 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
   {
     if(p[i].life > 0)
     {
+      // Calculate multipliers for the left and the up vectors
+      // i.e. how much to move on each vector in each frame
       float lMul = PROJECTILESPEED * cosf(p[i].dir);
       float uMul = PROJECTILESPEED * sinf(p[i].dir);
+      Vec4 toAtm(0, 0, 0);
+
+      // Check if the projectile has reached the atmosphere,
+      // if so we'll calculte new up/left vectors for it to
+      // bend around the atmosphere
+      if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
+      {
+        p[i].pos.normalize();
+        p[i].left = p[i].pos;
+        p[i].left = p[i].left.cross(p[i].up);
+        p[i].left.normalize();
+        p[i].pos *= WORLDRADIUS*ASPHERERADIUS;
+      }
+      else
+      {
+        // While the projectles are under the atmosphere we
+        // move them upwards more rapidly
+        toAtm.m_x = PROJECTILESPEED*p[i].normal.m_x;
+        toAtm.m_y = PROJECTILESPEED*p[i].normal.m_y,
+        toAtm.m_z = PROJECTILESPEED*p[i].normal.m_z;
+      }
 
       p[i].pos.m_x -= lMul * p[i].left.m_x;
       p[i].pos.m_y -= lMul * p[i].left.m_y;
@@ -234,16 +260,7 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
       p[i].pos.m_y += uMul * p[i].up.m_y;
       p[i].pos.m_z += uMul * p[i].up.m_z;
 
-      if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
-      {
-        p[i].pos.normalize();
-        p[i].left = p[i].pos;
-        p[i].left = p[i].left.cross(p[i].up);
-        p[i].up = p[i].left.cross(p[i].pos);
-        p[i].left.normalize();
-        p[i].up.normalize();
-        p[i].pos *= WORLDRADIUS*ASPHERERADIUS;
-      }
+      p[i].pos += toAtm;
 
       glColor3f(1, 0, 0);
       p[i].normal.normalGL();
@@ -268,8 +285,8 @@ void Player::ship()
       glVertex3f(0,1,0);
     glEnd();
 
-    glRotatef(-90, 1, 0, 0);
-    glScalef(0.007, 0.007, 0.007);
+    glRotatef(90, 1, 0, 0);
+    glScalef(0.02, 0.02, 0.02);
 
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)mInd.size(); ++i)
@@ -349,18 +366,26 @@ void Player::wrapRotation(float &io_a)
 void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aInd)
 {
   float dist;
+  Vec4 paDist = pos + Vec4(orientation.m_00*xMov + orientation.m_01*yMov,
+                           orientation.m_10*xMov + orientation.m_11*yMov,
+                           orientation.m_20*xMov + orientation.m_21*yMov);
+  paDist.normalize();
+  paDist *= WORLDRADIUS+PLAYEROFFSET;
   auto it = io_aInd.begin();
 
   for(it; it != io_aInd.end(); ++it)
   {
     for(int i = 0; i < (int)p.size(); ++i)
     {
-      dist = sqrt(
-            (io_a[*it].pos.m_x - p[i].pos.m_x)*(io_a[*it].pos.m_x - p[i].pos.m_x) +
-            (io_a[*it].pos.m_y - p[i].pos.m_y)*(io_a[*it].pos.m_y - p[i].pos.m_y) +
-            (io_a[*it].pos.m_z - p[i].pos.m_z)*(io_a[*it].pos.m_z - p[i].pos.m_z));
+      dist = (io_a[*it].pos - p[i].pos).length();
       if(dist < 0.2)
-        io_a[*it].life = 0;
+      {
+        io_a[*it].life -= 5;
+        ++score;
+      }
     }
+
+    if((io_a[*it].pos - paDist).length() + 0.15 <= WORLDRADIUS*ASPHERERADIUS - WORLDRADIUS + PLAYEROFFSET)
+      life -= 20;
   }
 }

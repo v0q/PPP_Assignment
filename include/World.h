@@ -5,22 +5,25 @@
 #include <list>
 #include <string>
 #include <cmath>
+#include <OpenGL/gl.h>
 
 #include "NCCA/Vec4.h"
 #include "Asteroids.h"
 
-#define SKYBOXRADIUS 45
+#define SKYBOXRADIUS 15
 
 class World
 {
   public:
-    World() : max_asteroids(175) { planet(); atmosphere(); skybox(); }
+    World() : max_asteroids(500) { planet(); atmosphere(); skybox(); }
     ~World() { stars.clear();
                std::vector<Vec4>().swap(stars);
                w_displayList.clear();
                std::vector<GLuint>().swap(w_displayList);
                asteroids.clear();
-               std::vector<Asteroid>().swap(asteroids); }
+               std::vector<Asteroid>().swap(asteroids);
+               a_ColIndices.clear();
+               std::list<int>().swap(a_ColIndices); }
     void initStars(int _a);
     void drawStars(Vec4 _c) const;
     void drawWorld();
@@ -41,7 +44,6 @@ class World
     std::vector<Vec4> stars;
     std::vector<GLuint> w_displayList;
     int max_asteroids;
-
 };
 
 #endif

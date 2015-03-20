@@ -20,7 +20,7 @@ const int sensitivity = 6000;
 class Player
 {
   public:
-    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : pos(_x, _y, _z, 1.0f) { loadModel("models/ss.obj", mVerts, mNorms, mInd); ship(); }
+    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", mVerts, mNorms, mInd); ship(); }
     ~Player() { p.clear();
                 std::vector<Projectile>().swap(p);
                 mVerts.clear();
@@ -30,9 +30,12 @@ class Player
                 mInd.clear();
                 std::vector<int>().swap(mInd); }
 
+    bool isAlive();
     void drawPlayer();
     void handleMovement(SDL_GameController *_c, Camera &_cam);
     void checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aInd);
+
+    int score;
 
   private:
     void ship();
@@ -49,6 +52,7 @@ class Player
     float aimDir;
     float rot, turn;
     float xMov, yMov;
+    int life;
 };
 
 #endif

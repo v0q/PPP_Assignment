@@ -5,6 +5,7 @@
 #include "Defs.h"
 #include "World.h"
 #include "Icosahedron.h"
+#include "TextureOBJ.h"
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
@@ -19,7 +20,6 @@ void World::planet()
 {
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
-
     glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
       glColor3f(1.0, 1.0, 1.0);
       tSphere(3, 1);
@@ -51,9 +51,13 @@ void World::skybox()
   glNewList(id, GL_COMPILE);
 
     glScalef(SKYBOXRADIUS, SKYBOXRADIUS, SKYBOXRADIUS);
+
+      loadTexture("textures/skybox2.png");
+
       glColor3f(0.4, 0.4, 0.4);
       tSphere(3, -1);
 
+      glBindTexture(GL_TEXTURE_2D, 0);
   glEndList();
   w_displayList.push_back(id);
 }
@@ -91,14 +95,29 @@ void World::subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d, int _ndir) const
 void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
 {
   Vec4 normal;
+  float u, v;
   normal = (_a + _b + _c) * _ndir;
   normal.normalize();
 
   glBegin(GL_TRIANGLES);
     normal.normalGL();
 
+    u = ((atan2(_a.m_x, _a.m_z) / PI) + 1.0f) * 0.5f;
+    v = (asin(_a.m_y) / PI) + 0.5f;
+
+    glTexCoord2f(u, v);
     _a.vertexGL();
+
+    u = ((atan2(_b.m_x, _b.m_z) / PI) + 1.0f) * 0.5f;
+    v = (asin(_b.m_y) / PI) + 0.5f;
+
+    glTexCoord2f(u, v);
     _b.vertexGL();
+
+    u = ((atan2(_c.m_x, _c.m_z) / PI) + 1.0f) * 0.5f;
+    v = (asin(_c.m_y) / PI) + 0.5f;
+
+    glTexCoord2f(u, v);
     _c.vertexGL();
   glEnd();
 }
@@ -144,7 +163,7 @@ void World::drawStars(Vec4 _c) const
 
 void World::generate_Asteroids()
 {
-  if(std::rand()/(float)RAND_MAX > 0.85 && (int)asteroids.size() < max_asteroids)
+  if(std::rand()/(float)RAND_MAX > 0.95 && (int)asteroids.size() < max_asteroids)
   {
     Vec4 aPos(std::rand()/(float)RAND_MAX * 2 - 1, std::rand()/(float)RAND_MAX  * 2 - 1, std::rand()/(float)RAND_MAX  * 2 - 1);
     aPos.normalize();
@@ -152,9 +171,10 @@ void World::generate_Asteroids()
     Vec4 aDir = aPos * - 1;
 
     aPos *= SKYBOXRADIUS;
+    float size = fmod(std::rand(), 5.0) + 1.0f;
     asteroids.push_back(Asteroid(aPos, aDir,
-                                 fmod(std::rand(), 5.0) + 1.0f,
-                                 fmod(std::rand(), 0.035) + 0.015f));
+                                 size, fmod(std::rand(), 0.035) + 0.015f,
+                                 size*100/6.0));
   }
 
   for(int i = 0; i < (int)asteroids.size(); ++i)
