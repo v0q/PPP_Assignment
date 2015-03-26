@@ -29,8 +29,6 @@ int main()
 
     cam.updateCamera();
 
-    sdlgl.handleInput(player, cam);
-
     world.drawStars((cam.eye-cam.look));
     world.drawWorld();
 
@@ -39,6 +37,8 @@ int main()
       player.drawPlayer();
       player.checkCollisions(world.asteroids, world.a_ColIndices);
     }
+
+    sdlgl.handleInput(player, cam);
 
     frameEnd(GLUT_BITMAP_HELVETICA_18, 1.0, 1.0, 1.0, 0.05, 0.95, player.score);
     SDL_GL_SwapWindow(sdlgl.win);

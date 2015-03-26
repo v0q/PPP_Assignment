@@ -1,6 +1,9 @@
 #ifndef PROJECTILE_H__
 #define PROJECTILE_H__
 
+#include <vector>
+
+#include "LoadOBJ.h"
 #include "NCCA/Vec4.h"
 
 #define PROJECTILESPEED 0.1
@@ -9,19 +12,26 @@ class Projectile
 {
   public:
     Projectile(float _px, float _py, float _pz,
-               Vec4 &_u, Vec4 &_l,
+               Vec4 _u, Vec4 _l,
                float _nx, float _ny, float _nz,
                float _d) :
                pos(_px, _py, _pz),
                up(_u), left(_l),
                normal(_nx, _ny, _nz),
-               dir(_d), life(35) {}
+               dir(_d), life(35) { loadModel("models/projectile.obj", mVerts, mNorms, mText, mInd);}
     ~Projectile() {}
+    void drawProjectile();
+    void cube();
+
     Vec4 pos, up, left, normal;
     float dir;
     int life;
 
   private:
+    std::vector<Vec4> mVerts;
+    std::vector<Vec4> mNorms;
+    std::vector<Vec4> mText;
+    std::vector<int> mInd;
 };
 
 #endif

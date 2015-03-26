@@ -24,6 +24,12 @@ class Vec4
     float lengthSquared() const;
     // Set the current Vec4 as the call to glNormal3fv(x,y,z)
     void normalGL();
+    // Set the current Vec4 as the call to glNormal3fv(-x,-y,-z)
+    void normalInvGL();
+    // Set the current Vec4 as the call to glTexCoord2f(x, y);
+    void textureGL();
+    // Call glVertex3f with components
+    void vertexGL();
     // Normalize this vector
     void normalize();
 
@@ -50,8 +56,7 @@ class Vec4
     float & operator [](int _i);
     // Set components
     void set(float _x, float _y, float _z, float _w = 1.0f);
-    // Call glVertex3f with components
-    void vertexGL();
+
 
     //static Vec4 sphericalCoords(float &_i, float &_j, float _offset);
 

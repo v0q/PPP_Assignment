@@ -9,6 +9,38 @@
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
+World::~World()
+{
+  stars.clear();
+  std::vector<Vec4>().swap(stars);
+  w_displayList.clear();
+  std::vector<GLuint>().swap(w_displayList);
+  asteroids.clear();
+  std::vector<Asteroid>().swap(asteroids);
+  a_ColIndices.clear();
+  std::list<int>().swap(a_ColIndices);
+
+  //Clear skybox model related stuff
+  skybox_Verts.clear();
+  std::vector<Vec4>().swap(skybox_Verts);
+  skybox_Norms.clear();
+  std::vector<Vec4>().swap(skybox_Norms);
+  skybox_Text.clear();
+  std::vector<Vec4>().swap(skybox_Text);
+  skybox_Ind.clear();
+  std::vector<int>().swap(skybox_Ind);
+
+  //Clear planet model related stuff
+  planet_Verts.clear();
+  std::vector<Vec4>().swap(planet_Verts);
+  planet_Norms.clear();
+  std::vector<Vec4>().swap(planet_Norms);
+  planet_Text.clear();
+  std::vector<Vec4>().swap(planet_Text);
+  planet_Ind.clear();
+  std::vector<int>().swap(planet_Ind);
+}
+
 void World::drawWorld()
 {
   generate_Asteroids();
@@ -21,8 +53,30 @@ void World::planet()
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
     glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
-      glColor3f(1.0, 1.0, 1.0);
-      tSphere(3, 1);
+
+    glBegin(GL_TRIANGLES);
+      glColor3f(0.906, 0.702, 0.471);
+      for(int i = 0; i < (int)planet_Ind.size(); i += 9)
+      {
+        // We're only using 1 normal for each face to achieve flat shading
+        planet_Norms[planet_Ind[i + 2] - 1].normalGL();
+        planet_Text[planet_Ind[i + 1] - 1].textureGL();
+        planet_Verts[planet_Ind[i] - 1].vertexGL();
+
+        planet_Text[planet_Ind[i + 4] - 1].textureGL();
+        planet_Verts[planet_Ind[i + 3] - 1].vertexGL();
+
+        planet_Text[planet_Ind[i + 7] - 1].textureGL();
+        planet_Verts[planet_Ind[i + 6] - 1].vertexGL();
+      }
+
+    glEnd();
+
+    glScalef(0.9, 0.9, 0.9);
+    glColor4f(0.114, 0.431, 0.506, 0.6);
+    glBegin(GL_TRIANGLES);
+      tSphere(2, 1);
+    glEnd();
 
   glEndList();
   w_displayList.push_back(id);
@@ -34,10 +88,15 @@ void World::atmosphere()
   glNewList(id, GL_COMPILE);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glColor4f(0.114, 0.431, 0.506, 0.3);
 
-      glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
+    glColor4f(0.114, 0.431, 0.506, 0.3);
+    glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
+
+    glBegin(GL_TRIANGLES);
+
         tSphere(4, 1);
+
+    glEnd();
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -47,17 +106,43 @@ void World::atmosphere()
 
 void World::skybox()
 {
+  GLubyte *data = NULL;
+  GLuint w, h;
+  data = loadTexture("textures/sb_cube.png", w, h);
+
+  glGenTextures(1, &skyBoxTexId);
+  glBindTexture(GL_TEXTURE_2D, skyBoxTexId);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+  free(data);
+
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
+    // Scale the skybox to the set radius
     glScalef(SKYBOXRADIUS, SKYBOXRADIUS, SKYBOXRADIUS);
 
-      loadTexture("textures/skybox2.png");
+    // We need to bind the texture inside the list so that the texture is rendered
+    // whenever the list is called.
+    glBindTexture(GL_TEXTURE_2D, skyBoxTexId);
+    glBegin(GL_TRIANGLES);
 
-      glColor3f(0.4, 0.4, 0.4);
-      tSphere(3, -1);
+      // Set the skybox to be "fully colored" and draw get the triangles of the loaded mesh
+      glColor4f(1, 1, 1, 1);
+      for(int i = 0; i < (int)skybox_Ind.size(); i += 3)
+      {
+        skybox_Norms[skybox_Ind[i + 2] - 1].normalInvGL();
+        skybox_Text[skybox_Ind[i + 1] - 1].textureGL();
+        skybox_Verts[skybox_Ind[i] - 1].vertexGL();
+      }
 
-      glBindTexture(GL_TEXTURE_2D, 0);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
   glEndList();
   w_displayList.push_back(id);
 }
@@ -99,27 +184,29 @@ void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
   normal = (_a + _b + _c) * _ndir;
   normal.normalize();
 
-  glBegin(GL_TRIANGLES);
-    normal.normalGL();
+  normal.normalGL();
 
-    u = ((atan2(_a.m_x, _a.m_z) / PI) + 1.0f) * 0.5f;
-    v = (asin(_a.m_y) / PI) + 0.5f;
+  /*u = ((atan2(_a.m_x, _a.m_z) / PI) + 1.0f) * 0.5f;
+  v = (asin(_a.m_y) / PI) + 0.5f;*/
+  u = asin(_a.m_x)/PI + 0.5;
+  v = asin(_a.m_y)/PI + 0.5;
 
-    glTexCoord2f(u, v);
-    _a.vertexGL();
+  glTexCoord2f(u, v);
+  _a.vertexGL();
 
-    u = ((atan2(_b.m_x, _b.m_z) / PI) + 1.0f) * 0.5f;
-    v = (asin(_b.m_y) / PI) + 0.5f;
+  u = ((atan2(_b.m_x, _b.m_z) / PI) + 1.0f) * 0.5f;
+  v = (asin(_b.m_y) / PI) + 0.5f;
 
-    glTexCoord2f(u, v);
-    _b.vertexGL();
+  glTexCoord2f(u, v);
+  _b.vertexGL();
 
-    u = ((atan2(_c.m_x, _c.m_z) / PI) + 1.0f) * 0.5f;
-    v = (asin(_c.m_y) / PI) + 0.5f;
+  /*u = ((atan2(_c.m_x, _c.m_z) / PI) + 1.0f) * 0.5f;
+  v = (asin(_c.m_y) / PI) + 0.5f;*/
+  u = asin(_c.m_x)/PI + 0.5;
+  v = asin(_c.m_y)/PI + 0.5;
 
-    glTexCoord2f(u, v);
-    _c.vertexGL();
-  glEnd();
+  glTexCoord2f(u, v);
+  _c.vertexGL();
 }
 
 void World::tSphere(int _d, int _ndir) const
@@ -169,10 +256,20 @@ void World::generate_Asteroids()
     aPos.normalize();
 
     Vec4 aDir = aPos * - 1;
+    Vec4 aSide(std::rand()/(float)RAND_MAX,
+              std::rand()/(float)RAND_MAX,
+              0);
+
+    if(fabs(aPos.m_z) > 0.001)
+      aSide.m_z = -(aSide.m_x*aPos.m_x + aSide.m_y*aPos.m_y) / aPos.m_z;
+
+    Vec4 aUp;
+    aUp = aSide.cross(aPos);
 
     aPos *= SKYBOXRADIUS;
     float size = fmod(std::rand(), 5.0) + 1.0f;
     asteroids.push_back(Asteroid(aPos, aDir,
+                                 aUp, aSide,
                                  size, fmod(std::rand(), 0.035) + 0.015f,
                                  size*100/6.0));
   }

@@ -1,6 +1,7 @@
 #ifndef PLAYER_H__
 #define PLAYER_H__
 
+#include <OpenGL/gl.h>
 #include <SDL.h>
 #include <vector>
 #include <list>
@@ -20,13 +21,15 @@ const int sensitivity = 6000;
 class Player
 {
   public:
-    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", mVerts, mNorms, mInd); ship(); }
+    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", mVerts, mNorms, mText, mInd); ship(); }
     ~Player() { p.clear();
                 std::vector<Projectile>().swap(p);
                 mVerts.clear();
                 std::vector<Vec4>().swap(mVerts);
                 mNorms.clear();
                 std::vector<Vec4>().swap(mNorms);
+                mText.clear();
+                std::vector<Vec4>().swap(mText);
                 mInd.clear();
                 std::vector<int>().swap(mInd); }
 
@@ -40,12 +43,13 @@ class Player
   private:
     void ship();
     void wrapRotation(float &io_a);
-    void shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l);
+    void shoot(SDL_GameController *_c);
 
     Vec4 pos, norm;
     Mat4 orientation;
     std::vector<Vec4> mVerts;
     std::vector<Vec4> mNorms;
+    std::vector<Vec4> mText;
     std::vector<int> mInd;
     std::vector<Projectile> p;
     std::vector<GLuint> m_displayList;
@@ -53,6 +57,7 @@ class Player
     float rot, turn;
     float xMov, yMov;
     int life;
+    GLuint id;
 };
 
 #endif

@@ -2,7 +2,8 @@
 #define TEXTUREOBJ_H__
 
 #include <iostream>
+#include <OpenGL/gl.h>
 
-void loadTexture(const std::string &_n);
+GLubyte *loadTexture(const std::string &_n, GLuint &_w, GLuint &_h);
 
 #endif

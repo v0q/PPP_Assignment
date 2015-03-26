@@ -1,10 +1,9 @@
-#include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <fstream>
 #include <png.h>
 #include "TextureOBJ.h"
 
-void loadTexture(const std::string &_n)
+GLubyte *loadTexture(const std::string &_n, GLuint &_w, GLuint &_h)
 {
   /*
   This little "snippet" by Morten Nobel:
@@ -15,14 +14,12 @@ void loadTexture(const std::string &_n)
   unsigned int sig_read = 0;
   int color_type, interlace_type;
   FILE *fp;
-
-  GLuint width, height;
   GLubyte *data;
 
-  if ((fp = std::fopen(_n.c_str(), "rb")) == NULL)
+  if((fp = std::fopen(_n.c_str(), "rb")) == NULL)
   {
     std::cerr << "Could not load " << _n << "\n";
-    return;
+    return NULL;
   }
 
   /* Create and initialize the png_struct
@@ -41,7 +38,7 @@ void loadTexture(const std::string &_n)
 
   if (png_ptr == NULL) {
     fclose(fp);
-    return;
+    return NULL;
   }
 
   /* Allocate/initialize the memory
@@ -50,7 +47,7 @@ void loadTexture(const std::string &_n)
   if (info_ptr == NULL) {
     fclose(fp);
     png_destroy_read_struct(&png_ptr, NULL, NULL);
-    return;
+    return NULL;
   }
 
   /* Set error handling if you are
@@ -69,7 +66,7 @@ void loadTexture(const std::string &_n)
       fclose(fp);
       /* If we get here, we had a
        * problem reading the file */
-      return;
+      return NULL;
   }
 
   /* Set up the output control if
@@ -102,19 +99,19 @@ void loadTexture(const std::string &_n)
   png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
 
   int bit_depth;
-  png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type,
+  png_get_IHDR(png_ptr, info_ptr, &_w, &_h, &bit_depth, &color_type,
                &interlace_type, NULL, NULL);
 
   unsigned int row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-  data = (GLubyte *) malloc(row_bytes * height);
+  data = (GLubyte *) malloc(row_bytes * _h);
 
   png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
 
-  for (int i = 0; i < height; i++) {
+  for (int i = 0; i < (int)_h; i++) {
       // note that png is ordered top to
       // bottom, but OpenGL expect it bottom to top
       // so the order or swapped
-      memcpy(data + (row_bytes * (height-1-i)), row_pointers[i], row_bytes);
+      memcpy(data + (row_bytes * (_h-1-i)), row_pointers[i], row_bytes);
   }
 
   /* Clean up after the read,
@@ -123,14 +120,5 @@ void loadTexture(const std::string &_n)
 
   /* Close the file */
   fclose(fp);
-
-  GLuint texId;
-  glGenTextures(1, &texId);
-  glBindTexture(GL_TEXTURE_2D, texId);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-  free(data);
+  return data;
 }

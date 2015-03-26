@@ -78,18 +78,24 @@ void Asteroid::draw()
 
 void Asteroid::move()
 {
-  if(pos.length() > WORLDRADIUS*ASPHERERADIUS)
+  if(pos.length() > WORLDRADIUS*ASPHERERADIUS && speed > 0.015f)
   {
     pos += dir*speed;
     rot += 5;
   }
-  else if(speed != 0)
-  {
-    // When the asteroid hits the atmosphere reduce the speed to 0 for now
-    speed = 0;
-    pos.normalize();
-    pos *= WORLDRADIUS*ASPHERERADIUS;
-  }
   else
+  {
+    speed = 0.01;
+
+    pos.normalize();
+    side = pos.cross(up);
+    side.normalize();
+    pos *= WORLDRADIUS*ASPHERERADIUS;
+
+    pos.m_x += speed * side.m_x;
+    pos.m_y += speed * side.m_y;
+    pos.m_z += speed * side.m_z;
+
     ++rot;
+  }
 }

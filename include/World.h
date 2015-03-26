@@ -7,23 +7,19 @@
 #include <cmath>
 #include <OpenGL/gl.h>
 
-#include "NCCA/Vec4.h"
 #include "Asteroids.h"
+#include "LoadOBJ.h"
+#include "NCCA/Vec4.h"
 
 #define SKYBOXRADIUS 15
 
 class World
 {
   public:
-    World() : max_asteroids(500) { planet(); atmosphere(); skybox(); }
-    ~World() { stars.clear();
-               std::vector<Vec4>().swap(stars);
-               w_displayList.clear();
-               std::vector<GLuint>().swap(w_displayList);
-               asteroids.clear();
-               std::vector<Asteroid>().swap(asteroids);
-               a_ColIndices.clear();
-               std::list<int>().swap(a_ColIndices); }
+    World() : max_asteroids(500) { loadModel("models/sphere.obj", skybox_Verts, skybox_Norms, skybox_Text, skybox_Ind);
+                                   loadModel("models/planet.obj", planet_Verts, planet_Norms, planet_Text, planet_Ind);
+                                   planet(); atmosphere(); skybox(); }
+    ~World();
     void initStars(int _a);
     void drawStars(Vec4 _c) const;
     void drawWorld();
@@ -41,9 +37,23 @@ class World
     void drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const;
     void partByDist();
 
+    // Skybox model
+    std::vector<Vec4> skybox_Verts;
+    std::vector<Vec4> skybox_Norms;
+    std::vector<Vec4> skybox_Text;
+    std::vector<int> skybox_Ind;
+
+    // Planet model
+    std::vector<Vec4> planet_Verts;
+    std::vector<Vec4> planet_Norms;
+    std::vector<Vec4> planet_Text;
+    std::vector<int> planet_Ind;
+
     std::vector<Vec4> stars;
     std::vector<GLuint> w_displayList;
     int max_asteroids;
+
+    GLuint skyBoxTexId;
 };
 
 #endif

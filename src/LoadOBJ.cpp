@@ -7,7 +7,7 @@
 
 void loadModel(const std::string &_n,
                std::vector <Vec4> &o_v,
-               std::vector <Vec4> &o_vn,
+               std::vector <Vec4> &o_vn, std::vector<Vec4> &o_vt,
                std::vector <int> &o_vf)
 {
   std::fstream fileIn;
@@ -41,15 +41,30 @@ void loadModel(const std::string &_n,
         Vec4 n(boost::lexical_cast<float>(*++it),
                boost::lexical_cast<float>(*++it),
                boost::lexical_cast<float>(*++it));
-        n.normalize();
         o_vn.push_back(n);
+      }
+      else if(*it == "vt")
+      {
+        Vec4 t(boost::lexical_cast<float>(*++it),
+               boost::lexical_cast<float>(*++it),
+               0);
+        o_vt.push_back(t);
       }
       else if(*it == "f")
       {
+        // First vert, textcoords & norms
         o_vf.push_back(boost::lexical_cast<int>(*++it));
-        ++(++it);
         o_vf.push_back(boost::lexical_cast<int>(*++it));
-        ++(++it);
+        o_vf.push_back(boost::lexical_cast<int>(*++it));
+
+        // Second vert, textcoords & norms
+        o_vf.push_back(boost::lexical_cast<int>(*++it));
+        o_vf.push_back(boost::lexical_cast<int>(*++it));
+        o_vf.push_back(boost::lexical_cast<int>(*++it));
+
+        // Third vert, textcoords & norms
+        o_vf.push_back(boost::lexical_cast<int>(*++it));
+        o_vf.push_back(boost::lexical_cast<int>(*++it));
         o_vf.push_back(boost::lexical_cast<int>(*++it));
       }
     }

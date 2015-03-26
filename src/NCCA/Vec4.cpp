@@ -48,9 +48,19 @@ void Vec4::normalGL()
   glNormal3f(m_x, m_y, m_z);
 }
 
+void Vec4::normalInvGL()
+{
+  glNormal3f(-m_x, -m_y, -m_z);
+}
+
 void Vec4::vertexGL()
 {
   glVertex3f(m_x, m_y, m_z);
+}
+
+void Vec4::textureGL()
+{
+  glTexCoord2f(m_x, m_y);
 }
 
 void Vec4::set(float _x, float _y, float _z, float _w)

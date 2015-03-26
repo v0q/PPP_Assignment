@@ -5,6 +5,8 @@
 #include "Defs.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Projectile.h"
+#include "TextureOBJ.h"
 #include "World.h"
 #include "NCCA/GLFunctions.h"
 
@@ -172,10 +174,10 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
 
   wrapRotation(rot);
 
-  shoot(_c, _cam.up, _cam.w);
+  shoot(_c);
 }
 
-void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
+void Player::shoot(SDL_GameController *_c)
 {
   bool shoot = false;
   float x = 0, y = 0;
@@ -213,68 +215,70 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_u, Vec4 &_l)
     // Create new projectiles when the player's shooting
     // As the player's movement is done with glTranslate we have to add the x and y movement to the coordinates along the left/up vectors
     // Also adds a little "correction" to balance the offset presented by the movement speed
-    p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
-                           n.m_y * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
-                           n.m_z * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
-                           _u, _l,
+      /*p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
+                             n.m_y * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
+                             n.m_z * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
+                             _u, _l,
+                             n.m_x, n.m_y, n.m_z,
+                             aimDir));*/
+    p.push_back(Projectile(xMov, yMov, WORLDRADIUS + PLAYEROFFSET,
+                           Vec4(0, 1, 0), Vec4(-1, 0, 0),
                            n.m_x, n.m_y, n.m_z,
                            aimDir));
   }
 
-  glBegin(GL_POINTS);
-  for(int i = 0; i < (int)p.size(); ++i)
-  {
-    if(p[i].life > 0)
-    {
-      // Calculate multipliers for the left and the up vectors
-      // i.e. how much to move on each vector in each frame
-      float lMul = PROJECTILESPEED * cosf(p[i].dir);
-      float uMul = PROJECTILESPEED * sinf(p[i].dir);
-      Vec4 toAtm(0, 0, 0);
+  glBindTexture(GL_TEXTURE_2D, id);
+  glEnable(GL_POINT_SPRITE_ARB);
 
-      // Check if the projectile has reached the atmosphere,
-      // if so we'll calculte new up/left vectors for it to
-      // bend around the atmosphere
-      if(p[i].pos.length() > WORLDRADIUS*ASPHERERADIUS)
+  glTexEnvi(GL_POINT_SPRITE_ARB, GL_COORD_REPLACE_ARB, GL_TRUE);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+  // Disable depth mask so the points above won't occlude the ones behind
+  glDepthMask(GL_FALSE);
+
+  glPushMatrix();
+    glMultMatrixf(orientation.m_openGL);
+
+    glLoadIdentity();
+    glTranslatef(0, 0, -pos.length());
+
+    glPointSize(50);
+    glBegin(GL_POINTS);
+      for(int i = 0; i < (int)p.size(); ++i)
       {
-        p[i].pos.normalize();
-        p[i].left = p[i].pos;
-        p[i].left = p[i].left.cross(p[i].up);
-        p[i].left.normalize();
-        p[i].pos *= WORLDRADIUS*ASPHERERADIUS;
+        if(p[i].life > 0)
+          p[i].drawProjectile();
+        else
+          p.erase(p.begin() + i);
       }
-      else
-      {
-        // While the projectles are under the atmosphere we
-        // move them upwards more rapidly
-        toAtm.m_x = PROJECTILESPEED*p[i].normal.m_x;
-        toAtm.m_y = PROJECTILESPEED*p[i].normal.m_y,
-        toAtm.m_z = PROJECTILESPEED*p[i].normal.m_z;
-      }
+    glEnd();
 
-      p[i].pos.m_x -= lMul * p[i].left.m_x;
-      p[i].pos.m_y -= lMul * p[i].left.m_y;
-      p[i].pos.m_z -= lMul * p[i].left.m_z;
+  glPopMatrix();
 
-      p[i].pos.m_x += uMul * p[i].up.m_x;
-      p[i].pos.m_y += uMul * p[i].up.m_y;
-      p[i].pos.m_z += uMul * p[i].up.m_z;
+  glBindTexture(GL_TEXTURE_2D, 0);
 
-      p[i].pos += toAtm;
-
-      glColor3f(1, 0, 0);
-      p[i].normal.normalGL();
-      p[i].pos.vertexGL();
-      --p[i].life;
-    }
-    else
-      p.erase(p.begin() + i);
-  }
-  glEnd();
+  // Enable depth mask after the points are drawn so nothing else is affected
+  glDepthMask(GL_TRUE);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Player::ship()
 {
+  GLubyte *data = NULL;
+  GLuint w, h;
+  data = loadTexture("textures/projectile4.png", w, h);
+
+  glGenTextures(1, &id);
+  glBindTexture(GL_TEXTURE_2D, id);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+  free(data);
+  glBindTexture(GL_TEXTURE_2D, 0);
   //float r = PLAYERWIDTH;
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
@@ -289,66 +293,12 @@ void Player::ship()
     glScalef(0.02, 0.02, 0.02);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)mInd.size(); ++i)
+      for(int i = 0; i < (int)mInd.size(); i += 3)
       {
-        mNorms[mInd[i] - 1].normalGL();
+        mNorms[mInd[i + 2] - 1].normalGL();
+        mText[mInd[i + 1] - 1].textureGL();
         mVerts[mInd[i] - 1].vertexGL();
       }
-      /*norm.normalGL();
-      // Side 1
-      glVertex3f(r, r, r/2);
-      glVertex3f(-r, r, r/2);
-      glVertex3f(r, -r, r/2);
-
-      glVertex3f(-r, r, r/2);
-      glVertex3f(r, -r, r/2);
-      glVertex3f(-r, -r, r/2);
-
-      // Side 2
-      glVertex3f(r, r, -r/2);
-      glVertex3f(-r, r, -r/2);
-      glVertex3f(r, -r, -r/2);
-
-      glVertex3f(-r, r, -r/2);
-      glVertex3f(r, -r, -r/2);
-      glVertex3f(-r, -r, -r/2);
-
-      // Side 3
-      glVertex3f(-r, r, -r/2);
-      glVertex3f(-r, r, r/2);
-      glVertex3f(-r, -r, -r/2);
-
-      glVertex3f(-r, r, r/2);
-      glVertex3f(-r, -r, -r/2);
-      glVertex3f(-r, -r, r/2);
-
-      // Side 4
-      glVertex3f(r, r, -r/2);
-      glVertex3f(r, r, r/2);
-      glVertex3f(r, -r, -r/2);
-
-      glVertex3f(r, r, r/2);
-      glVertex3f(r, -r, -r/2);
-      glVertex3f(r, -r, r/2);
-
-      // Side 5
-      glVertex3f(-r, r, -r/2);
-      glVertex3f(-r, r, r/2);
-      glVertex3f(r, r, -r/2);
-
-      glVertex3f(-r, r, r/2);
-      glVertex3f(r, r, -r/2);
-      glVertex3f(r, r, r/2);
-
-      // Side 6
-      glVertex3f(-r, -r, -r/2);
-      glVertex3f(-r, -r, r/2);
-      glVertex3f(r, -r, -r/2);
-
-      glVertex3f(-r, -r, r/2);
-      glVertex3f(r, -r, -r/2);
-      glVertex3f(r, -r, r/2);*/
-
     glEnd();
 
   glEndList();
@@ -378,10 +328,11 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
     for(int i = 0; i < (int)p.size(); ++i)
     {
       dist = (io_a[*it].pos - p[i].pos).length();
-      if(dist < 0.2)
+      if(dist < 0.007*io_a.size())
       {
         io_a[*it].life -= 5;
         ++score;
+        p.erase(p.begin() + i);
       }
     }
 
