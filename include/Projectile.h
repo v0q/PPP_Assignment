@@ -14,18 +14,18 @@ class Projectile
     Projectile(float _px, float _py, float _pz,
                Vec4 _u, Vec4 _l,
                float _nx, float _ny, float _nz,
-               float _d) :
+               float _d, float _ml) :
                pos(_px, _py, _pz),
                up(_u), left(_l),
                normal(_nx, _ny, _nz),
-               dir(_d), life(35) { loadModel("models/projectile.obj", mVerts, mNorms, mText, mInd);}
+               dir(_d), life(0), max_life(_ml) { loadModel("models/projectile.obj", mVerts, mNorms, mText, mInd);}
     ~Projectile() {}
-    void drawProjectile();
+    void drawProjectile(int num_it);
     void cube();
 
     Vec4 pos, up, left, normal;
     float dir;
-    int life;
+    int life, max_life;
 
   private:
     std::vector<Vec4> mVerts;

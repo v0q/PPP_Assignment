@@ -221,16 +221,17 @@ void Player::shoot(SDL_GameController *_c)
                              _u, _l,
                              n.m_x, n.m_y, n.m_z,
                              aimDir));*/
-    p.push_back(Projectile(xMov, yMov, WORLDRADIUS + PLAYEROFFSET,
-                           Vec4(0, 1, 0), Vec4(-1, 0, 0),
-                           n.m_x, n.m_y, n.m_z,
-                           aimDir));
+
+    for(int i = 0; i < 2; ++i)
+    {
+      p.push_back(Projectile(xMov, yMov, WORLDRADIUS + PLAYEROFFSET,
+                             Vec4(0, 1, 0), Vec4(-1, 0, 0),
+                             n.m_x, n.m_y, n.m_z,
+                             aimDir, std::rand()%30 + 25));
+    }
   }
 
-  glBindTexture(GL_TEXTURE_2D, id);
-  glEnable(GL_POINT_SPRITE_ARB);
-
-  glTexEnvi(GL_POINT_SPRITE_ARB, GL_COORD_REPLACE_ARB, GL_TRUE);
+  glBindTexture(GL_TEXTURE_2D, projectileId);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
   // Disable depth mask so the points above won't occlude the ones behind
@@ -242,13 +243,11 @@ void Player::shoot(SDL_GameController *_c)
     glLoadIdentity();
     glTranslatef(0, 0, -pos.length());
 
-    glPointSize(50);
-    glBegin(GL_POINTS);
+    glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)p.size(); ++i)
       {
-        if(p[i].life > 0)
-          p[i].drawProjectile();
-        else
+        p[i].drawProjectile(5);
+        if(p[i].life == p[i].max_life)
           p.erase(p.begin() + i);
       }
     glEnd();
@@ -264,20 +263,8 @@ void Player::shoot(SDL_GameController *_c)
 
 void Player::ship()
 {
-  GLubyte *data = NULL;
-  GLuint w, h;
-  data = loadTexture("textures/projectile4.png", w, h);
+  loadTexture("textures/animated_explosion.png", projectileId);
 
-  glGenTextures(1, &id);
-  glBindTexture(GL_TEXTURE_2D, id);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-  free(data);
   glBindTexture(GL_TEXTURE_2D, 0);
   //float r = PLAYERWIDTH;
   GLuint id = glGenLists(1);
@@ -315,7 +302,7 @@ void Player::wrapRotation(float &io_a)
 
 void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aInd)
 {
-  float dist;
+  /*float dist;
   Vec4 paDist = pos + Vec4(orientation.m_00*xMov + orientation.m_01*yMov,
                            orientation.m_10*xMov + orientation.m_11*yMov,
                            orientation.m_20*xMov + orientation.m_21*yMov);
@@ -338,5 +325,5 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
 
     if((io_a[*it].pos - paDist).length() + 0.15 <= WORLDRADIUS*ASPHERERADIUS - WORLDRADIUS + PLAYEROFFSET)
       life -= 20;
-  }
+  }*/
 }

@@ -77,7 +77,7 @@ void World::planet()
     glBegin(GL_TRIANGLES);
       tSphere(2, 1);
     glEnd();
-
+    glScalef(1.111f, 1.111f, 1.111f);
   glEndList();
   w_displayList.push_back(id);
 }
@@ -106,20 +106,7 @@ void World::atmosphere()
 
 void World::skybox()
 {
-  GLubyte *data = NULL;
-  GLuint w, h;
-  data = loadTexture("textures/sb_cube.png", w, h);
-
-  glGenTextures(1, &skyBoxTexId);
-  glBindTexture(GL_TEXTURE_2D, skyBoxTexId);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-  free(data);
+  loadTexture("textures/sb_cube.png", skyBoxTexId);
 
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);

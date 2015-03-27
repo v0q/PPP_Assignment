@@ -25,7 +25,7 @@ QMAKE_CXXFLAGS += $$system(sdl2-config  --cflags)
 QMAKE_CXXFLAGS += -std=c++11
 
 LIBS += $$system(sdl2-config  --libs)
-LIBS += -L/usr/local/lib -lpng
+LIBS += -L/usr/local/lib -lSDL2_image
 
 macx:LIBS += -framework OpenGL
 macx:LIBS += -framework glut

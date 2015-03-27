@@ -57,7 +57,7 @@ class Player
     float rot, turn;
     float xMov, yMov;
     int life;
-    GLuint id;
+    GLuint projectileId;
 };
 
 #endif

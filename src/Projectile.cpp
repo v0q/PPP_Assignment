@@ -5,49 +5,80 @@
 #include "Projectile.h"
 #include "Defs.h"
 
-void Projectile::drawProjectile()
+void Projectile::drawProjectile(int num_it)
 {
-  // Calculate multipliers for the left and the up vectors
-  // i.e. how much to move on each vector in each frame
-  float lMul = PROJECTILESPEED * cosf(dir);
-  float uMul = PROJECTILESPEED * sinf(dir);
+  float tDim = 1.0/5.0;
+  int step = floor(life*25/max_life);
 
-  pos.m_x -= lMul * left.m_x;
-  pos.m_y -= lMul * left.m_y;
-  pos.m_z -= lMul * left.m_z;
+  float xMin = tDim * (step%5);
+  float xMax = tDim * (step%5 + 1);
+  float yMin = tDim * (step/5);
+  float yMax = tDim * (step/5 + 1);
 
-  pos.m_x += uMul * up.m_x;
-  pos.m_y += uMul * up.m_y;
-  pos.m_z += uMul * up.m_z;
+  //std::cout << step << " " << xMin << " " << xMax << " " << yMin << " " << yMax << "\n";
 
-  // Check if the projectile has reached the atmosphere,
-  // if so we'll calculte new up/left vectors for it to
-  // bend around the atmosphere
-  if(pos.length() > WORLDRADIUS*ASPHERERADIUS)
+  for(int i = 0; i < num_it; ++i)
   {
-    pos.normalize();
-    left = pos.cross(up);
-    left.normalize();
-    pos *= WORLDRADIUS*ASPHERERADIUS;
+    // Calculate multipliers for the left and the up vectors
+    // i.e. how much to move on each vector in each frame
+    float lMul = (PROJECTILESPEED * cosf(dir)) / num_it;
+    float uMul = (PROJECTILESPEED * sinf(dir)) / num_it;
+
+    pos.m_x -= lMul * left.m_x;
+    pos.m_y -= lMul * left.m_y;
+    pos.m_z -= lMul * left.m_z;
+
+    pos.m_x += uMul * up.m_x;
+    pos.m_y += uMul * up.m_y;
+    pos.m_z += uMul * up.m_z;
+
+    if(pos.length() < WORLDRADIUS*ASPHERERADIUS)
+    {
+      // While the projectiles are under the atmosphere we
+      // move them upwards more rapidly
+      pos += Vec4(0, 0, 1)*PROJECTILESPEED / num_it;
+    }
+
+    // Check if the projectile has reached the atmosphere,
+    // if so we'll calculte new up/left vectors for it to
+    // bend around the atmosphere
+    if(pos.length() > WORLDRADIUS*ASPHERERADIUS)
+    {
+      pos.normalize();
+      left = pos.cross(up);
+      left.normalize();
+      pos *= WORLDRADIUS*ASPHERERADIUS;
+    }
+
+    normal.normalGL();
+    glColor4f(1,
+              1 - (life / (float)max_life),
+              0.5 - 2*(life / (float)max_life),
+              1 - life / (float)max_life);
+
+    glNormal3f(0, 0, 1);
+    float r = 0.05f;
+
+    glTexCoord2f(xMax, yMin);
+    glVertex3f(pos.m_x + r, pos.m_y + r, pos.m_z);
+
+    glTexCoord2f(xMin, yMin);
+    glVertex3f(pos.m_x - r, pos.m_y + r, pos.m_z);
+
+    glTexCoord2f(xMax, yMax);
+    glVertex3f(pos.m_x + r, pos.m_y - r, pos.m_z);
+
+    glTexCoord2f(xMin, yMin);
+    glVertex3f(pos.m_x - r, pos.m_y + r, pos.m_z);
+
+    glTexCoord2f(xMin, yMax);
+    glVertex3f(pos.m_x - r, pos.m_y - r, pos.m_z);
+
+    glTexCoord2f(xMax, yMax);
+    glVertex3f(pos.m_x + r, pos.m_y - r, pos.m_z);
   }
-  else
-  {
-    // While the projectiles are under the atmosphere we
-    // move them upwards more rapidly
-    pos += Vec4(0, 0, 1)*PROJECTILESPEED;
-  }
 
-
-  normal.normalGL();
-  glColor4f(1,
-            1 * (life/(float)35.0),
-            1 * (life/(float)70.0),
-            life/(float)35.0);
-
-  glNormal3f(0, 0, 1);
-  pos.vertexGL();
-
-  --life;
+  ++life;
 }
 
 void Projectile::cube()
