@@ -20,8 +20,7 @@ class Projectile
                normal(_nx, _ny, _nz),
                dir(_d), life(0), max_life(_ml) { loadModel("models/projectile.obj", mVerts, mNorms, mText, mInd);}
     ~Projectile() {}
-    void drawProjectile(int num_it);
-    void cube();
+    void drawProjectile(int num_it, Vec4 &_cu, Vec4 &_cl);
 
     Vec4 pos, up, left, normal;
     float dir;

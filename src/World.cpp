@@ -9,6 +9,18 @@
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
+World::World() : max_asteroids(10)
+{
+  loadModel("models/sphere.obj", skybox_Verts, skybox_Norms, skybox_Text, skybox_Ind);
+  loadModel("models/planet.obj", planet_Verts, planet_Norms, planet_Text, planet_Ind);
+  loadModel("models/asteroid1.obj", asteroid_Verts[0], asteroid_Norms[0], asteroid_Text[0], asteroid_Ind[0]);
+  loadModel("models/asteroid2.obj", asteroid_Verts[1], asteroid_Norms[1], asteroid_Text[1], asteroid_Ind[1]);
+  planet();
+  atmosphere();
+  skybox();
+  genALists();
+}
+
 World::~World()
 {
   stars.clear();
@@ -39,6 +51,18 @@ World::~World()
   std::vector<Vec4>().swap(planet_Text);
   planet_Ind.clear();
   std::vector<int>().swap(planet_Ind);
+
+  for(int i = 0; i < 2; ++i)
+  {
+    asteroid_Verts[i].clear();
+    std::vector<Vec4>().swap(asteroid_Verts[i]);
+    asteroid_Norms[i].clear();
+    std::vector<Vec4>().swap(asteroid_Norms[i]);
+    asteroid_Text[i].clear();
+    std::vector<Vec4>().swap(asteroid_Text[i]);
+    asteroid_Ind[i].clear();
+    std::vector<int>().swap(asteroid_Ind[i]);
+  }
 }
 
 void World::drawWorld()
@@ -46,6 +70,19 @@ void World::drawWorld()
   generate_Asteroids();
   partByDist();
   glCallLists(w_displayList.size(), GL_UNSIGNED_INT, &w_displayList[0]);
+}
+
+void World::drawStars(Vec4 _c) const
+{
+  glPointSize(6);
+  glBegin(GL_POINTS);
+      for(int i = 0; i < (int)stars.size(); ++i)
+      {
+        glColor4f(1, 1, 1, (stars[i].m_w > 0.4 ? stars[i].m_w - 0.4f : stars[i].m_w));
+        glNormal3f(_c.m_x, _c.m_y, _c.m_z);
+        glVertex3f(stars[i].m_x, stars[i].m_y, stars[i].m_z);
+      }
+  glEnd();
 }
 
 void World::planet()
@@ -173,8 +210,6 @@ void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
 
   normal.normalGL();
 
-  /*u = ((atan2(_a.m_x, _a.m_z) / PI) + 1.0f) * 0.5f;
-  v = (asin(_a.m_y) / PI) + 0.5f;*/
   u = asin(_a.m_x)/PI + 0.5;
   v = asin(_a.m_y)/PI + 0.5;
 
@@ -187,8 +222,6 @@ void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
   glTexCoord2f(u, v);
   _b.vertexGL();
 
-  /*u = ((atan2(_c.m_x, _c.m_z) / PI) + 1.0f) * 0.5f;
-  v = (asin(_c.m_y) / PI) + 0.5f;*/
   u = asin(_c.m_x)/PI + 0.5;
   v = asin(_c.m_y)/PI + 0.5;
 
@@ -222,19 +255,6 @@ void World::initStars(int _a)
   }
 }
 
-void World::drawStars(Vec4 _c) const
-{
-  glPointSize(6);
-  glBegin(GL_POINTS);
-      for(int i = 0; i < (int)stars.size(); ++i)
-      {
-        glColor4f(1, 1, 1, (stars[i].m_w > 0.4 ? stars[i].m_w - 0.4f : stars[i].m_w));
-        glNormal3f(_c.m_x, _c.m_y, _c.m_z);
-        glVertex3f(stars[i].m_x, stars[i].m_y, stars[i].m_z);
-      }
-  glEnd();
-}
-
 void World::generate_Asteroids()
 {
   if(std::rand()/(float)RAND_MAX > 0.95 && (int)asteroids.size() < max_asteroids)
@@ -254,20 +274,27 @@ void World::generate_Asteroids()
     aUp = aSide.cross(aPos);
 
     aPos *= SKYBOXRADIUS;
-    float size = fmod(std::rand(), 5.0) + 1.0f;
+
+    float size = std::rand()/(float)RAND_MAX * 0.8f + 0.1f;
+    int type = std::rand()%2;
+
     asteroids.push_back(Asteroid(aPos, aDir,
                                  aUp, aSide,
                                  size, fmod(std::rand(), 0.035) + 0.015f,
-                                 size*100/6.0));
+                                 size*150, 0));
   }
 
+  glBindTexture(GL_TEXTURE_2D, aTexId);
   for(int i = 0; i < (int)asteroids.size(); ++i)
   {
     if(asteroids[i].life > 0)
-      asteroids[i].draw();
+      asteroids[i].draw(a_displayList);
     else
       asteroids.erase(asteroids.begin() + i);
   }
+  glBindTexture(GL_TEXTURE_2D, 0);
+  //glBufferDataARB();
+
 }
 
 void World::partByDist()
@@ -277,4 +304,50 @@ void World::partByDist()
       a_ColIndices.push_back(i);
   a_ColIndices.sort();
   a_ColIndices.unique();
+}
+
+void World::genALists()
+{
+  loadTexture("textures/Am2.jpg", aTexId);
+
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+
+    glBegin(GL_TRIANGLES);
+      for(int i = 0; i < (int)asteroid_Ind[0].size(); i += 9)
+      {
+        asteroid_Norms[0][asteroid_Ind[0][i + 2] - 1].normalGL();
+        asteroid_Text[0][asteroid_Ind[0][i + 1] - 1].textureGL();
+        asteroid_Verts[0][asteroid_Ind[0][i] - 1].vertexGL();
+
+        asteroid_Text[0][asteroid_Ind[0][i + 4] - 1].textureGL();
+        asteroid_Verts[0][asteroid_Ind[0][i + 3] - 1].vertexGL();
+
+        asteroid_Text[0][asteroid_Ind[0][i + 7] - 1].textureGL();
+        asteroid_Verts[0][asteroid_Ind[0][i + 6] - 1].vertexGL();
+      }
+    glEnd();
+  glEndList();
+
+  a_displayList.push_back(id);
+
+  id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+    glBegin(GL_TRIANGLES);
+      for(int i = 0; i < (int)asteroid_Ind[1].size(); i += 9)
+      {
+        asteroid_Norms[1][asteroid_Ind[1][i + 2] - 1].normalGL();
+        asteroid_Text[1][asteroid_Ind[1][i + 1] - 1].textureGL();
+        asteroid_Verts[1][asteroid_Ind[1][i] - 1].vertexGL();
+
+        asteroid_Text[1][asteroid_Ind[1][i + 4] - 1].textureGL();
+        asteroid_Verts[1][asteroid_Ind[1][i + 3] - 1].vertexGL();
+
+        asteroid_Text[1][asteroid_Ind[1][i + 7] - 1].textureGL();
+        asteroid_Verts[1][asteroid_Ind[1][i + 6] - 1].vertexGL();
+      }
+    glEnd();
+  glEndList();
+
+  a_displayList.push_back(id);
 }

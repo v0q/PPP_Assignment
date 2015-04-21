@@ -1,78 +1,19 @@
-#include <OpenGL/gl.h>
 #include <iostream>
 
 #include "Asteroids.h"
 
-void Asteroid::draw()
+void Asteroid::draw(std::vector<GLuint> &_dL)
 {
-  float r = 0.05f*size;
   move();
   glPushMatrix();
+
     glTranslatef(pos.m_x, pos.m_y, pos.m_z);
+    glScalef(size, size, size);
     glRotatef(rot, 1, 1, 1);
-    glBegin(GL_TRIANGLES);
-      glColor3f(0, 0, 1);
 
-      // Side 1
-      glNormal3f(0, 0, 1);
-      glVertex3f(r, r, r);
-      glVertex3f(-r, r, r);
-      glVertex3f(r, -r, r);
+    glColor4f(1, 1, 1, 1);
+    glCallList(_dL[aType]);
 
-      glVertex3f(-r, r, r);
-      glVertex3f(-r, -r, r);
-      glVertex3f(r, -r, r);
-
-      // Side 2
-      glNormal3f(0, 0, -1);
-      glVertex3f(r, r, -r);
-      glVertex3f(r, -r, -r);
-      glVertex3f(-r, r, -r);
-
-      glVertex3f(-r, r, -r);
-      glVertex3f(r, -r, -r);
-      glVertex3f(-r, -r, -r);
-
-      // Side 3
-      glNormal3f(-1, 0, 0);
-      glVertex3f(-r, r, -r);
-      glVertex3f(-r, -r, -r);
-      glVertex3f(-r, r, r);
-
-      glVertex3f(-r, r, r);
-      glVertex3f(-r, -r, -r);
-      glVertex3f(-r, -r, r);
-
-      // Side 4
-      glNormal3f(1, 0, 0);
-      glVertex3f(r, r, -r);
-      glVertex3f(r, r, r);
-      glVertex3f(r, -r, -r);
-
-      glVertex3f(r, r, r);
-      glVertex3f(r, -r, r);
-      glVertex3f(r, -r, -r);
-
-      // Side 5
-      glNormal3f(0, 1, 0);
-      glVertex3f(-r, r, -r);
-      glVertex3f(-r, r, r);
-      glVertex3f(r, r, -r);
-
-      glVertex3f(-r, r, r);
-      glVertex3f(r, r, r);
-      glVertex3f(r, r, -r);
-
-      // Side 6
-      glNormal3f(0, -1, 0);
-      glVertex3f(-r, -r, -r);
-      glVertex3f(r, -r, -r);
-      glVertex3f(-r, -r, r);
-
-      glVertex3f(-r, -r, r);
-      glVertex3f(r, -r, -r);
-      glVertex3f(r, -r, r);
-    glEnd();
   glPopMatrix();
 }
 

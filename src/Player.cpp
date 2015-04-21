@@ -174,10 +174,10 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
 
   wrapRotation(rot);
 
-  shoot(_c);
+  shoot(_c, _cam.up, _cam.w);
 }
 
-void Player::shoot(SDL_GameController *_c)
+void Player::shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl)
 {
   bool shoot = false;
   float x = 0, y = 0;
@@ -212,20 +212,12 @@ void Player::shoot(SDL_GameController *_c)
     Vec4 n = pos;
     n.normalize();
 
-    // Create new projectiles when the player's shooting
-    // As the player's movement is done with glTranslate we have to add the x and y movement to the coordinates along the left/up vectors
-    // Also adds a little "correction" to balance the offset presented by the movement speed
-      /*p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_x + yMov * _u.m_x) + xMov*_l.m_x*MOVESPEED*6 - yMov*_u.m_x*MOVESPEED*6,
-                             n.m_y * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_y + yMov * _u.m_y) + xMov*_l.m_y*MOVESPEED*6 - yMov*_u.m_y*MOVESPEED*6,
-                             n.m_z * (WORLDRADIUS + PLAYEROFFSET*2) + (-xMov * _l.m_z + yMov * _u.m_z) + xMov*_l.m_z*MOVESPEED*6 - yMov*_u.m_z*MOVESPEED*6,
-                             _u, _l,
-                             n.m_x, n.m_y, n.m_z,
-                             aimDir));*/
-
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < 3; ++i)
     {
-      p.push_back(Projectile(xMov, yMov, WORLDRADIUS + PLAYEROFFSET,
-                             Vec4(0, 1, 0), Vec4(-1, 0, 0),
+      p.push_back(Projectile(n.m_x * (WORLDRADIUS + PLAYEROFFSET) + (xMov * -_cl.m_x + yMov * _cu.m_x),
+                             n.m_y * (WORLDRADIUS + PLAYEROFFSET) + (xMov * -_cl.m_y + yMov * _cu.m_y),
+                             n.m_z * (WORLDRADIUS + PLAYEROFFSET) + (xMov * -_cl.m_z + yMov * _cu.m_z),
+                             _cu, _cl,
                              n.m_x, n.m_y, n.m_z,
                              aimDir, std::rand()%30 + 25));
     }
@@ -237,22 +229,14 @@ void Player::shoot(SDL_GameController *_c)
   // Disable depth mask so the points above won't occlude the ones behind
   glDepthMask(GL_FALSE);
 
-  glPushMatrix();
-    glMultMatrixf(orientation.m_openGL);
-
-    glLoadIdentity();
-    glTranslatef(0, 0, -pos.length());
-
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)p.size(); ++i)
       {
-        p[i].drawProjectile(5);
+        p[i].drawProjectile(3, _cu, _cl);
         if(p[i].life == p[i].max_life)
           p.erase(p.begin() + i);
       }
     glEnd();
-
-  glPopMatrix();
 
   glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -302,12 +286,13 @@ void Player::wrapRotation(float &io_a)
 
 void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aInd)
 {
-  /*float dist;
+  float dist;
   Vec4 paDist = pos + Vec4(orientation.m_00*xMov + orientation.m_01*yMov,
                            orientation.m_10*xMov + orientation.m_11*yMov,
                            orientation.m_20*xMov + orientation.m_21*yMov);
   paDist.normalize();
-  paDist *= WORLDRADIUS+PLAYEROFFSET;
+  paDist *= WORLDRADIUS*ASPHERERADIUS;
+
   auto it = io_aInd.begin();
 
   for(it; it != io_aInd.end(); ++it)
@@ -315,15 +300,15 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
     for(int i = 0; i < (int)p.size(); ++i)
     {
       dist = (io_a[*it].pos - p[i].pos).length();
-      if(dist < 0.007*io_a.size())
+      if(dist < io_a[*it].size * 0.5)
       {
-        io_a[*it].life -= 5;
+        io_a[*it].life -= 1;
         ++score;
         p.erase(p.begin() + i);
       }
     }
 
-    if((io_a[*it].pos - paDist).length() + 0.15 <= WORLDRADIUS*ASPHERERADIUS - WORLDRADIUS + PLAYEROFFSET)
+    if((io_a[*it].pos - paDist).length() <= io_a[*it].size * 0.5)
       life -= 20;
-  }*/
+  }
 }

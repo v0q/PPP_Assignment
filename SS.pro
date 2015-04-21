@@ -30,3 +30,4 @@ LIBS += -L/usr/local/lib -lSDL2_image
 macx:LIBS += -framework OpenGL
 macx:LIBS += -framework glut
 macx:DEFINES +=DARWIN
+

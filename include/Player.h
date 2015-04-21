@@ -43,7 +43,7 @@ class Player
   private:
     void ship();
     void wrapRotation(float &io_a);
-    void shoot(SDL_GameController *_c);
+    void shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl);
 
     Vec4 pos, norm;
     Mat4 orientation;

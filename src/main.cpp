@@ -22,12 +22,13 @@ int main()
 
   std::srand(time(NULL));
 
+  int start = SDL_GetTicks();
+  int lastTime = 0;
+
   while(sdlgl.isActive())
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     frameStart();
-
-    cam.updateCamera();
 
     world.drawStars((cam.eye-cam.look));
     world.drawWorld();
@@ -38,7 +39,17 @@ int main()
       player.checkCollisions(world.asteroids, world.a_ColIndices);
     }
 
+    cam.updateCamera();
+
     sdlgl.handleInput(player, cam);
+
+    if(lastTime != (SDL_GetTicks() - start)/1000)
+    {
+      world.max_asteroids += world.max_asteroids/50 + 1;
+      lastTime = (SDL_GetTicks() - start)/1000;
+      //std::cout << world.max_asteroids << "s" << "\n";
+    }
+
 
     frameEnd(GLUT_BITMAP_HELVETICA_18, 1.0, 1.0, 1.0, 0.05, 0.95, player.score);
     SDL_GL_SwapWindow(sdlgl.win);

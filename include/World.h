@@ -16,9 +16,7 @@
 class World
 {
   public:
-    World() : max_asteroids(500) { loadModel("models/sphere.obj", skybox_Verts, skybox_Norms, skybox_Text, skybox_Ind);
-                                   loadModel("models/planet.obj", planet_Verts, planet_Norms, planet_Text, planet_Ind);
-                                   planet(); atmosphere(); skybox(); }
+    World();
     ~World();
     void initStars(int _a);
     void drawStars(Vec4 _c) const;
@@ -27,12 +25,14 @@ class World
 
     std::vector<Asteroid> asteroids;
     std::list<int> a_ColIndices;
+    int max_asteroids;
 
   private:
     void planet();
     void atmosphere();
     void skybox();
     void generate_Asteroids();
+    void genALists();
     void tSphere(int _d, int _ndir) const;
     void drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const;
     void partByDist();
@@ -49,11 +49,17 @@ class World
     std::vector<Vec4> planet_Text;
     std::vector<int> planet_Ind;
 
-    std::vector<Vec4> stars;
-    std::vector<GLuint> w_displayList;
-    int max_asteroids;
+    // Asteroid models
+    std::vector<Vec4> asteroid_Verts[2];
+    std::vector<Vec4> asteroid_Norms[2];
+    std::vector<Vec4> asteroid_Text[2];
+    std::vector<int> asteroid_Ind[2];
 
-    GLuint skyBoxTexId;
+    std::vector<Vec4> stars;
+    std::vector<GLuint> w_displayList;    
+    std::vector<GLuint> a_displayList;
+
+    GLuint skyBoxTexId, aTexId;
 };
 
 #endif
