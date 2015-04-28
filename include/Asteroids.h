@@ -1,8 +1,9 @@
-#ifndef ASTEROIDS_H__
-#define ASTEROIDS_H__
+#ifndef ASTEROIDS_H
+#define ASTEROIDS_H
 
 #include <OpenGL/gl.h>
 #include <vector>
+
 #include "Defs.h"
 #include "NCCA/Vec4.h"
 

@@ -1,4 +1,5 @@
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "NCCA/GLFunctions.h"
 #include "Defs.h"
@@ -6,8 +7,16 @@
 
 SDL_GL::SDL_GL()
 {
+  int audio_rate = 22050;
+  Uint16 audio_format = AUDIO_S16SYS;
+  int audio_channels = 2;
+  int audio_buffers = 4096;
+
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
     SDLErrorExit("Couldn't initialise SDL");
+
+  if(((Mix_Init(MIX_INIT_OGG))&MIX_INIT_OGG) != MIX_INIT_OGG)
+    std::cerr << "Failed to initialise OGG support:" << Mix_GetError() << "\n";
 
   if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) == -1)
     SDLErrorExit("Couldn't initialise SDL controller");
@@ -33,6 +42,12 @@ SDL_GL::SDL_GL()
       break;
   }
 
+  if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0)
+  {
+      std::cerr << "Unable to initialize audio: " << Mix_GetError() << "\n";
+      exit(1);
+  }
+
   act = true;
 }
 
@@ -40,6 +55,8 @@ SDL_GL::~SDL_GL()
 {
   if(!controller)
     SDL_GameControllerClose(controller);
+
+  Mix_CloseAudio();
   SDL_Quit();
 }
 

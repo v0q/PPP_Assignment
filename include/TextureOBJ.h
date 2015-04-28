@@ -1,5 +1,5 @@
-#ifndef TEXTUREOBJ_H__
-#define TEXTUREOBJ_H__
+#ifndef TEXTUREOBJ_H
+#define TEXTUREOBJ_H
 
 #include <iostream>
 #include <OpenGL/gl.h>

@@ -1,5 +1,5 @@
-#ifndef ICOSAHEDRON_H__
-#define ICOSAHEDRON_H__
+#ifndef ICOSAHEDRON_H
+#define ICOSAHEDRON_H
 
 #include "NCCA/Vec4.h"
 

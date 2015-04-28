@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <OpenGL/gl.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "Asteroids.h"
 #include "LoadOBJ.h"
@@ -56,7 +57,7 @@ class World
     std::vector<int> asteroid_Ind[2];
 
     std::vector<Vec4> stars;
-    std::vector<GLuint> w_displayList;    
+    std::vector<GLuint> w_displayList;
     std::vector<GLuint> a_displayList;
 
     GLuint skyBoxTexId, aTexId;

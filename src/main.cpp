@@ -34,20 +34,25 @@ int main()
     world.drawWorld();
 
     if(player.isAlive())
-    {
       player.drawPlayer();
-      player.checkCollisions(world.asteroids, world.a_ColIndices);
-    }
+    else
+      Mix_PauseMusic();
 
     cam.updateCamera();
 
+    if(player.isAlive())
+    {
+      if(player.particles.size() > 0)
+        player.drawParticles();
+      player.checkCollisions(world.asteroids, world.a_ColIndices);
+    }
+
     sdlgl.handleInput(player, cam);
 
-    if(lastTime != (SDL_GetTicks() - start)/1000)
+    if(lastTime != (SDL_GetTicks() - start)/1000 && world.max_asteroids < 300)
     {
       world.max_asteroids += world.max_asteroids/50 + 1;
       lastTime = (SDL_GetTicks() - start)/1000;
-      //std::cout << world.max_asteroids << "s" << "\n";
     }
 
 

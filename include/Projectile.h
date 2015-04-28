@@ -1,9 +1,10 @@
-#ifndef PROJECTILE_H__
-#define PROJECTILE_H__
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
 
 #include <vector>
 
 #include "LoadOBJ.h"
+#include "Particles.h"
 #include "NCCA/Vec4.h"
 
 #define PROJECTILESPEED 0.1

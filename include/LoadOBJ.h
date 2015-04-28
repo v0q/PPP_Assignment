@@ -1,5 +1,5 @@
-#ifndef LOADOBJ_H__
-#define LOADOBJ_H__
+#ifndef LOADOBJ_H
+#define LOADOBJ_H
 
 #include <string>
 #include <boost/tokenizer.hpp>

@@ -1,5 +1,5 @@
-#ifndef CAMERA_H__
-#define CAMERA_H__
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include "Defs.h"
 #include "NCCA/Vec4.h"

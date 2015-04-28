@@ -100,3 +100,4 @@ void Projectile::drawProjectile(int num_it, Vec4 &_cu, Vec4 &_cl)
 
   ++life;
 }
+

@@ -10,6 +10,27 @@
 #include "World.h"
 #include "NCCA/GLFunctions.h"
 
+//http://www.freesound.org/people/copyc4t/sounds/235732/
+
+Player::~Player()
+{
+  p.clear();
+  std::vector<Projectile>().swap(p);
+  particles.clear();
+  std::vector<Particle>().swap(particles);
+  mVerts.clear();
+  std::vector<Vec4>().swap(mVerts);
+  mNorms.clear();
+  std::vector<Vec4>().swap(mNorms);
+  mText.clear();
+  std::vector<Vec4>().swap(mText);
+  mInd.clear();
+  std::vector<int>().swap(mInd);
+
+  Mix_FreeChunk(a_fire);
+  Mix_FreeMusic(bgSound);
+}
+
 bool Player::isAlive()
 {
   if(life > 0)
@@ -25,7 +46,7 @@ void Player::drawPlayer()
 
     glPointSize(15.0f);
 
-    // Move player to the correct position and rotate
+    // Move player to the correct position
     glTranslatef(xMov, yMov, -pos.length()+WORLDRADIUS+PLAYEROFFSET);
 
     glBegin(GL_POINTS);
@@ -172,6 +193,13 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
           ((distance >= -180 && distance < 0) || distance > 180 ? 25 : 0));
   }
 
+  if(xMov || yMov)
+  {
+    if(!Mix_PlayingMusic())
+      Mix_PlayMusic(bgSound, -1);
+    Mix_VolumeMusic(MIX_MAX_VOLUME * (((fabs(xMov) + fabs(yMov))/0.5f) < 0.25f && (fabs(xMov) > 0.01f || fabs(yMov) > 0.01f) ? 0.25f : ((fabs(xMov) + fabs(yMov))/0.5f)));
+  }
+
   wrapRotation(rot);
 
   shoot(_c, _cam.up, _cam.w);
@@ -209,6 +237,14 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl)
 
   if(shoot)
   {
+    /*if(!Mix_Playing(1))
+    {
+      if(Mix_PlayChannel(1, a_fire, -1) == -1)
+          std::cerr << "Unable to play WAV file: " << Mix_GetError() << "\n";
+    }
+    if(Mix_Paused(1))
+      Mix_Resume(1);*/
+
     Vec4 n = pos;
     n.normalize();
 
@@ -222,6 +258,8 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl)
                              aimDir, std::rand()%30 + 25));
     }
   }
+  else
+    Mix_Pause(1);
 
   glBindTexture(GL_TEXTURE_2D, projectileId);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -287,23 +325,32 @@ void Player::wrapRotation(float &io_a)
 void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aInd)
 {
   float dist;
+  int extra_particles = 0;
   Vec4 paDist = pos + Vec4(orientation.m_00*xMov + orientation.m_01*yMov,
                            orientation.m_10*xMov + orientation.m_11*yMov,
                            orientation.m_20*xMov + orientation.m_21*yMov);
   paDist.normalize();
   paDist *= WORLDRADIUS*ASPHERERADIUS;
 
-  auto it = io_aInd.begin();
+  std::list<int>::iterator it = io_aInd.begin();
 
   for(it; it != io_aInd.end(); ++it)
   {
     for(int i = 0; i < (int)p.size(); ++i)
     {
       dist = (io_a[*it].pos - p[i].pos).length();
-      if(dist < io_a[*it].size * 0.5)
+      if(dist < io_a[*it].size * 0.75f)
       {
         io_a[*it].life -= 1;
+        io_a[*it].size *= 0.999f;
         ++score;
+
+        if(io_a[*it].life <= 0)
+          extra_particles = 50;
+
+        for(int j = 0; j < max_particles + extra_particles; ++j)
+          particles.push_back(Particle(p[i].pos, 50));
+
         p.erase(p.begin() + i);
       }
     }
@@ -311,4 +358,28 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
     if((io_a[*it].pos - paDist).length() <= io_a[*it].size * 0.5)
       life -= 20;
   }
+}
+
+void Player::drawParticles()
+{
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+  glDepthMask(GL_FALSE);
+  glEnable(GL_POINT_SPRITE);
+  glBindTexture(GL_COMPILE, particleTexId);
+
+  glPointSize(10);
+  glBegin(GL_POINTS);
+    for(int i = 0; i < (int)particles.size(); ++i)
+    {
+      particles[i].draw();
+      particles[i].move();
+      ++particles[i].life;
+      if(particles[i].life >= particles[i].max_life)
+        particles.erase(particles.begin() + i);
+    }
+  glEnd();
+
+  glBindTexture(GL_COMPILE, 0);
+  glDepthMask(GL_TRUE);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
