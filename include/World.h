@@ -7,6 +7,8 @@
 #include <cmath>
 #include <OpenGL/gl.h>
 #include <SDL2/SDL_mixer.h>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 #include "Asteroids.h"
 #include "LoadOBJ.h"
@@ -60,7 +62,12 @@ class World
     std::vector<GLuint> w_displayList;
     std::vector<GLuint> a_displayList;
 
+    Mix_Chunk *a_explosion, *a_bgmusic;
     GLuint skyBoxTexId, aTexId;
+
+
+    boost::random::mt11213b rng;
+    //boost::mt19937 rng;
 };
 
 #endif

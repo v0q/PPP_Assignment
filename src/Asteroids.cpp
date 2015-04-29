@@ -19,14 +19,14 @@ void Asteroid::draw(std::vector<GLuint> &_dL)
 
 void Asteroid::move()
 {
-  if(pos.length() > WORLDRADIUS*ASPHERERADIUS && speed > 0.015f)
+  if(pos.length() > WORLDRADIUS*ASPHERERADIUS && speed > 0.031f)
   {
     pos += dir*speed;
     rot += 5;
   }
   else
   {
-    speed = 0.01;
+    speed = 0.03f;
 
     pos.normalize();
     side = pos.cross(up);

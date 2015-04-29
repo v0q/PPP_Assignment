@@ -24,9 +24,10 @@ class Player
 {
   public:
     Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", mVerts, mNorms, mText, mInd); ship();
-                                                                                                             loadTexture("textures/particle.png", particleTexId);
+                                                                                                             loadTexture("textures/projectile4.png", particleTexId);
                                                                                                              audio::loadSound("sounds/flame.wav", &a_fire);
-                                                                                                             audio::loadSound("sounds/bg_sound2.ogg", &bgSound);
+                                                                                                             audio::loadSound("sounds/bg_sound.ogg", &bgSound);
+                                                                                                             Mix_PlayMusic(bgSound, -1); Mix_VolumeMusic(MIX_MAX_VOLUME * 0.05f);
                                                                                                            }
     ~Player();
 

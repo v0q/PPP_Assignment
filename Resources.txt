@@ -1,0 +1,41 @@
+Textures & visual stuff
+-----------------------------------------------------------------------------
+Asteroid models & Asteroid textures
+/*
+ Copyright © 2012 Solcommand.com
+ http://www.solcommand.com/2012/12/low-poly-asteroids.html
+*/
+
+Skybox texture/background
+/*
+ Copyright © 2012 Unknown
+ http://freshwallpapers.net/space/galaxy-background.html
+*/
+
+Projectile animated sprite sheet
+/*
+ Copyright © 2011 Nordenfelt – Steampunk Shoot 'em Up
+ http://www.nordenfelt-thegame.com/blog/2011/11/02/nordenfelt-dev-log-25/
+*/
+-----------------------------------------------------------------------------
+
+
+Audio etc.
+-----------------------------------------------------------------------------
+Background music
+/*
+ Copyright © 2014 joshuaempyre
+ http://www.freesound.org/people/joshuaempyre/sounds/251461/
+*/
+
+Explosion
+/*
+ Copyright © 2010 Nbs Dark
+ http://www.freesound.org/people/Nbs%20Dark/sounds/94185/
+*/
+
+Flame
+/*
+ Copyright © 2014 copyc4t
+ http://www.freesound.org/people/copyc4t/sounds/235731/
+*/

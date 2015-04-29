@@ -194,11 +194,7 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
   }
 
   if(xMov || yMov)
-  {
-    if(!Mix_PlayingMusic())
-      Mix_PlayMusic(bgSound, -1);
-    Mix_VolumeMusic(MIX_MAX_VOLUME * (((fabs(xMov) + fabs(yMov))/0.5f) < 0.25f && (fabs(xMov) > 0.01f || fabs(yMov) > 0.01f) ? 0.25f : ((fabs(xMov) + fabs(yMov))/0.5f)));
-  }
+    Mix_VolumeMusic(MIX_MAX_VOLUME * (((fabs(xMov) + fabs(yMov))/0.5f) < 0.25f ? 0.05f : ((fabs(xMov) + fabs(yMov))/0.5f)));
 
   wrapRotation(rot);
 
@@ -258,8 +254,6 @@ void Player::shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl)
                              aimDir, std::rand()%30 + 25));
     }
   }
-  else
-    Mix_Pause(1);
 
   glBindTexture(GL_TEXTURE_2D, projectileId);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -341,15 +335,14 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
       dist = (io_a[*it].pos - p[i].pos).length();
       if(dist < io_a[*it].size * 0.75f)
       {
-        io_a[*it].life -= 1;
-        io_a[*it].size *= 0.999f;
+        io_a[*it].life -= 2;
         ++score;
 
         if(io_a[*it].life <= 0)
           extra_particles = 50;
 
         for(int j = 0; j < max_particles + extra_particles; ++j)
-          particles.push_back(Particle(p[i].pos, 50));
+          particles.push_back(Particle(p[i].pos, 25));
 
         p.erase(p.begin() + i);
       }
@@ -364,10 +357,12 @@ void Player::drawParticles()
 {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
   glDepthMask(GL_FALSE);
-  glEnable(GL_POINT_SPRITE);
-  glBindTexture(GL_COMPILE, particleTexId);
 
-  glPointSize(10);
+  glBindTexture(GL_TEXTURE_2D, particleTexId);
+  glEnable(GL_POINT_SPRITE);
+  glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+
+  glPointSize(50);
   glBegin(GL_POINTS);
     for(int i = 0; i < (int)particles.size(); ++i)
     {
@@ -379,7 +374,7 @@ void Player::drawParticles()
     }
   glEnd();
 
-  glBindTexture(GL_COMPILE, 0);
+  glBindTexture(GL_TEXTURE_2D, 0);
   glDepthMask(GL_TRUE);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

@@ -17,7 +17,8 @@ HEADERS += include/*.h \
            include/NCCA/*.h
 OTHER_FILES += textures/* \
                models/* \
-               sounds/*
+               sounds/* \
+               Resources.txt
 
 INCLUDEPATH += ./include
 INCLUDEPATH += /usr/local/include

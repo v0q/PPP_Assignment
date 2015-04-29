@@ -1,6 +1,6 @@
 #include <iostream>
 #include <OpenGL/gl.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include "Defs.h"
 #include "World.h"
@@ -11,17 +11,27 @@
 #include "NCCA/GLFunctions.h"
 
 //http://www.freesound.org/people/hykenfreak/sounds/214663/
+//http://www.freesound.org/people/ryansnook/sounds/110113/
+//http://www.freesound.org/people/joshuaempyre/sounds/251461/
 
 World::World() : max_asteroids(10)
 {
+  rng.seed(time(NULL));
   loadModel("models/sphere.obj", skybox_Verts, skybox_Norms, skybox_Text, skybox_Ind);
   loadModel("models/planet.obj", planet_Verts, planet_Norms, planet_Text, planet_Ind);
   loadModel("models/asteroid1.obj", asteroid_Verts[0], asteroid_Norms[0], asteroid_Text[0], asteroid_Ind[0]);
   loadModel("models/asteroid2.obj", asteroid_Verts[1], asteroid_Norms[1], asteroid_Text[1], asteroid_Ind[1]);
+  audio::loadSound("sounds/explosion.wav", &a_explosion);
+  audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
   planet();
   atmosphere();
   skybox();
   genALists();
+
+  Mix_VolumeChunk(a_bgmusic, MIX_MAX_VOLUME * 0.8f);
+  Mix_VolumeChunk(a_explosion, MIX_MAX_VOLUME * 0.4f);
+
+  Mix_PlayChannel(-1, a_bgmusic, -1);
 }
 
 World::~World()
@@ -66,6 +76,9 @@ World::~World()
     asteroid_Ind[i].clear();
     std::vector<int>().swap(asteroid_Ind[i]);
   }
+
+  Mix_FreeChunk(a_explosion);
+  Mix_FreeChunk(a_bgmusic);
 }
 
 void World::drawWorld()
@@ -260,14 +273,16 @@ void World::initStars(int _a)
 
 void World::generate_Asteroids()
 {
-  if(std::rand()/(float)RAND_MAX > 0.95 && (int)asteroids.size() < max_asteroids)
+  boost::random::uniform_int_distribution<> u_random(0, 10000);
+
+  if(u_random(rng)/10000.0 > 0.95 && (int)asteroids.size() < max_asteroids)
   {
-    Vec4 aPos(std::rand()/(float)RAND_MAX * 2 - 1, std::rand()/(float)RAND_MAX  * 2 - 1, std::rand()/(float)RAND_MAX  * 2 - 1);
+    Vec4 aPos(u_random(rng)/10000.0 * 2 - 1, u_random(rng)/10000.0  * 2 - 1, u_random(rng)/10000.0  * 2 - 1);
     aPos.normalize();
 
     Vec4 aDir = aPos * - 1;
-    Vec4 aSide(std::rand()/(float)RAND_MAX,
-              std::rand()/(float)RAND_MAX,
+    Vec4 aSide(u_random(rng)/10000.0,
+              u_random(rng)/10000.0,
               0);
 
     if(fabs(aPos.m_z) > 0.001)
@@ -278,13 +293,13 @@ void World::generate_Asteroids()
 
     aPos *= SKYBOXRADIUS;
 
-    float size = std::rand()/(float)RAND_MAX * 0.8f + 0.1f;
-    int type = std::rand()%2;
+    float size = u_random(rng)/10000.0 * 0.8f + 0.1f;
+    int type = u_random(rng)%2;
 
     asteroids.push_back(Asteroid(aPos, aDir,
                                  aUp, aSide,
-                                 size, fmod(std::rand(), 0.035) + 0.015f,
-                                 size*150, 0));
+                                 size, fmod(u_random(rng)/10000.0, 0.04f) + 0.0315f,
+                                 size * 150, type));
   }
 
   glBindTexture(GL_TEXTURE_2D, aTexId);
@@ -293,10 +308,37 @@ void World::generate_Asteroids()
     if(asteroids[i].life > 0)
       asteroids[i].draw(a_displayList);
     else
+    {
+      if(asteroids[i].size > 0.5f)
+      {
+        for(int j = 0; j < 2; ++j)
+        {
+          Vec4 aPos = asteroids[i].pos;
+          aPos.normalize();
+          Vec4 new_dir = aPos * - 1;
+          Vec4 new_side(u_random(rng)/10000.0,
+                    u_random(rng)/10000.0,
+                    0);
+          Vec4 new_up = new_side.cross(aPos);
+
+          if(fabs(aPos.m_z) > 0.001)
+            new_side.m_z = -(new_side.m_x*aPos.m_x + new_side.m_y*aPos.m_y) / aPos.m_z;
+
+          float new_size = asteroids[i].size*fmod(u_random(rng)/10000.0, 0.35f) + 0.25f;
+
+          asteroids.push_back(Asteroid(asteroids[i].pos, new_dir,
+                                       new_up, new_side,
+                                       new_size, fmod(u_random(rng)/10000.0, 0.055) + 0.02f,
+                                       new_size*150, u_random(rng)%2));
+        }
+      }
+
+      Mix_PlayChannel(-1, a_explosion, 0);
+
       asteroids.erase(asteroids.begin() + i);
+    }
   }
   glBindTexture(GL_TEXTURE_2D, 0);
-  //glBufferDataARB();
 
 }
 
@@ -315,7 +357,6 @@ void World::genALists()
 
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
-
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)asteroid_Ind[0].size(); i += 9)
       {
