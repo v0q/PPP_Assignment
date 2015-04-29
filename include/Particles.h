@@ -8,6 +8,8 @@
   #include <OpenGL/gl.h>
 #endif
 
+#include <iostream>
+
 #include "NCCA/Vec4.h"
 
 class Particle

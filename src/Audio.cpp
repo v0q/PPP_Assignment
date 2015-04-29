@@ -1,3 +1,5 @@
+#include <string>
+
 #include "Audio.h"
 
 void audio::loadSound(const std::string &_fname, Mix_Chunk **_sound)

@@ -54,7 +54,7 @@
   #include <GL/glut.h>
 #endif
 #ifdef DARWIN
-  #include <OpenGL/glut.h>
+  #include <glut/glut.h>
 #endif
 
 #include <SDL2/SDL.h>
