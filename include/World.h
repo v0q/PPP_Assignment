@@ -17,6 +17,7 @@
 #include <boost/random/uniform_int_distribution.hpp>
 
 #include "Asteroids.h"
+#include "Planet.h"
 #include "LoadOBJ.h"
 #include "NCCA/Vec4.h"
 
@@ -37,7 +38,7 @@ class World
     int max_asteroids;
 
   private:
-    void planet();
+    void drawPlanet();
     void atmosphere();
     void skybox();
     void generate_Asteroids();
@@ -46,23 +47,13 @@ class World
     void drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const;
     void partByDist();
 
-    // Skybox model
-    std::vector<Vec4> skybox_Verts;
-    std::vector<Vec4> skybox_Norms;
-    std::vector<Vec4> skybox_Text;
-    std::vector<int> skybox_Ind;
+    Planet m_planet;
 
-    // Planet model
-    std::vector<Vec4> planet_Verts;
-    std::vector<Vec4> planet_Norms;
-    std::vector<Vec4> planet_Text;
-    std::vector<int> planet_Ind;
+    // Skybox model
+    model m_skybox;
 
     // Asteroid models
-    std::vector<Vec4> asteroid_Verts[2];
-    std::vector<Vec4> asteroid_Norms[2];
-    std::vector<Vec4> asteroid_Text[2];
-    std::vector<int> asteroid_Ind[2];
+    model m_asteroid[2];
 
     std::vector<Vec4> stars;
     std::vector<GLuint> w_displayList;
@@ -72,7 +63,6 @@ class World
     GLuint skyBoxTexId, aTexId;
 
     boost::mt11213b rng;
-    //boost::mt19937 rng;
 };
 
 #endif

@@ -8,6 +8,14 @@
 
 typedef boost::tokenizer<boost::char_separator<char> >tokenizer;
 
+typedef struct
+{
+  std::vector<Vec4> Verts;
+  std::vector<Vec4> Norms;
+  std::vector<Vec4> Text;
+  std::vector<int> Ind;
+} model;
+
 void loadModel(const std::string &_n,
                std::vector<Vec4> &o_v,
                std::vector<Vec4> &o_vn,

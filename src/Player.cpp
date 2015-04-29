@@ -22,14 +22,15 @@ Player::~Player()
   std::vector<Projectile>().swap(p);
   particles.clear();
   std::vector<Particle>().swap(particles);
-  mVerts.clear();
-  std::vector<Vec4>().swap(mVerts);
-  mNorms.clear();
-  std::vector<Vec4>().swap(mNorms);
-  mText.clear();
-  std::vector<Vec4>().swap(mText);
-  mInd.clear();
-  std::vector<int>().swap(mInd);
+
+  m_ship.Verts.clear();
+  std::vector<Vec4>().swap(m_ship.Verts);
+  m_ship.Norms.clear();
+  std::vector<Vec4>().swap(m_ship.Norms);
+  m_ship.Text.clear();
+  std::vector<Vec4>().swap(m_ship.Text);
+  m_ship.Ind.clear();
+  std::vector<int>().swap(m_ship.Ind);
 
   Mix_FreeChunk(a_fire);
   Mix_FreeMusic(bgSound);
@@ -300,11 +301,11 @@ void Player::ship()
     glScalef(0.02, 0.02, 0.02);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)mInd.size(); i += 3)
+      for(int i = 0; i < (int)m_ship.Ind.size(); i += 3)
       {
-        mNorms[mInd[i + 2] - 1].normalGL();
-        mText[mInd[i + 1] - 1].textureGL();
-        mVerts[mInd[i] - 1].vertexGL();
+        m_ship.Norms[m_ship.Ind[i + 2] - 1].normalGL();
+        m_ship.Text[m_ship.Ind[i + 1] - 1].textureGL();
+        m_ship.Verts[m_ship.Ind[i] - 1].vertexGL();
       }
     glEnd();
 

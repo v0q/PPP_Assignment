@@ -29,7 +29,7 @@ const int sensitivity = 6000;
 class Player
 {
   public:
-    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", mVerts, mNorms, mText, mInd); ship();
+    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", m_ship.Verts, m_ship.Norms, m_ship.Text, m_ship.Ind); ship();
                                                                                                              loadTexture("textures/projectile4.png", particleTexId);
                                                                                                              audio::loadSound("sounds/flame.wav", &a_fire);
                                                                                                              audio::loadSound("sounds/bg_sound.ogg", &bgSound);
@@ -53,10 +53,9 @@ class Player
 
     Vec4 pos, norm;
     Mat4 orientation;
-    std::vector<Vec4> mVerts;
-    std::vector<Vec4> mNorms;
-    std::vector<Vec4> mText;
-    std::vector<int> mInd;
+
+    model m_ship;
+
     std::vector<Projectile> p;
     std::vector<GLuint> m_displayList;
     Mix_Chunk *a_fire;
