@@ -25,13 +25,20 @@ class Planet
     void genMountains();
     void genWaters();
     void genWaterbottoms();
+    void genTree();
 
     model p_surface;
     model p_mountains;
     model p_waters;
     model p_waterbottoms;
+    model t_leaves;
+    model t_trunk;
+
+    std::vector<Vec4> tree_positions;
+    std::vector<int> stored_positions;
 
     std::vector<GLuint> p_displayList;
+    GLuint t_displayList;
 };
 
 #endif

@@ -20,12 +20,11 @@ World::World() : max_asteroids(10)
 {
   rng.seed(time(NULL));
   loadModel("models/sphere.obj", m_skybox.Verts, m_skybox.Norms, m_skybox.Text, m_skybox.Ind);
-  //loadModel("models/p_surface.obj", planet_Verts, planet_Norms, planet_Text, planet_Ind);
   loadModel("models/asteroid1.obj", m_asteroid[0].Verts, m_asteroid[0].Norms, m_asteroid[0].Text, m_asteroid[0].Ind);
   loadModel("models/asteroid2.obj", m_asteroid[1].Verts, m_asteroid[1].Norms, m_asteroid[1].Text, m_asteroid[1].Ind);
   audio::loadSound("sounds/explosion.wav", &a_explosion);
   audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
-  atmosphere();
+  //atmosphere();
   skybox();
   genALists();
 
@@ -64,7 +63,6 @@ World::~World()
     std::vector<Vec4>().swap(m_asteroid[i].Norms);
     m_asteroid[i].Text.clear();
     std::vector<Vec4>().swap(m_asteroid[i].Text);
-    std::cout << "Called the planet destructor\n";
     m_asteroid[i].Ind.clear();
     std::vector<int>().swap(m_asteroid[i].Ind);
   }

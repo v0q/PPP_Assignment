@@ -135,6 +135,17 @@ Vec4 Vec4::operator /(float _rhs)
               m_w);
 }
 
+bool Vec4::operator ==(const Vec4 &_rhs)
+{
+  if(m_x == _rhs.m_x &&
+     m_y == _rhs.m_y &&
+     m_z == _rhs.m_z &&
+     m_w == _rhs.m_w)
+    return true;
+  else
+    return false;
+}
+
 /*Vec4 Vec4::sphericalCoords(float &_i, float &_j, float _offset)
 {
   //  Sphere code based on a function Written by Paul Bourke.

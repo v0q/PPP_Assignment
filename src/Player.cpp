@@ -354,7 +354,14 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
     }
 
     if((io_a[*it].pos - paDist).length() <= io_a[*it].size * 0.5)
+    {
       life -= 20;
+      if(life <= 0)
+      {
+        for(int j = 0; j < 250; ++j)
+          particles.push_back(Particle(pos, 50));
+      }
+    }
   }
 }
 

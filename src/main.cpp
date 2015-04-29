@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Asteroids.h"
 #include "frames.h"
+#include "OrthoText.h"
 
 int main()
 {
@@ -19,8 +20,6 @@ int main()
   world.initStars(1500);
   sdlgl.enableLighting();
   glClearColor (0.4, 0.4, 0.4, 0.4);
-
-  std::srand(time(NULL));
 
   int start = SDL_GetTicks();
   int lastTime = 0;
@@ -40,12 +39,13 @@ int main()
 
     cam.updateCamera();
 
+    if(player.particles.size() > 0)
+      player.drawParticles();
+
     if(player.isAlive())
-    {
-      if(player.particles.size() > 0)
-        player.drawParticles();
       player.checkCollisions(world.asteroids, world.a_ColIndices);
-    }
+    //else
+      //OrthoText(GLUT_BITMAP_HELVETICA_18, "GAME OVER", screen.w/2, screen.h/2);
 
     sdlgl.handleInput(player, cam);
 
