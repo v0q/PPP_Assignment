@@ -49,7 +49,7 @@ int main()
 
     sdlgl.handleInput(player, cam);
 
-    if(lastTime != (SDL_GetTicks() - start)/1000 && world.max_asteroids < 300)
+    if(lastTime != (int)(SDL_GetTicks() - start)/1000 && world.max_asteroids < 300)
     {
       world.max_asteroids += world.max_asteroids/50 + 1;
       lastTime = (SDL_GetTicks() - start)/1000;

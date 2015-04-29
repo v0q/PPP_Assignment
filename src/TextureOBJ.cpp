@@ -1,5 +1,11 @@
-#include <OpenGL/gl.h>
-#include <SDL_image.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
+#include <SDL2/SDL_image.h>
 
 #include "TextureOBJ.h"
 

@@ -1,7 +1,13 @@
 #ifndef PARTICLES_H
 #define PARTICLES_H
 
-#include <OpenGL/gl.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
 #include "NCCA/Vec4.h"
 
 class Particle

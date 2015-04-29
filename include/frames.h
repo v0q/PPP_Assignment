@@ -50,9 +50,16 @@
     }
 *****************************************/
 
-#include <SDL.h>
+#ifdef LINUX
+  #include <GL/glut.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/glut.h>
+#endif
+
+#include <SDL2/SDL.h>
 #include <sys/time.h>
-#include <glut/glut.h>
+
 #define MAX_FPS 100.0f
 
 struct timeval frameStartTime, frameEndTime;

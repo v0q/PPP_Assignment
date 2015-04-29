@@ -1,10 +1,16 @@
-#include "NCCA/Vec4.h"
-#include "Defs.h"
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
 
-#include <OpenGL/gl.h>
 #include <iostream>
 #include <cmath>
 #include <assert.h>
+
+#include "NCCA/Vec4.h"
+#include "Defs.h"
 
 void Vec4::colourGL()
 {

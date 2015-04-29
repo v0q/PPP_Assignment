@@ -1,12 +1,13 @@
-#include <cstring> // For memcpy
-#include "NCCA/Mat4.h"
-
 #ifdef LINUX
   #include <GL/gl.h>
 #endif
 #ifdef DARWIN
   #include <OpenGL/gl.h>
 #endif
+
+#include <cstring> // For memcpy
+
+#include "NCCA/Mat4.h"
 
 Mat4::Mat4(float _s)
 {

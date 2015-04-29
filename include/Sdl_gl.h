@@ -1,8 +1,14 @@
 #ifndef SDL_GL_H__
 #define SDL_GL_H__
 
-#include <SDL.h>
-#include <OpenGL/gl.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
+#include <SDL2/SDL.h>
 #include <iostream>
 
 #include "Camera.h"

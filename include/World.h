@@ -1,11 +1,17 @@
 #ifndef WORLD_H__
 #define WORLD_H__
 
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
 #include <vector>
 #include <list>
 #include <string>
 #include <cmath>
-#include <OpenGL/gl.h>
 #include <SDL2/SDL_mixer.h>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
@@ -65,8 +71,7 @@ class World
     Mix_Chunk *a_explosion, *a_bgmusic;
     GLuint skyBoxTexId, aTexId;
 
-
-    boost::random::mt11213b rng;
+    boost::mt11213b rng;
     //boost::mt19937 rng;
 };
 

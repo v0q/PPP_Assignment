@@ -1,4 +1,10 @@
-#include <OpenGl/gl.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
 #include <iostream>
 #include <ctime>
 
@@ -9,8 +15,6 @@
 #include "TextureOBJ.h"
 #include "World.h"
 #include "NCCA/GLFunctions.h"
-
-//http://www.freesound.org/people/copyc4t/sounds/235732/
 
 Player::~Player()
 {

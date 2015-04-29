@@ -1,7 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <OpenGL/gl.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
 #include <SDL2/SDL.h>
 #include <vector>
 #include <list>

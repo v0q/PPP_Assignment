@@ -1,5 +1,11 @@
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
 #include <iostream>
-#include <OpenGL/gl.h>
 #include <SDL2/SDL.h>
 
 #include "Defs.h"
@@ -9,10 +15,6 @@
 #include "TextureOBJ.h"
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
-
-//http://www.freesound.org/people/hykenfreak/sounds/214663/
-//http://www.freesound.org/people/ryansnook/sounds/110113/
-//http://www.freesound.org/people/joshuaempyre/sounds/251461/
 
 World::World() : max_asteroids(10)
 {
@@ -273,16 +275,16 @@ void World::initStars(int _a)
 
 void World::generate_Asteroids()
 {
-  boost::random::uniform_int_distribution<> u_random(0, 10000);
+  boost::random::uniform_int_distribution<> u_random(0, 1000);
 
-  if(u_random(rng)/10000.0 > 0.95 && (int)asteroids.size() < max_asteroids)
+  if(u_random(rng)/1000.0 > 0.95 && (int)asteroids.size() < max_asteroids)
   {
-    Vec4 aPos(u_random(rng)/10000.0 * 2 - 1, u_random(rng)/10000.0  * 2 - 1, u_random(rng)/10000.0  * 2 - 1);
+    Vec4 aPos(u_random(rng)/1000.0 * 2 - 1, u_random(rng)/1000.0  * 2 - 1, u_random(rng)/1000.0  * 2 - 1);
     aPos.normalize();
 
     Vec4 aDir = aPos * - 1;
-    Vec4 aSide(u_random(rng)/10000.0,
-              u_random(rng)/10000.0,
+    Vec4 aSide(u_random(rng)/1000.0,
+              u_random(rng)/1000.0,
               0);
 
     if(fabs(aPos.m_z) > 0.001)
@@ -293,12 +295,12 @@ void World::generate_Asteroids()
 
     aPos *= SKYBOXRADIUS;
 
-    float size = u_random(rng)/10000.0 * 0.8f + 0.1f;
+    float size = u_random(rng)/1000.0 * 0.8f + 0.1f;
     int type = u_random(rng)%2;
 
     asteroids.push_back(Asteroid(aPos, aDir,
                                  aUp, aSide,
-                                 size, fmod(u_random(rng)/10000.0, 0.04f) + 0.0315f,
+                                 size, fmod(u_random(rng)/1000.0, 0.04f) + 0.0315f,
                                  size * 150, type));
   }
 
@@ -316,19 +318,19 @@ void World::generate_Asteroids()
           Vec4 aPos = asteroids[i].pos;
           aPos.normalize();
           Vec4 new_dir = aPos * - 1;
-          Vec4 new_side(u_random(rng)/10000.0,
-                    u_random(rng)/10000.0,
+          Vec4 new_side(u_random(rng)/1000.0,
+                    u_random(rng)/1000.0,
                     0);
           Vec4 new_up = new_side.cross(aPos);
 
           if(fabs(aPos.m_z) > 0.001)
             new_side.m_z = -(new_side.m_x*aPos.m_x + new_side.m_y*aPos.m_y) / aPos.m_z;
 
-          float new_size = asteroids[i].size*fmod(u_random(rng)/10000.0, 0.35f) + 0.25f;
+          float new_size = asteroids[i].size*fmod(u_random(rng)/1000.0, 0.35f) + 0.25f;
 
           asteroids.push_back(Asteroid(asteroids[i].pos, new_dir,
                                        new_up, new_side,
-                                       new_size, fmod(u_random(rng)/10000.0, 0.055) + 0.02f,
+                                       new_size, fmod(u_random(rng)/1000.0, 0.055) + 0.02f,
                                        new_size*150, u_random(rng)%2));
         }
       }

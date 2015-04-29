@@ -1,3 +1,10 @@
+#ifdef LINUX
+  #include <GL/glut.h>
+#endif
+#ifdef DARWIN
+  #include <glut/glut.h>
+#endif
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
@@ -20,6 +27,10 @@ SDL_GL::SDL_GL()
 
   if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) == -1)
     SDLErrorExit("Couldn't initialise SDL controller");
+
+  int argc = 1;
+  char *argv[1] = {(char*)"Something"};
+  glutInit(&argc, argv);
 
   win = SDL_CreateWindow("SS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 

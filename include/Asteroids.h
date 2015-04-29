@@ -1,7 +1,13 @@
 #ifndef ASTEROIDS_H
 #define ASTEROIDS_H
 
-#include <OpenGL/gl.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
 #include <vector>
 
 #include "Defs.h"

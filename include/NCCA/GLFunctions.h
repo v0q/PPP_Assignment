@@ -1,10 +1,16 @@
 #ifndef GLFUNCTIONS_H__
 #define GLFUNCTIONS_H__
 
-#include <OpenGL/gl.h>
+#ifdef LINUX
+  #include <GL/gl.h>
+#endif
+#ifdef DARWIN
+  #include <OpenGL/gl.h>
+#endif
+
+#include <cmath>
 
 #include "Vec4.h"
-#include <cmath>
 
 class GLFunctions
 {
