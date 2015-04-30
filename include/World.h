@@ -62,7 +62,8 @@ class World
     Mix_Chunk *a_explosion, *a_bgmusic;
     GLuint skyBoxTexId, aTexId;
 
-    boost::mt11213b rng;
+
+    boost::mt19937 rng;
 };
 
 #endif

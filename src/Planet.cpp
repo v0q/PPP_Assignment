@@ -7,18 +7,19 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 
 #include "Planet.h"
+#include "NCCA/GLFunctions.h"
 
 Planet::Planet()
 {
-  loadModel("models/p_surface.obj", p_surface.Verts, p_surface.Norms, p_surface.Text, p_surface.Ind);
-  loadModel("models/p_mountains.obj", p_mountains.Verts, p_mountains.Norms, p_mountains.Text, p_mountains.Ind);
-  loadModel("models/p_waters.obj", p_waters.Verts, p_waters.Norms, p_waters.Text, p_waters.Ind);
-  loadModel("models/p_waterbottoms.obj", p_waterbottoms.Verts, p_waterbottoms.Norms, p_waterbottoms.Text, p_waterbottoms.Ind);
-
-  loadModel("models/tree_trunk.obj", t_trunk.Verts, t_trunk.Norms, t_trunk.Text, t_trunk.Ind);
-  loadModel("models/tree_leaves.obj", t_leaves.Verts, t_leaves.Norms, t_leaves.Text, t_leaves.Ind);
+  loadModel("models/p_surface.obj", p_surface);
+  loadModel("models/p_mountains.obj", p_mountains);
+  loadModel("models/p_waters.obj", p_waters);
+  loadModel("models/p_waterbottoms.obj", p_waterbottoms);
+  loadModel("models/tree_trunk.obj", t_trunk);
+  loadModel("models/tree_leaves.obj", t_leaves);
 
   genSurface();
   genMountains();
@@ -29,62 +30,56 @@ Planet::Planet()
 
 Planet::~Planet()
 {
-  p_surface.Verts.clear();
-  std::vector<Vec4>().swap(p_surface.Verts);
-  p_surface.Norms.clear();
-  std::vector<Vec4>().swap(p_surface.Norms);
-  p_surface.Text.clear();
-  std::vector<Vec4>().swap(p_surface.Text);
-  p_surface.Ind.clear();
-  std::vector<int>().swap(p_surface.Ind);
-
-  p_mountains.Verts.clear();
-  std::vector<Vec4>().swap(p_mountains.Verts);
-  p_mountains.Norms.clear();
-  std::vector<Vec4>().swap(p_mountains.Norms);
-  p_mountains.Text.clear();
-  std::vector<Vec4>().swap(p_mountains.Text);
-  p_mountains.Ind.clear();
-  std::vector<int>().swap(p_mountains.Ind);
-
-  p_waters.Verts.clear();
-  std::vector<Vec4>().swap(p_waters.Verts);
-  p_waters.Norms.clear();
-  std::vector<Vec4>().swap(p_waters.Norms);
-  p_waters.Text.clear();
-  std::vector<Vec4>().swap(p_waters.Text);
-  p_waters.Ind.clear();
-  std::vector<int>().swap(p_waters.Ind);
-
-  p_waterbottoms.Verts.clear();
-  std::vector<Vec4>().swap(p_waterbottoms.Verts);
-  p_waterbottoms.Norms.clear();
-  std::vector<Vec4>().swap(p_waterbottoms.Norms);
-  p_waterbottoms.Text.clear();
-  std::vector<Vec4>().swap(p_waterbottoms.Text);
-  p_waterbottoms.Ind.clear();
-  std::vector<int>().swap(p_waterbottoms.Ind);
+  freeModelMem(p_surface);
+  freeModelMem(p_mountains);
+  freeModelMem(p_waters);
+  freeModelMem(p_waterbottoms);
+  freeModelMem(t_trunk);
+  freeModelMem(t_leaves);
 }
 
 void Planet::draw()
 {
   glCallLists(p_displayList.size(), GL_UNSIGNED_INT, &p_displayList[0]);
 
-  for(int i = 0; i < tree_positions.size(); ++i)
+  for(int i = 0; i < (int)tree_positions.size(); ++i)
   {
+    // Calculating the rotation axis
+    Vec4 vecTo = tree_positions[i];
+    Vec4 rotAxis = Vec4(0, 1, 0).cross(vecTo);
+
+    vecTo.normalize();
+    rotAxis.normalize();
+
+    // Rotation angle
+    float theta = acosf(vecTo.dot(Vec4(0, 1, 0))) * 180/M_PI;
+
     glPushMatrix();
+
       glTranslatef(tree_positions[i].m_x, tree_positions[i].m_y, tree_positions[i].m_z);
-      glCallList(t_displayList);
+      glRotatef(theta, rotAxis.m_x, rotAxis.m_y, rotAxis.m_z);
+
+      glCallList(t_displayList[0]);
+
+      if(!(i%2))
+        glColor3f(0.706f, 0.706f, 0.251f);
+      else
+        glColor3f(0.349f, 0.584f, 0.196f);
+
+      glCallList(t_displayList[1]);
+
     glPopMatrix();
   }
 }
 
 void Planet::genSurface()
 {
-  GLuint id = glGenLists(1);
-  glNewList(id, GL_COMPILE);
   float min = 0.86f;
   float max = 0.92f;
+  bool *stored_position = new bool[(int)p_surface.Verts.size()];
+
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)p_surface.Ind.size(); i += 3)
@@ -96,13 +91,11 @@ void Planet::genSurface()
         {
           glColor3f(0.686f + 0.15f*(hVal / 0.4f), 0.592f + 0.1f*(hVal / 0.4f), 0.31f);
 
-          // A bit of a hacky way to make sure that no duplicate positions are stored
-          if(std::find(stored_positions.begin(), stored_positions.end(), p_surface.Ind[i]) == stored_positions.end())
+          if(stored_position[p_surface.Ind[i] - 1] == false)
           {
             tree_positions.push_back(Vec4(p_surface.Verts[p_surface.Ind[i] - 1]));
-            stored_positions.push_back(p_surface.Ind[i]);
+            stored_position[p_surface.Ind[i] - 1] = true;
           }
-
         }
         else
           glColor3f(0.471f, 0.565f + 0.35f*(hVal - 0.49f) / 0.4f, 0.188f);
@@ -114,14 +107,17 @@ void Planet::genSurface()
     glEnd();
   glEndList();
   p_displayList.push_back(id);
+
+  delete [] stored_position;
 }
 
 void Planet::genMountains()
 {
-  GLuint id = glGenLists(1);
-  glNewList(id, GL_COMPILE);
   float min = 0.87f;
   float max = 1.01f;
+
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)p_mountains.Ind.size(); i += 3)
@@ -161,11 +157,11 @@ void Planet::genWaters()
 
 void Planet::genWaterbottoms()
 {
-  GLuint id = glGenLists(1);
-  glNewList(id, GL_COMPILE);
   float min = 0.78f;
   float max = 0.9f;
 
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)p_waterbottoms.Ind.size(); i += 3)
       {
@@ -187,30 +183,34 @@ void Planet::genWaterbottoms()
 
 void Planet::genTree()
 {
-  t_displayList = glGenLists(1);
-  glNewList(t_displayList, GL_COMPILE);
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
-        glColor3f(0.165f, 0.106f, 0.039f);
-        for(int i = 0; i < (int)t_trunk.Ind.size(); i += 3)
-        {
-//          Vec4 newVertex(t_trunk.Verts[t_trunk.Ind[i] - 1].m_x + tree_positions[j].m_x,
-//                         t_trunk.Verts[t_trunk.Ind[i] - 1].m_y + tree_positions[j].m_y,
-//                         t_trunk.Verts[t_trunk.Ind[i] - 1].m_z + tree_positions[j].m_z);
-          t_trunk.Norms[t_trunk.Ind[i + 2] - 1].normalGL();
-          t_trunk.Verts[t_trunk.Ind[i] - 1].vertexGL();
-        }
-
-        glColor3f(0.69f, 0.765f, 0.118f);
-        for(int i = 0; i < (int)t_leaves.Ind.size(); i += 3)
-        {
-//          Vec4 newVertex(t_leaves.Verts[t_leaves.Ind[i] - 1].m_x + tree_positions[j].m_x,
-//                         t_leaves.Verts[t_leaves.Ind[i] - 1].m_y + tree_positions[j].m_y,
-//                         t_leaves.Verts[t_leaves.Ind[i] - 1].m_z + tree_positions[j].m_z);
-          t_leaves.Norms[t_leaves.Ind[i + 2] - 1].normalGL();
-          t_leaves.Verts[t_leaves.Ind[i] - 1].vertexGL();
-        }
+      glColor3f(0.165f, 0.106f, 0.039f);
+      for(int i = 0; i < (int)t_trunk.Ind.size(); i += 3)
+      {
+        t_trunk.Norms[t_trunk.Ind[i + 2] - 1].normalGL();
+        t_trunk.Verts[t_trunk.Ind[i] - 1].vertexGL();
+      }
     glEnd();
 
   glEndList();
+
+  t_displayList.push_back(id);
+
+  id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+
+    glBegin(GL_TRIANGLES);
+      for(int i = 0; i < (int)t_leaves.Ind.size(); i += 3)
+      {
+        t_leaves.Norms[t_leaves.Ind[i + 2] - 1].normalGL();
+        t_leaves.Verts[t_leaves.Ind[i] - 1].vertexGL();
+      }
+    glEnd();
+
+  glEndList();
+
+  t_displayList.push_back(id);
 }

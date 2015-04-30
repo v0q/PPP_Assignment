@@ -23,14 +23,7 @@ Player::~Player()
   particles.clear();
   std::vector<Particle>().swap(particles);
 
-  m_ship.Verts.clear();
-  std::vector<Vec4>().swap(m_ship.Verts);
-  m_ship.Norms.clear();
-  std::vector<Vec4>().swap(m_ship.Norms);
-  m_ship.Text.clear();
-  std::vector<Vec4>().swap(m_ship.Text);
-  m_ship.Ind.clear();
-  std::vector<int>().swap(m_ship.Ind);
+  freeModelMem(m_ship);
 
   Mix_FreeChunk(a_fire);
   Mix_FreeMusic(bgSound);

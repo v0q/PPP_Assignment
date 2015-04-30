@@ -35,10 +35,9 @@ class Planet
     model t_trunk;
 
     std::vector<Vec4> tree_positions;
-    std::vector<int> stored_positions;
 
     std::vector<GLuint> p_displayList;
-    GLuint t_displayList;
+    std::vector<GLuint> t_displayList;
 };
 
 #endif

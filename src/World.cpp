@@ -19,19 +19,19 @@
 World::World() : max_asteroids(10)
 {
   rng.seed(time(NULL));
-  loadModel("models/sphere.obj", m_skybox.Verts, m_skybox.Norms, m_skybox.Text, m_skybox.Ind);
-  loadModel("models/asteroid1.obj", m_asteroid[0].Verts, m_asteroid[0].Norms, m_asteroid[0].Text, m_asteroid[0].Ind);
-  loadModel("models/asteroid2.obj", m_asteroid[1].Verts, m_asteroid[1].Norms, m_asteroid[1].Text, m_asteroid[1].Ind);
+  loadModel("models/sphere.obj", m_skybox);
+  loadModel("models/asteroid1.obj", m_asteroid[0]);
+  loadModel("models/asteroid2.obj", m_asteroid[1]);
   audio::loadSound("sounds/explosion.wav", &a_explosion);
   audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
-  //atmosphere();
+  atmosphere();
   skybox();
   genALists();
 
   Mix_VolumeChunk(a_bgmusic, MIX_MAX_VOLUME * 0.8f);
   Mix_VolumeChunk(a_explosion, MIX_MAX_VOLUME * 0.4f);
 
-  Mix_PlayChannel(-1, a_bgmusic, -1);
+  //Mix_PlayChannel(-1, a_bgmusic, -1);
 }
 
 World::~World()
@@ -46,26 +46,10 @@ World::~World()
   std::list<int>().swap(a_ColIndices);
 
   //Clear skybox model related stuff
-  m_skybox.Verts.clear();
-  std::vector<Vec4>().swap(m_skybox.Verts);
-  m_skybox.Norms.clear();
-  std::vector<Vec4>().swap(m_skybox.Norms);
-  m_skybox.Text.clear();
-  std::vector<Vec4>().swap(m_skybox.Text);
-  m_skybox.Ind.clear();
-  std::vector<int>().swap(m_skybox.Ind);
+  freeModelMem(m_skybox);
 
   for(int i = 0; i < 2; ++i)
-  {
-    m_asteroid[i].Verts.clear();
-    std::vector<Vec4>().swap(m_asteroid[i].Verts);
-    m_asteroid[i].Norms.clear();
-    std::vector<Vec4>().swap(m_asteroid[i].Norms);
-    m_asteroid[i].Text.clear();
-    std::vector<Vec4>().swap(m_asteroid[i].Text);
-    m_asteroid[i].Ind.clear();
-    std::vector<int>().swap(m_asteroid[i].Ind);
-  }
+    freeModelMem(m_asteroid[i]);
 
   Mix_FreeChunk(a_explosion);
   Mix_FreeChunk(a_bgmusic);
@@ -237,16 +221,16 @@ void World::initStars(int _a)
 
 void World::generate_Asteroids()
 {
-  boost::random::uniform_int_distribution<> u_random(0, 1000);
+  boost::random::uniform_int_distribution<> u_random(1, 100);
 
-  if(u_random(rng)/1000.0 > 0.95 && (int)asteroids.size() < max_asteroids)
+  if(u_random(rng)/100.0 > 0.95 && (int)asteroids.size() < max_asteroids)
   {
-    Vec4 aPos(u_random(rng)/1000.0 * 2 - 1, u_random(rng)/1000.0  * 2 - 1, u_random(rng)/1000.0  * 2 - 1);
+    Vec4 aPos(u_random(rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(rng)/100.0 * 2.0 - 1.0 + 0.01f);
     aPos.normalize();
 
     Vec4 aDir = aPos * - 1;
-    Vec4 aSide(u_random(rng)/1000.0,
-              u_random(rng)/1000.0,
+    Vec4 aSide(u_random(rng)/100.0,
+              u_random(rng)/100.0,
               0);
 
     if(fabs(aPos.m_z) > 0.001)
@@ -257,12 +241,12 @@ void World::generate_Asteroids()
 
     aPos *= SKYBOXRADIUS;
 
-    float size = u_random(rng)/1000.0 * 0.8f + 0.1f;
+    float size = u_random(rng)/100.0 * 0.8f + 0.1f;
     int type = u_random(rng)%2;
 
     asteroids.push_back(Asteroid(aPos, aDir,
                                  aUp, aSide,
-                                 size, fmod(u_random(rng)/1000.0, 0.04f) + 0.0315f,
+                                 size, fmod(u_random(rng)/100.0, 0.04f) + 0.0315f,
                                  size * 150, type));
   }
 
@@ -280,19 +264,19 @@ void World::generate_Asteroids()
           Vec4 aPos = asteroids[i].pos;
           aPos.normalize();
           Vec4 new_dir = aPos * - 1;
-          Vec4 new_side(u_random(rng)/1000.0,
-                    u_random(rng)/1000.0,
+          Vec4 new_side(u_random(rng)/100.0 + 0.01f,
+                    u_random(rng)/100.0 + 0.01f,
                     0);
           Vec4 new_up = new_side.cross(aPos);
 
           if(fabs(aPos.m_z) > 0.001)
             new_side.m_z = -(new_side.m_x*aPos.m_x + new_side.m_y*aPos.m_y) / aPos.m_z;
 
-          float new_size = asteroids[i].size*fmod(u_random(rng)/1000.0, 0.35f) + 0.25f;
+          float new_size = asteroids[i].size*fmod(u_random(rng)/100.0, 0.35f) + 0.25f;
 
           asteroids.push_back(Asteroid(asteroids[i].pos, new_dir,
                                        new_up, new_side,
-                                       new_size, fmod(u_random(rng)/1000.0, 0.055) + 0.02f,
+                                       new_size, fmod(u_random(rng)/100.0, 0.055) + 0.02f,
                                        new_size*150, u_random(rng)%2));
         }
       }

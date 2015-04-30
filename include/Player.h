@@ -29,12 +29,16 @@ const int sensitivity = 6000;
 class Player
 {
   public:
-    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) : score(0), pos(_x, _y, _z, 1.0f), life(100) { loadModel("models/ss.obj", m_ship.Verts, m_ship.Norms, m_ship.Text, m_ship.Ind); ship();
-                                                                                                             loadTexture("textures/projectile4.png", particleTexId);
-                                                                                                             audio::loadSound("sounds/flame.wav", &a_fire);
-                                                                                                             audio::loadSound("sounds/bg_sound.ogg", &bgSound);
-                                                                                                             Mix_PlayMusic(bgSound, -1); Mix_VolumeMusic(MIX_MAX_VOLUME * 0.05f);
-                                                                                                           }
+    Player(float _x = 1.0f, float _y = 1.0f, float _z = 1.0f) :
+      score(0), pos(_x, _y, _z, 1.0f), xMov(0), yMov(0), life(100)
+    {
+      loadModel("models/ss.obj", m_ship);
+      ship();
+      loadTexture("textures/projectile4.png", particleTexId);
+      audio::loadSound("sounds/flame.wav", &a_fire);
+      audio::loadSound("sounds/bg_sound.ogg", &bgSound);
+      Mix_PlayMusic(bgSound, -1); Mix_VolumeMusic(MIX_MAX_VOLUME * 0.05f);
+    }
     ~Player();
 
     bool isAlive();

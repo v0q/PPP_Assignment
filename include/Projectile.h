@@ -19,19 +19,13 @@ class Projectile
                pos(_px, _py, _pz),
                up(_u), left(_l),
                normal(_nx, _ny, _nz),
-               dir(_d), life(0), max_life(_ml) { loadModel("models/projectile.obj", mVerts, mNorms, mText, mInd);}
+               dir(_d), life(0), max_life(_ml) {}
     ~Projectile() {}
     void drawProjectile(int num_it, Vec4 &_cu, Vec4 &_cl);
 
     Vec4 pos, up, left, normal;
     float dir;
     int life, max_life;
-
-  private:
-    std::vector<Vec4> mVerts;
-    std::vector<Vec4> mNorms;
-    std::vector<Vec4> mText;
-    std::vector<int> mInd;
 };
 
 #endif

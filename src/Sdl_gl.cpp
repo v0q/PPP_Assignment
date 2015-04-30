@@ -28,9 +28,11 @@ SDL_GL::SDL_GL()
   if(SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) == -1)
     SDLErrorExit("Couldn't initialise SDL controller");
 
+#ifdef LINUX
   int argc = 1;
   char *argv[1] = {(char*)"Something"};
   glutInit(&argc, argv);
+#endif
 
   win = SDL_CreateWindow("SS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
