@@ -60,8 +60,8 @@ void World::drawWorld()
   generate_Asteroids();
   partByDist();
 
-  drawPlanet();
   glCallLists(w_displayList.size(), GL_UNSIGNED_INT, &w_displayList[0]);
+  drawPlanet();
 }
 
 void World::drawStars(Vec4 _c) const
@@ -91,13 +91,15 @@ void World::atmosphere()
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glColor4f(0.114, 0.431, 0.506, 0.3);
-    glScalef(ASPHERERADIUS, ASPHERERADIUS, ASPHERERADIUS);
+    glScalef(WORLDRADIUS*ASPHERERADIUS, WORLDRADIUS*ASPHERERADIUS, WORLDRADIUS*ASPHERERADIUS);
 
     glBegin(GL_TRIANGLES);
 
         tSphere(4, 1);
 
     glEnd();
+
+    glScalef(1.0f/(WORLDRADIUS*ASPHERERADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS));
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -112,8 +114,9 @@ void World::skybox()
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
+    glDepthMask(GL_FALSE);
     // Scale the skybox to the set radius
-    glScalef(SKYBOXRADIUS, SKYBOXRADIUS, SKYBOXRADIUS);
+    glScalef(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS, WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS, WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS);
 
     // We need to bind the texture inside the list so that the texture is rendered
     // whenever the list is called.
@@ -131,6 +134,10 @@ void World::skybox()
 
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    glScalef(1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS));
+
+    glDepthMask(GL_TRUE);
   glEndList();
   w_displayList.push_back(id);
 }

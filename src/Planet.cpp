@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "Planet.h"
+#include "TextureOBJ.h"
 #include "NCCA/GLFunctions.h"
 
 Planet::Planet()
@@ -21,11 +22,14 @@ Planet::Planet()
   loadModel("models/tree_trunk.obj", t_trunk);
   loadModel("models/tree_leaves.obj", t_leaves);
 
+  loadTexture("textures/cloud_particle.png", c_texture);
+
   genSurface();
   genMountains();
   genWaterbottoms();
   genWaters();
   genTree();
+  genClouds();
 }
 
 Planet::~Planet()
@@ -70,6 +74,10 @@ void Planet::draw()
 
     glPopMatrix();
   }
+  /*glPushMatrix();
+    glTranslatef(0.0f, 1.0f, 0.0f);
+    glCallList(c_displayList[0]);
+  glPopMatrix();*/
 }
 
 void Planet::genSurface()
@@ -213,4 +221,56 @@ void Planet::genTree()
   glEndList();
 
   t_displayList.push_back(id);
+}
+
+void Planet::genClouds()
+{
+  /*float r = 0.15f;
+  float l = 0.001f;
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE);
+    glBindTexture(GL_TEXTURE_2D, c_texture);
+
+    glBegin(GL_TRIANGLES);
+      glColor3f(1, 1, 1);
+      for(int i = 0; i < 10; ++i)
+      {
+        float z = fmod(std::rand()/((float)RAND_MAX), 0.21f);
+        quad(r, l, z);
+        l += 0.002f;
+      }
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDepthMask(GL_TRUE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glEndList();
+
+  c_displayList.push_back(id);*/
+}
+
+void Planet::quad(float &_l, float &_os, float &_z)
+{
+  glNormal3f(0.0, 0.0, 1.0f);
+  glTexCoord2f(0, 0);
+  glVertex3f(-_l + _os, _l + _os, _z);
+
+  glTexCoord2f(0, 1);
+  glVertex3f(-_l + _os, -_l + _os, _z);
+
+  glTexCoord2f(1, 0);
+  glVertex3f(_l + _os, _l + _os, _z);
+
+  glTexCoord2f(1, 0);
+  glVertex3f(_l + _os, _l + _os, _z);
+
+  glTexCoord2f(0, 1);
+  glVertex3f(-_l + _os, -_l + _os, _z);
+
+  glTexCoord2f(1, 1);
+  glVertex3f(_l + _os, -_l + _os, _z);
 }

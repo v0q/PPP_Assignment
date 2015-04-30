@@ -26,6 +26,8 @@ class Planet
     void genWaters();
     void genWaterbottoms();
     void genTree();
+    void genClouds();
+    void quad(float &_l, float &_os, float &_z);
 
     model p_surface;
     model p_mountains;
@@ -37,7 +39,10 @@ class Planet
     std::vector<Vec4> tree_positions;
 
     std::vector<GLuint> p_displayList;
+    std::vector<GLuint> c_displayList;
     std::vector<GLuint> t_displayList;
+
+    GLuint c_texture;
 };
 
 #endif
