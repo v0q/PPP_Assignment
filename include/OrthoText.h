@@ -20,7 +20,6 @@ void OrthoText(void *font, const std::string &_str, GLfloat x, GLfloat y)
 
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
-
     glLoadIdentity();
     gluOrtho2D(0.0, 1.0, 0.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
@@ -43,5 +42,4 @@ void OrthoText(void *font, const std::string &_str, GLfloat x, GLfloat y)
   glMatrixMode(matrixMode);
 
   if (lightingOn) glEnable(GL_LIGHTING);
-  std::cout << "SHOULD PRINT OUT THE THING!\n";
 }

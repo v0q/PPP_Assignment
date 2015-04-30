@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Asteroids.h"
 #include "frames.h"
+#include "OrthoText.h"
 
 int main()
 {
@@ -43,6 +44,8 @@ int main()
 
     if(player.isAlive())
       player.checkCollisions(world.asteroids, world.a_ColIndices);
+    else
+      OrthoText(GLUT_BITMAP_HELVETICA_18, "GAME OVER!", 0.5f, 0.5f);
 
     sdlgl.handleInput(player, cam);
 
