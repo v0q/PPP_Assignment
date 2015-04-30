@@ -19,11 +19,12 @@
 Player::Player(float _x, float _y, float _z) : score(0), pos(_x, _y, _z, 1.0f), aimDir(0.0f), rot(0.0f), turn(0.0f), xMov(0.0f), yMov(0.0f), life(100)
 {
   loadModel("models/ss.obj", m_ship);
-  ship();
 
   loadTexture("textures/projectile4.png", particleTexId);
   loadTexture("textures/animated_explosion.png", projectileId);
   loadTexture("textures/ss_texture.png", shipTexId);
+
+  ship();
 
   audio::loadSound("sounds/flame.wav", &a_fire);
   audio::loadSound("sounds/bg_sound.ogg", &bgSound);
@@ -305,7 +306,6 @@ void Player::ship()
 
     glColor3f(1.0f, 1.0f, 1.0f);
     glBindTexture(GL_TEXTURE_2D, shipTexId);
-    std::cout << (int)m_ship.Verts.size() << "\n";
 
     glBegin(GL_TRIANGLES);
       for(int i = 0; i < (int)m_ship.Ind.size(); i += 3)

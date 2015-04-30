@@ -31,7 +31,7 @@ World::World() : max_asteroids(10)
   Mix_VolumeChunk(a_bgmusic, MIX_MAX_VOLUME * 0.8f);
   Mix_VolumeChunk(a_explosion, MIX_MAX_VOLUME * 0.4f);
 
-  Mix_PlayChannel(-1, a_bgmusic, -1);
+  //Mix_PlayChannel(-1, a_bgmusic, -1);
 }
 
 World::~World()
@@ -109,7 +109,7 @@ void World::atmosphere()
 
 void World::skybox()
 {
-  loadTexture("textures/sb_90.png", skyBoxTexId);
+  loadTexture("textures/sb_cube.png", skyBoxTexId);
 
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
