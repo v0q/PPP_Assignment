@@ -129,7 +129,7 @@ void SDL_GL::enableLighting() const
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
-  glColor3f(1,1,0);
+  glColor3f(1,1,1);
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);

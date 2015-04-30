@@ -38,6 +38,7 @@ linux-* {
     DEFINES += LINUX
     LIBS+= -lGLEW -lglut -lGLU
 }
+
 linux-clang {
     DEFINES += LINUX
     LIBS+= -lGLEW -lglut -lGLU

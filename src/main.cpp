@@ -12,8 +12,8 @@
 int main()
 {
   SDL_GL sdlgl;
-  World world;
   Camera cam;
+  World world;
   Player player(0.0f, 0.0f, WORLDRADIUS+PLAYEROFFSET);
 
   cam.initCamera();
@@ -54,7 +54,6 @@ int main()
       world.max_asteroids += world.max_asteroids/50 + 1;
       lastTime = (SDL_GetTicks() - start)/1000;
     }
-
 
     frameEnd(GLUT_BITMAP_HELVETICA_18, 1.0, 1.0, 1.0, 0.05, 0.95, player.score);
     SDL_GL_SwapWindow(sdlgl.win);

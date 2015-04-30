@@ -109,11 +109,12 @@ void World::atmosphere()
 
 void World::skybox()
 {
-  loadTexture("textures/sb_cube.png", skyBoxTexId);
+  loadTexture("textures/sb_90.png", skyBoxTexId);
 
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
+    glDisable(GL_LIGHTING);
     glDepthMask(GL_FALSE);
     // Scale the skybox to the set radius
     glScalef(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS, WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS, WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS);
@@ -138,6 +139,7 @@ void World::skybox()
     glScalef(1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS));
 
     glDepthMask(GL_TRUE);
+    glEnable(GL_LIGHTING);
   glEndList();
   w_displayList.push_back(id);
 }

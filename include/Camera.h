@@ -3,7 +3,7 @@
 
 #include "Defs.h"
 #include "NCCA/Vec4.h"
-#define CAMRADIUS 6
+#define CAMRADIUS 6.0f
 
 class Camera
 {
@@ -25,7 +25,7 @@ class Camera
 
     Mat4 orient;
 
-    Camera(): eye(0.0f, 0.0f, 4.0f),
+    Camera(): eye(0.0f, 0.0f, CAMRADIUS),
               look(0.0f, 0.0f, 0.0f),
               up(0.0f, 1.0f, 0.0f),
               fov(65.0f),
