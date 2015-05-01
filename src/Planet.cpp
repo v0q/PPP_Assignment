@@ -107,26 +107,49 @@ void Planet::genSurface()
   glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)p_surface.Ind.size(); i += 3)
+      for(int i = 0; i < (int)p_surface.Ind.size(); i += 9)
       {
+        float r[3];
+        float g[3];
+        float b[3];
+        int j = 0;
         // Normalizing the vertex distance to 0 -> 1 for color calculatons
-        float hVal = (p_surface.Verts[p_surface.Ind[i] - 1].length() - min) / (max - min);
-
-        if(hVal < 0.4f)
+        for(int k = i; k < i + 9; k += 3)
         {
-          glColor3f(0.686f + 0.15f*(hVal / 0.4f), 0.592f + 0.1f*(hVal / 0.4f), 0.31f);
+          float hVal = (p_surface.Verts[p_surface.Ind[k] - 1].length() - min) / (max - min);
 
-          if(stored_position[p_surface.Ind[i] - 1] == false)
+          if(hVal < 0.4f)
           {
-            tree_positions.push_back(Vec4(p_surface.Verts[p_surface.Ind[i] - 1]));
-            stored_position[p_surface.Ind[i] - 1] = true;
+            //glColor3f(0.686f + 0.15f*(hVal / 0.4f), 0.592f + 0.1f*(hVal / 0.4f), 0.31f);
+            r[j] = 0.686f + 0.15f*(hVal / 0.4f);
+            g[j] = 0.592f + 0.1f*(hVal / 0.4f);
+            b[j] = 0.31f;
+
+            if(stored_position[p_surface.Ind[k] - 1] == false)
+            {
+              tree_positions.push_back(Vec4(p_surface.Verts[p_surface.Ind[k] - 1]));
+              stored_position[p_surface.Ind[k] - 1] = true;
+            }
           }
+          else
+          {
+          //glColor3f(0.471f, 0.565f + 0.35f*(hVal - 0.49f) / 0.4f, 0.188f);
+            r[j] = 0.471f;
+            g[j] = 0.565f + 0.35f*(hVal - 0.49f) / 0.4f;
+            b[j] = 0.188f;
+          }
+          ++j;
         }
-        else
-          glColor3f(0.471f, 0.565f + 0.35f*(hVal - 0.49f) / 0.4f, 0.188f);
 
         p_surface.Norms[p_surface.Ind[i + 2] - 1].normalGL();
+        glColor3f(r[0], g[0], b[0]);
         p_surface.Verts[p_surface.Ind[i] - 1].vertexGL();
+
+        //glColor3f(r[1], g[1], b[1]);
+        p_surface.Verts[p_surface.Ind[i + 3] - 1].vertexGL();
+
+        //glColor3f(r[2], g[2], b[2]);
+        p_surface.Verts[p_surface.Ind[i + 6] - 1].vertexGL();
       }
 
     glEnd();
