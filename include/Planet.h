@@ -29,12 +29,15 @@ class Planet
     void genClouds();
     void quad(float &_l, float &_os, float &_z);
 
+    float cloudRot;
+
     model p_surface;
     model p_mountains;
     model p_waters;
     model p_waterbottoms;
     model t_leaves;
     model t_trunk;
+    model m_cloud;
 
     std::vector<Vec4> tree_positions;
 
