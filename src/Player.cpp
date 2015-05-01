@@ -22,7 +22,12 @@ Player::Player(float _x, float _y, float _z) : score(0), pos(_x, _y, _z, 1.0f), 
 
   loadTexture("textures/projectile4.png", particleTexId);
   loadTexture("textures/animated_explosion.png", projectileId);
+#ifdef LINUX
+  loadTexture("textures/ss_texture_90.png", shipTexId);
+#endif
+#ifdef DARWIN
   loadTexture("textures/ss_texture.png", shipTexId);
+#endif
 
   ship();
 
@@ -302,6 +307,11 @@ void Player::ship()
     glEnd();
 
     glRotatef(90, 1, 0, 0);
+
+#ifdef LINUX
+    glRotatef(-90, 0, 1, 0);
+#endif
+
     glScalef(0.02, 0.02, 0.02);
 
     glColor3f(1.0f, 1.0f, 1.0f);

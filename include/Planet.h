@@ -9,6 +9,8 @@
 #endif
 
 #include <vector>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 #include "LoadOBJ.h"
 #include "NCCA/Vec4.h"
@@ -27,9 +29,15 @@ class Planet
     void genWaterbottoms();
     void genTree();
     void genClouds();
-    void quad(float &_l, float &_os, float &_z);
 
-    float cloudRot;
+    typedef struct
+    {
+      Vec4 rAxis;
+      float rot;
+      float scale;
+    } cloud;
+
+    int max_clouds;
 
     model p_surface;
     model p_mountains;
@@ -40,12 +48,15 @@ class Planet
     model m_cloud;
 
     std::vector<Vec4> tree_positions;
+    std::vector<cloud> clouds;
 
     std::vector<GLuint> p_displayList;
     std::vector<GLuint> c_displayList;
     std::vector<GLuint> t_displayList;
 
     GLuint c_texture;
+
+    boost::mt19937 rng;
 };
 
 #endif

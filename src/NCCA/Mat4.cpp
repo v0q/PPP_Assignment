@@ -134,3 +134,17 @@ void Mat4::loadModelView() const
   glLoadIdentity();
   glMultMatrixf(m_openGL);
 }
+
+const Mat4& Mat4::transpose()
+{
+  Mat4 tmp(*this);
+
+  for(int row=0; row<4; row++)
+  {
+    for(int col=0; col<4; col++)
+    {
+      m_m[row][col]=tmp.m_m[col][row];
+    }
+  }
+  return *this;
+}

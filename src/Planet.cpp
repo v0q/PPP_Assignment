@@ -6,15 +6,20 @@
 #endif
 
 #include <algorithm>
-#include <iostream>
 #include <cmath>
+#include <ctime>
 
 #include "Planet.h"
 #include "TextureOBJ.h"
 #include "NCCA/GLFunctions.h"
 
-Planet::Planet() : cloudRot(0)
+Planet::Planet()
 {
+  rng.seed(time(NULL));
+
+  boost::random::uniform_int_distribution<> u_random(25, 250);
+  max_clouds = u_random(rng);
+
   loadModel("models/p_surface.obj", p_surface);
   loadModel("models/p_mountains.obj", p_mountains);
   loadModel("models/p_waters.obj", p_waters);
@@ -41,6 +46,11 @@ Planet::~Planet()
   freeModelMem(p_waterbottoms);
   freeModelMem(t_trunk);
   freeModelMem(t_leaves);
+
+  tree_positions.clear();
+  std::vector<Vec4>().swap(tree_positions);
+  clouds.clear();
+  std::vector<cloud>().swap(clouds);
 }
 
 void Planet::draw()
@@ -76,12 +86,15 @@ void Planet::draw()
     glPopMatrix();
   }
 
-  glPushMatrix();
-    glRotatef(cloudRot += 0.1f, 1.0f, 0.0f, 0.5f);
-    glTranslatef(0.0f, 1.0f, 0.0f);
-    glScalef(0.05f, 0.05f, 0.05f);
-    glCallList(c_displayList[0]);
-  glPopMatrix();
+  for(int i = 0; i < max_clouds; ++i)
+  {
+    glPushMatrix();
+      glRotatef(clouds[i].rot += 0.1f, clouds[i].rAxis.m_x, clouds[i].rAxis.m_y, clouds[i].rAxis.m_z);
+      glTranslatef(0.0f, 1.0f, 0.0f);
+      glScalef(clouds[i].scale, clouds[i].scale, clouds[i].scale);
+      glCallList(c_displayList[0]);
+    glPopMatrix();
+  }
 }
 
 void Planet::genSurface()
@@ -232,9 +245,6 @@ void Planet::genClouds()
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    //glDepthMask(GL_FALSE);
-
     glBegin(GL_TRIANGLES);
       glColor3f(1, 1, 1);
       for(int i = 0; i < (int)m_cloud.Ind.size(); i += 3)
@@ -244,33 +254,23 @@ void Planet::genClouds()
       }
     glEnd();
 
-//    glBindTexture(GL_TEXTURE_2D, 0);
-//    glDepthMask(GL_TRUE);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
   glEndList();
 
   c_displayList.push_back(id);
-}
 
-void Planet::quad(float &_l, float &_os, float &_z)
-{
-  glNormal3f(0.0, 0.0, 1.0f);
-  glTexCoord2f(0, 0);
-  glVertex3f(-_l + _os, _l + _os, _z);
+  boost::random::uniform_int_distribution<> u_random(1, 100);
 
-  glTexCoord2f(0, 1);
-  glVertex3f(-_l + _os, -_l + _os, _z);
+  for(int i = 0; i < max_clouds; ++i)
+  {
+    cloud aCloud;
+    aCloud.rAxis = Vec4(u_random(rng)/100.0f * 2.0f - 1.0f,
+                        u_random(rng)/100.0f * 2.0f - 1.0f,
+                        u_random(rng)/100.0f * 2.0f - 1.0f);
+    aCloud.rAxis.normalize();
 
-  glTexCoord2f(1, 0);
-  glVertex3f(_l + _os, _l + _os, _z);
+    aCloud.rot = u_random(rng)*3.6f;
+    aCloud.scale = u_random(rng) / (100.0f * 20.0f) + 0.01f;
 
-  glTexCoord2f(1, 0);
-  glVertex3f(_l + _os, _l + _os, _z);
-
-  glTexCoord2f(0, 1);
-  glVertex3f(-_l + _os, -_l + _os, _z);
-
-  glTexCoord2f(1, 1);
-  glVertex3f(_l + _os, -_l + _os, _z);
+    clouds.push_back(aCloud);
+  }
 }

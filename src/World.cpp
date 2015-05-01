@@ -22,8 +22,20 @@ World::World() : max_asteroids(10)
   loadModel("models/sphere.obj", m_skybox);
   loadModel("models/asteroid1.obj", m_asteroid[0]);
   loadModel("models/asteroid2.obj", m_asteroid[1]);
+
+#ifdef LINUX
+  loadTexture("textures/sb_90.png", skyBoxTexId);
+#endif
+#ifdef DARWIN
+  loadTexture("textures/sb_cube.png", skyBoxTexId);
+#endif
+
+  loadTexture("textures/Am2.jpg", aTexId);
+
+
   audio::loadSound("sounds/explosion.wav", &a_explosion);
   audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
+
   atmosphere();
   skybox();
   genALists();
@@ -109,8 +121,6 @@ void World::atmosphere()
 
 void World::skybox()
 {
-  loadTexture("textures/sb_cube.png", skyBoxTexId);
-
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
@@ -310,8 +320,6 @@ void World::partByDist()
 
 void World::genALists()
 {
-  loadTexture("textures/Am2.jpg", aTexId);
-
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
     glBegin(GL_TRIANGLES);

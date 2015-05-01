@@ -23,6 +23,8 @@ class Mat4
     // Load gl projection
     void loadProjection() const;
 
+    const Mat4& transpose();
+
     union
     {
       float m_m[4][4];

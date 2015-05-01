@@ -17,6 +17,7 @@ void Camera::updateCamera()
   this->orient = GLFunctions::orientation(eye,
                                           look,
                                           up);
+
   this->orient.loadModelView();
 
   /*Vec4 lPos = eye;
