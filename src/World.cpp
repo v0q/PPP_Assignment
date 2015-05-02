@@ -36,7 +36,7 @@ World::World() : max_asteroids(10)
   audio::loadSound("sounds/explosion.wav", &a_explosion);
   audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
 
-  atmosphere();
+  //atmosphere();
   skybox();
   genALists();
 

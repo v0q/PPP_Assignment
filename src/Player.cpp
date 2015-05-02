@@ -16,7 +16,7 @@
 #include "World.h"
 #include "NCCA/GLFunctions.h"
 
-Player::Player(float _x, float _y, float _z) : score(0), pos(_x, _y, _z, 1.0f), aimDir(0.0f), rot(0.0f), turn(0.0f), xMov(0.0f), yMov(0.0f), life(100)
+Player::Player(float _x, float _y, float _z) : score(0), pos(_x, _y, _z, 1.0f), aimDir(0.0f), rot(0.0f), turn(0.0f), xMov(0.0f), yMov(0.0f), life(100), moving(0)
 {
   loadModel("models/ss.obj", m_ship);
 
@@ -77,6 +77,9 @@ void Player::drawPlayer()
 
     glColor3f(1.0f, 0.0, 0.0f);
     glCallLists(m_displayList.size(), GL_UNSIGNED_INT, &m_displayList[0]);
+
+    if(moving)
+      engineFire();
 }
 
 void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
@@ -209,7 +212,11 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
           ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
     turn = ((distance > 0 && distance <= 180) || distance < -180 ? -25 :
           ((distance >= -180 && distance < 0) || distance > 180 ? 25 : 0));
+
+    moving = 1;
   }
+  else
+    moving = 0;
 
   if(xMov || yMov)
     Mix_VolumeMusic(MIX_MAX_VOLUME * (((fabs(xMov) + fabs(yMov))/0.5f) < 0.25f ? 0.05f : ((fabs(xMov) + fabs(yMov))/0.5f)));
@@ -312,7 +319,7 @@ void Player::ship()
     glRotatef(-90, 0, 1, 0);
 #endif
 
-    glScalef(0.02, 0.02, 0.02);
+    glScalef(0.02f, 0.02f, 0.02f);
 
     glColor3f(1.0f, 1.0f, 1.0f);
     glBindTexture(GL_TEXTURE_2D, shipTexId);
@@ -327,6 +334,7 @@ void Player::ship()
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, 0);
+    glScalef(1.0f/0.02f, 1.0f/0.02f, 1.0f/0.02f);
   glEndList();
   m_displayList.push_back(id);
 }
@@ -407,4 +415,50 @@ void Player::drawParticles()
   glBindTexture(GL_TEXTURE_2D, 0);
   glDepthMask(GL_TRUE);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Player::engineFire()
+{
+  float tDim = 1.0/5.0;
+  static int step = 0;
+
+  float xMin = tDim * (step%5);
+  float xMax = tDim * (step%5 + 1);
+  float yMin = tDim * (step/5);
+  float yMax = tDim * (step/5 + 1);
+
+  step = (step < 25 ? step + 1 : 0);
+
+  std::cout << step << "\n";
+
+  float r = 0.04f;
+  glBindTexture(GL_TEXTURE_2D, projectileId);
+  glTranslatef(0.1f, 0.09f, 0.0f);
+  glPointSize(10);
+  glBegin(GL_TRIANGLES);
+    glNormal3f(0.0f, 1.0f, 0.0f);
+    // Bot left
+    glTexCoord2f(xMin, yMax);
+    glVertex3f(r*4.0f, 0, r);
+
+    // Top right
+    glTexCoord2f(xMax, yMin);
+    glVertex3f(0, 0, -r);
+
+    // Top left
+    glTexCoord2f(xMin, yMin);
+    glVertex3f(0, 0, r);
+
+    // Top right
+    glTexCoord2f(xMax, yMin);
+    glVertex3f(0, 0, -r);
+
+    // Bot left
+    glTexCoord2f(xMin, yMax);
+    glVertex3f(r*4.0f, 0, r);
+
+    // Bot right
+    glTexCoord2f(xMax, yMax);
+    glVertex3f(r*4.0f, 0, -r);
+  glEnd();
 }

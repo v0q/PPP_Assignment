@@ -17,7 +17,7 @@ Planet::Planet()
 {
   rng.seed(time(NULL));
 
-  boost::random::uniform_int_distribution<> u_random(25, 250);
+  boost::random::uniform_int_distribution<> u_random(25, 125);
   max_clouds = u_random(rng);
 
   loadModel("models/p_surface.obj", p_surface);
