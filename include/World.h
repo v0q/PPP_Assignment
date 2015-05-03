@@ -37,7 +37,7 @@ class World
     std::list<int> a_ColIndices;
     int max_asteroids;
 
-  private:
+  protected:
     void drawPlanet();
     void atmosphere();
     void skybox();

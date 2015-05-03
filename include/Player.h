@@ -41,11 +41,10 @@ class Player
     std::vector<Particle> particles;
     int score;
 
-  private:
+  protected:
     void ship();
     void wrapRotation(float &io_a);
     void shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl);
-    void engineFire();
 
     Vec4 pos, norm;
     Mat4 orientation;
@@ -59,8 +58,8 @@ class Player
     float aimDir;
     float rot, turn;
     float xMov, yMov;
-    int life, moving;
-    GLuint shipTexId, projectileId, particleTexId, engFireTexId;
+    int life;
+    GLuint shipTexId, projectileId, particleTexId,;
 };
 
 #endif

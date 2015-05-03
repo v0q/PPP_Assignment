@@ -1,17 +1,31 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+*/
+
 #include "Particles.h"
 
-void Particle::draw() const
+// ---------------------------------------------------------------------------------------
+/// @file Particles.cpp
+/// @brief Implementation the particle draw and move functions
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
+void Particle::draw()
 {
   glColor4f(1,
-            1 - (life / (float)max_life),
-            0.5 - 2*(life / (float)max_life),
-            1 - life / (float)max_life);
-  glVertex3f(pos.m_x, pos.m_y, pos.m_z);
+            1 - (m_life / (float)m_max_life),
+            0.5 - 2*(m_life / (float)m_max_life),
+            1 - m_life / (float)m_max_life);
+  m_pos.vertexGL();
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void Particle::move()
 {
-  pos.m_x += (pos.m_x > 0 ? -moveX : moveX);
-  pos.m_y += (pos.m_y > 0 ? -moveY : moveY);
-  pos.m_z += (pos.m_z > 0 ? -moveZ : moveZ);
+  m_pos.m_x += (m_pos.m_x > 0 ? -m_moveX : m_moveX);
+  m_pos.m_y += (m_pos.m_y > 0 ? -m_moveY : m_moveY);
+  m_pos.m_z += (m_pos.m_z > 0 ? -m_moveZ : m_moveZ);
 }
+// ---------------------------------------------------------------------------------------

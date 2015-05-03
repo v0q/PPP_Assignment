@@ -1,5 +1,22 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+*/
+
 #ifndef CAMERA_H
 #define CAMERA_H
+
+// ---------------------------------------------------------------------------------------
+/// @file Camera.h
+/// @brief Class to handle camera and its movement
+/// @version 1.0
+/// @author Teemu Lindborg
+/// @date 03/05/15
+/// Revision History:
+///   -
+/// @todo Understand the GL pipeline properly and load/use projection and modelview
+///       matrices properly, thus possibly update the updateCamera() function
+// ---------------------------------------------------------------------------------------
 
 #include "Defs.h"
 #include "NCCA/Vec4.h"
@@ -8,36 +25,63 @@
 class Camera
 {
   public:
-    // Eye level
-    Vec4 eye;
-    // Look at
-    Vec4 look;
-    // Up
-    Vec4 up;
-    // Left vector
-    Vec4 w;
-    // Field-of-view
-    float fov;
-    // Near, far
-    float n, f;
-    // Aspect ratio
-    float a;
+    // ---------------------------------------------------------------------------------------
+    /// @brief Vector holding the camera position
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_eye;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Vector holding the position to look at
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_look;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Up vector of the camera
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_up;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Side vector of the camera
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_w;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Field of view angle
+    // ---------------------------------------------------------------------------------------
+    float m_fov;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Near and far clipping plane distances
+    // ---------------------------------------------------------------------------------------
+    float m_n, m_f;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Aspect ratio
+    // ---------------------------------------------------------------------------------------
+    float m_a;
 
     Mat4 orient;
 
-    Camera(): eye(0.0f, 0.0f, CAMRADIUS),
-              look(0.0f, 0.0f, 0.0f),
-              up(0.0f, 1.0f, 0.0f),
-              fov(65.0f),
-              n(0.5f), f(200.0f),
-              a(SCREENWIDTH / (float)SCREENHEIGHT) {}
-    ~Camera() {}
+    Camera(): m_eye(0.0f, 0.0f, CAMRADIUS),
+              m_look(0.0f, 0.0f, 0.0f),
+              m_up(0.0f, 1.0f, 0.0f),
+              m_fov(65.0f),
+              m_n(0.5f),
+              m_f(200.0f),
+              m_a(SCREENWIDTH / (float)SCREENHEIGHT)
+    { }
+    ~Camera() { }
 
-    /*void setEye(float &_x, float &_y, float &_z) { ex = _x; ey = _y; ez = _z; }
-    void setUp(float &_x, float &_y, float &_z) { ux = _x; uy = _y; uz = _z; }*/
-
+    // ---------------------------------------------------------------------------------------
+    /// @brief Initialises the camera by loading the projection and modelview matrices
+    // ---------------------------------------------------------------------------------------
     void initCamera();
-    void updateCamera();
-};
 
-#endif
+    // ---------------------------------------------------------------------------------------
+    /// @brief Updates the camera based on the new position, look and up vectors
+    // ---------------------------------------------------------------------------------------
+    void updateCamera();
+
+}; // end of class
+
+#endif // end of CAMERA_H

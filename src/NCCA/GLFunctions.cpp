@@ -1,11 +1,21 @@
-#include <iostream>
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+ Initial code © by Jon Macey
+*/
+
 #include <cmath>
 
 #include "NCCA/Vec4.h"
-#include "NCCA/Mat4.h"
 #include "NCCA/GLFunctions.h"
 
-Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, Vec4 _up)
+// ---------------------------------------------------------------------------------------
+/// @file GLFunctions.cpp
+/// @brief Implementation for GLFunctions class
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
+Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, const Vec4 _up)
 {
   Vec4 n = _look-_eye;
   Vec4 u = _up;
@@ -28,11 +38,13 @@ Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, Vec4 _up)
   mv.m_30 = -_eye.dot(v);
   mv.m_31 = -_eye.dot(u);
   mv.m_32 = _eye.dot(n);
+
   return mv;
 }
+// ---------------------------------------------------------------------------------------
 
-
-void GLFunctions::perspective(float _fovy,float _aspect, float _zNear, float _zFar)
+// ---------------------------------------------------------------------------------------
+void GLFunctions::perspective(const float _fovy, const float _aspect, const float _zNear, const float _zFar)
 {
   float range = tan(radians(_fovy / 2.0)) * _zNear;
   float left = -range * _aspect;
@@ -47,8 +59,11 @@ void GLFunctions::perspective(float _fovy,float _aspect, float _zNear, float _zF
   result.m_32 = - (2.0f* _zFar * _zNear) / (_zFar - _zNear);
   result.loadProjection();
 }
+// ---------------------------------------------------------------------------------------
 
-float GLFunctions::radians(float _deg )
+// ---------------------------------------------------------------------------------------
+float GLFunctions::radians(const float _deg )
 {
   return (_deg/180.0f) * M_PI;
 }
+// ---------------------------------------------------------------------------------------

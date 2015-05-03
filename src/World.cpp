@@ -36,14 +36,14 @@ World::World() : max_asteroids(10)
   audio::loadSound("sounds/explosion.wav", &a_explosion);
   audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
 
-  //atmosphere();
+  atmosphere();
   skybox();
   genALists();
 
   Mix_VolumeChunk(a_bgmusic, MIX_MAX_VOLUME * 0.8f);
   Mix_VolumeChunk(a_explosion, MIX_MAX_VOLUME * 0.4f);
 
-  //Mix_PlayChannel(-1, a_bgmusic, -1);
+  Mix_PlayChannel(-1, a_bgmusic, -1);
 }
 
 World::~World()
@@ -136,11 +136,11 @@ void World::skybox()
 
       // Set the skybox to be "fully colored" and draw get the triangles of the loaded mesh
       glColor4f(1, 1, 1, 1);
-      for(int i = 0; i < (int)m_skybox.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_skybox.m_Ind.size(); i += 3)
       {
-        m_skybox.Norms[m_skybox.Ind[i + 2] - 1].normalInvGL();
-        m_skybox.Text[m_skybox.Ind[i + 1] - 1].textureGL();
-        m_skybox.Verts[m_skybox.Ind[i] - 1].vertexGL();
+        m_skybox.m_Norms[m_skybox.m_Ind[i + 2] - 1].normalInvGL();
+        m_skybox.m_Text[m_skybox.m_Ind[i + 1] - 1].textureGL();
+        m_skybox.m_Verts[m_skybox.m_Ind[i] - 1].vertexGL();
       }
 
     glEnd();
@@ -272,15 +272,15 @@ void World::generate_Asteroids()
   glBindTexture(GL_TEXTURE_2D, aTexId);
   for(int i = 0; i < (int)asteroids.size(); ++i)
   {
-    if(asteroids[i].life > 0)
+    if(asteroids[i].m_life > 0)
       asteroids[i].draw(a_displayList);
     else
     {
-      if(asteroids[i].size > 0.5f)
+      if(asteroids[i].m_size > 0.5f)
       {
         for(int j = 0; j < 2; ++j)
         {
-          Vec4 aPos = asteroids[i].pos;
+          Vec4 aPos = asteroids[i].m_pos;
           aPos.normalize();
           Vec4 new_dir = aPos * - 1;
           Vec4 new_side(u_random(rng)/100.0 + 0.01f,
@@ -289,11 +289,11 @@ void World::generate_Asteroids()
           Vec4 new_up = new_side.cross(aPos);
 
           if(fabs(aPos.m_z) > 0.001)
-            new_side.m_z = -(new_side.m_x*aPos.m_x + new_side.m_y*aPos.m_y) / aPos.m_z;
+            new_side.m_z = -(new_side.m_x * aPos.m_x + new_side.m_y * aPos.m_y) / aPos.m_z;
 
-          float new_size = asteroids[i].size*fmod(u_random(rng)/100.0, 0.35f) + 0.25f;
+          float new_size = asteroids[i].m_size * fmod(u_random(rng)/100.0, 0.35f) + 0.25f;
 
-          asteroids.push_back(Asteroid(asteroids[i].pos, new_dir,
+          asteroids.push_back(Asteroid(asteroids[i].m_pos, new_dir,
                                        new_up, new_side,
                                        new_size, fmod(u_random(rng)/100.0, 0.055) + 0.02f,
                                        new_size*150, u_random(rng)%2));
@@ -312,7 +312,7 @@ void World::generate_Asteroids()
 void World::partByDist()
 {
   for(int i = 0; i < (int)asteroids.size(); ++i)
-    if(fabs(asteroids[i].pos.length() - WORLDRADIUS*ASPHERERADIUS) < 0.05)
+    if(fabs(asteroids[i].m_pos.length() - WORLDRADIUS*ASPHERERADIUS) < 0.05)
       a_ColIndices.push_back(i);
   a_ColIndices.sort();
   a_ColIndices.unique();
@@ -320,43 +320,28 @@ void World::partByDist()
 
 void World::genALists()
 {
-  GLuint id = glGenLists(1);
-  glNewList(id, GL_COMPILE);
-    glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)m_asteroid[0].Ind.size(); i += 9)
-      {
-        m_asteroid[0].Norms[m_asteroid[0].Ind[i + 2] - 1].normalGL();
-        m_asteroid[0].Text[m_asteroid[0].Ind[i + 1] - 1].textureGL();
-        m_asteroid[0].Verts[m_asteroid[0].Ind[i] - 1].vertexGL();
+  GLuint id;
 
-        m_asteroid[0].Text[m_asteroid[0].Ind[i + 4] - 1].textureGL();
-        m_asteroid[0].Verts[m_asteroid[0].Ind[i + 3] - 1].vertexGL();
+  for(int j = 0; j < 2; ++j)
+  {
+    id = glGenLists(1);
+    glNewList(id, GL_COMPILE);
+      glBegin(GL_TRIANGLES);
+        for(int i = 0; i < (int)m_asteroid[j].m_Ind.size(); i += 9)
+        {
+          m_asteroid[j].m_Norms[m_asteroid[j].m_Ind[i + 2] - 1].normalGL();
+          m_asteroid[j].m_Text[m_asteroid[j].m_Ind[i + 1] - 1].textureGL();
+          m_asteroid[j].m_Verts[m_asteroid[j].m_Ind[i] - 1].vertexGL();
 
-        m_asteroid[0].Text[m_asteroid[0].Ind[i + 7] - 1].textureGL();
-        m_asteroid[0].Verts[m_asteroid[0].Ind[i + 6] - 1].vertexGL();
-      }
-    glEnd();
-  glEndList();
+          m_asteroid[j].m_Text[m_asteroid[j].m_Ind[i + 4] - 1].textureGL();
+          m_asteroid[j].m_Verts[m_asteroid[j].m_Ind[i + 3] - 1].vertexGL();
 
-  a_displayList.push_back(id);
+          m_asteroid[j].m_Text[m_asteroid[j].m_Ind[i + 7] - 1].textureGL();
+          m_asteroid[j].m_Verts[m_asteroid[j].m_Ind[i + 6] - 1].vertexGL();
+        }
+      glEnd();
+    glEndList();
 
-  id = glGenLists(1);
-  glNewList(id, GL_COMPILE);
-    glBegin(GL_TRIANGLES);
-    for(int i = 0; i < (int)m_asteroid[1].Ind.size(); i += 9)
-    {
-      m_asteroid[1].Norms[m_asteroid[1].Ind[i + 2] - 1].normalGL();
-      m_asteroid[1].Text[m_asteroid[1].Ind[i + 1] - 1].textureGL();
-      m_asteroid[1].Verts[m_asteroid[1].Ind[i] - 1].vertexGL();
-
-      m_asteroid[1].Text[m_asteroid[1].Ind[i + 4] - 1].textureGL();
-      m_asteroid[1].Verts[m_asteroid[1].Ind[i + 3] - 1].vertexGL();
-
-      m_asteroid[1].Text[m_asteroid[1].Ind[i + 7] - 1].textureGL();
-      m_asteroid[1].Verts[m_asteroid[1].Ind[i + 6] - 1].vertexGL();
-    }
-    glEnd();
-  glEndList();
-
-  a_displayList.push_back(id);
+    a_displayList.push_back(id);
+  }
 }

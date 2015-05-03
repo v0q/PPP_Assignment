@@ -16,13 +16,14 @@
 #include "World.h"
 #include "NCCA/GLFunctions.h"
 
-Player::Player(float _x, float _y, float _z) : score(0), pos(_x, _y, _z, 1.0f), aimDir(0.0f), rot(0.0f), turn(0.0f), xMov(0.0f), yMov(0.0f), life(100), moving(0)
+Player::Player(float _x, float _y, float _z) :
+  score(0), pos(_x, _y, _z, 1.0f), aimDir(0.0f),
+  rot(0.0f), turn(0.0f), xMov(0.0f), yMov(0.0f), life(100)
 {
   loadModel("models/ss.obj", m_ship);
 
   loadTexture("textures/projectile4.png", particleTexId);
   loadTexture("textures/animated_explosion.png", projectileId);
-  loadTexture("textures/engine_flame.png", engFireTexId);
 #ifdef LINUX
   loadTexture("textures/ss_texture_90.png", shipTexId);
 #endif
@@ -68,23 +69,20 @@ void Player::drawPlayer()
     // Move player to the correct position
     glTranslatef(xMov, yMov, -pos.length()+WORLDRADIUS+PLAYEROFFSET);
 
-#ifdef LINUX
-    glRotatef(-90, 0, 0, 1);
-#endif
-
     glBegin(GL_POINTS);
       glColor3f(0, 0, 0);
       glVertex3f(0.1*cosf(aimDir), 0.1*sinf(aimDir), 0);
     glEnd();
+
+#ifdef LINUX
+    glRotatef(-90, 0, 0, 1);
+#endif
 
     glRotatef(rot, 0, 0, 1);
     glRotatef(turn, 0, 1, 0);
 
     glColor3f(1.0f, 0.0, 0.0f);
     glCallLists(m_displayList.size(), GL_UNSIGNED_INT, &m_displayList[0]);
-
-    if(moving)
-      engineFire();
 }
 
 void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
@@ -110,13 +108,13 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
 
   // Using the cross product we calculate the new up and side vectors for the camera
   // to control the correct movement of the camera and the player
-  _cam.eye.normalize();
+  _cam.m_eye.normalize();
 
-  _cam.w = _cam.eye;
-  _cam.w = _cam.w.cross(_cam.up);
-  _cam.up = _cam.w.cross(_cam.eye);
-  _cam.w.normalize();
-  _cam.up.normalize();
+  _cam.m_w = _cam.m_eye;
+  _cam.m_w = _cam.m_w.cross(_cam.m_up);
+  _cam.m_up = _cam.m_w.cross(_cam.m_eye);
+  _cam.m_w.normalize();
+  _cam.m_up.normalize();
 
   /*
    * Handle keyboard direction (trying to imitate controller stick coordinates
@@ -171,35 +169,35 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
   // and smooth the camera's movement as well
   if(ud)
   {
-    _cam.eye.m_x += ud * _cam.up.m_x * MOVESPEED;
-    _cam.eye.m_y += ud * _cam.up.m_y * MOVESPEED;
-    _cam.eye.m_z += ud * _cam.up.m_z * MOVESPEED;
+    _cam.m_eye.m_x += ud * _cam.m_up.m_x * MOVESPEED;
+    _cam.m_eye.m_y += ud * _cam.m_up.m_y * MOVESPEED;
+    _cam.m_eye.m_z += ud * _cam.m_up.m_z * MOVESPEED;
   }
   else
   {
-    _cam.eye.m_x -= _cam.up.m_x * yMove;
-    _cam.eye.m_y -= _cam.up.m_y * yMove;
-    _cam.eye.m_z -= _cam.up.m_z * yMove;
+    _cam.m_eye.m_x -= _cam.m_up.m_x * yMove;
+    _cam.m_eye.m_y -= _cam.m_up.m_y * yMove;
+    _cam.m_eye.m_z -= _cam.m_up.m_z * yMove;
   }
   if(lr)
   {
-    _cam.eye.m_x -= lr * _cam.w.m_x * MOVESPEED;
-    _cam.eye.m_y -= lr * _cam.w.m_y * MOVESPEED;
-    _cam.eye.m_z -= lr * _cam.w.m_z * MOVESPEED;
+    _cam.m_eye.m_x -= lr * _cam.m_w.m_x * MOVESPEED;
+    _cam.m_eye.m_y -= lr * _cam.m_w.m_y * MOVESPEED;
+    _cam.m_eye.m_z -= lr * _cam.m_w.m_z * MOVESPEED;
   }
   else
   {
-    _cam.eye.m_x += _cam.w.m_x * xMove;
-    _cam.eye.m_y += _cam.w.m_y * xMove;
-    _cam.eye.m_z += _cam.w.m_z * xMove;
+    _cam.m_eye.m_x += _cam.m_w.m_x * xMove;
+    _cam.m_eye.m_y += _cam.m_w.m_y * xMove;
+    _cam.m_eye.m_z += _cam.m_w.m_z * xMove;
   }
 
-  _cam.eye.normalize();
+  _cam.m_eye.normalize();
 
-  _cam.eye *= CAMRADIUS;
-  pos = _cam.eye;
+  _cam.m_eye *= CAMRADIUS;
+  pos = _cam.m_eye;
 
-  orientation = GLFunctions::orientation(_cam.eye, _cam.look, _cam.up);
+  orientation = GLFunctions::orientation(_cam.m_eye, _cam.m_look, _cam.m_up);
 
   // Check whether player is moving somewhere and
   // handle the possible rotation required
@@ -217,18 +215,14 @@ void Player::handleMovement(SDL_GameController *_c, Camera &_cam)
           ((distance >= -180 && distance < 0) || distance > 180 ? rot - aStep : rot));
     turn = ((distance > 0 && distance <= 180) || distance < -180 ? -25 :
           ((distance >= -180 && distance < 0) || distance > 180 ? 25 : 0));
-
-    moving = 1;
   }
-  else
-    moving = 0;
 
   if(xMov || yMov)
     Mix_VolumeMusic(MIX_MAX_VOLUME * (((fabs(xMov) + fabs(yMov))/0.5f) < 0.25f ? 0.05f : ((fabs(xMov) + fabs(yMov))/0.5f)));
 
   wrapRotation(rot);
 
-  shoot(_c, _cam.up, _cam.w);
+  shoot(_c, _cam.m_up, _cam.m_w);
 }
 
 void Player::shoot(SDL_GameController *_c, Vec4 &_cu, Vec4 &_cl)
@@ -312,12 +306,6 @@ void Player::ship()
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
-    glBegin(GL_LINE_STRIP);
-      glColor3f(1,0,0);
-      glVertex3f(0,0,0);
-      glVertex3f(0,1,0);
-    glEnd();
-
     glRotatef(90, 1, 0, 0);
 
     glScalef(0.02f, 0.02f, 0.02f);
@@ -326,11 +314,11 @@ void Player::ship()
     glBindTexture(GL_TEXTURE_2D, shipTexId);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)m_ship.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_ship.m_Ind.size(); i += 3)
       {
-        m_ship.Norms[m_ship.Ind[i + 2] - 1].normalGL();
-        m_ship.Text[m_ship.Ind[i + 1] - 1].textureGL();
-        m_ship.Verts[m_ship.Ind[i] - 1].vertexGL();
+        m_ship.m_Norms[m_ship.m_Ind[i + 2] - 1].normalGL();
+        m_ship.m_Text[m_ship.m_Ind[i + 1] - 1].textureGL();
+        m_ship.m_Verts[m_ship.m_Ind[i] - 1].vertexGL();
       }
     glEnd();
 
@@ -364,23 +352,23 @@ void Player::checkCollisions(std::vector<Asteroid> &io_a, std::list<int> &io_aIn
   {
     for(int i = 0; i < (int)p.size(); ++i)
     {
-      dist = (io_a[*it].pos - p[i].pos).length();
-      if(dist < io_a[*it].size * 0.75f)
+      dist = (io_a[*it].m_pos - p[i].pos).length();
+      if(dist < io_a[*it].m_size * 0.75f)
       {
-        io_a[*it].life -= 2;
+        io_a[*it].m_life -= 2;
         ++score;
 
-        if(io_a[*it].life <= 0)
+        if(io_a[*it].m_life <= 0)
           extra_particles = 50;
 
-        for(int j = 0; j < max_particles + extra_particles; ++j)
+        for(int j = 0; j < FIRE_PARTICLES + extra_particles; ++j)
           particles.push_back(Particle(p[i].pos, 25));
 
         p.erase(p.begin() + i);
       }
     }
 
-    if((io_a[*it].pos - paDist).length() <= io_a[*it].size * 0.5)
+    if((io_a[*it].m_pos - paDist).length() <= io_a[*it].m_size * 0.5)
     {
       life -= 20;
       if(life <= 0)
@@ -407,8 +395,8 @@ void Player::drawParticles()
     {
       particles[i].draw();
       particles[i].move();
-      ++particles[i].life;
-      if(particles[i].life >= particles[i].max_life)
+      ++particles[i].m_life;
+      if(particles[i].m_life >= particles[i].m_max_life)
         particles.erase(particles.begin() + i);
     }
   glEnd();
@@ -416,56 +404,4 @@ void Player::drawParticles()
   glBindTexture(GL_TEXTURE_2D, 0);
   glDepthMask(GL_TRUE);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void Player::engineFire()
-{
-  float tDim = 1.0/5.0;
-  static int step = 5;
-
-  float xMin = tDim * (step%5);
-  float xMax = tDim * (step%5 + 1);
-  float yMin = tDim * (step/5);
-  float yMax = tDim * (step/5 + 1);
-
-  step = (step < 20 ? step + 1 : 10);
-
-  float r = 0.1f;
-
-  glBindTexture(GL_TEXTURE_2D, projectileId);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-  glDepthMask(GL_FALSE);
-
-  glTranslatef(0.0f, 0.09f, 0.0f);
-
-  glBegin(GL_TRIANGLES);
-    glNormal3f(0.0f, 1.0f, 0.0f);
-    // Bot left
-    glTexCoord2f(xMin, yMax);
-    glVertex3f(r, 0, r*4.0f);
-
-    // Top right
-    glTexCoord2f(xMax, yMin);
-    glVertex3f(-r, 0, r);
-
-    // Top left
-    glTexCoord2f(xMin, yMin);
-    glVertex3f(r, 0, 0);
-
-    // Top right
-    glTexCoord2f(xMax, yMin);
-    glVertex3f(-r, 0, 0);
-
-    // Bot left
-    glTexCoord2f(xMin, yMax);
-    glVertex3f(r, 0, r*4.0f);
-
-    // Bot right
-    glTexCoord2f(xMax, yMax);
-    glVertex3f(-r, 0, r*4.0f);
-  glEnd();
-
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glDepthMask(GL_TRUE);
-  glBindTexture(GL_TEXTURE_2D, 0);
 }

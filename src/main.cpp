@@ -29,7 +29,7 @@ int main()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     frameStart();
 
-    world.drawStars((cam.eye-cam.look));
+    world.drawStars((cam.m_eye - cam.m_look));
     world.drawWorld();
 
     if(player.isAlive())

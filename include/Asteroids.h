@@ -1,5 +1,22 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+*/
+
 #ifndef ASTEROIDS_H
 #define ASTEROIDS_H
+
+// ---------------------------------------------------------------------------------------
+/// @file Asteroids.h
+/// @brief Class used to define an asteroid and its attributes
+/// @version 1.0
+/// @author Teemu Lindborg
+/// @date 03/05/15
+/// Revision History:
+///   -
+/// @todo Tidying up, maybe figure out a way to move the asteroids when they reach the
+///       surface without having to do normalisation as much.
+// ---------------------------------------------------------------------------------------
 
 #ifdef LINUX
   #include <GL/gl.h>
@@ -16,23 +33,89 @@
 class Asteroid
 {
   public:
-    Asteroid(Vec4 &_p, Vec4 &_d,
-             Vec4 &_up, Vec4 &_side,
-             float _s, float _sp,
-             float _l, int _t) :
-             pos(_p), dir(_d),
-             up(_up), side(_side),
-             size(_s), speed(_sp),
-             rot(0.0), life(_l),
-             aType(_t) {}
+    // ---------------------------------------------------------------------------------------
+    /// @brief Position vector of an asteroid
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_pos;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Direction vector of an asteroid
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_dir;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Up vector of an asteroid
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_up;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Side vector of an asteroid
+    // ---------------------------------------------------------------------------------------
+    Vec4 m_side;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Scale factor of an asteroid
+    // ---------------------------------------------------------------------------------------
+    float m_size;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Speed of an asteroid
+    // ---------------------------------------------------------------------------------------
+    float m_speed;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Rotation angle of an asteroid
+    // ---------------------------------------------------------------------------------------
+    float m_rot;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Health of an asteroid
+    // ---------------------------------------------------------------------------------------
+    int m_life;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief 3d model
+    // ---------------------------------------------------------------------------------------
+    int c_aType;
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Default constructor for an asteroid
+    /// @param _p Position vector
+    /// @param _d Direction vector
+    /// @param _up Up vector
+    /// @param _side Side vector
+    /// @param _s Scale factor
+    /// @param _sp Speed value
+    /// @param _l Life/health
+    /// @param _t Asteroid type for different models
+    // ---------------------------------------------------------------------------------------
+    Asteroid(const Vec4 &_p, const Vec4 &_d,
+             const Vec4 &_up, const Vec4 &_side,
+             const float _s, const float _sp,
+             const float _l, const int _t) :
+             m_pos(_p),
+             m_dir(_d),
+             m_up(_up),
+             m_side(_side),
+             m_size(_s),
+             m_speed(_sp),
+             m_rot(0.0),
+             m_life(_l),
+             c_aType(_t)
+    {}
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Default destructor
+    // ---------------------------------------------------------------------------------------
     ~Asteroid() {}
 
-    Vec4 pos, dir, up, side;
-    float size, speed, rot;
-    int life, aType;
-
-    void draw(std::vector<GLuint> &_dL);
+    // ---------------------------------------------------------------------------------------
+    /// @brief Function that will call the correct displaylist, scale, rotate and translate
+    ///        the asteroid to its correct position
+    /// @param D
+    // ---------------------------------------------------------------------------------------
+    void draw(const std::vector<GLuint> &_dL);
     void move();
-};
+}; // end of class
 
-#endif
+#endif // end of ASTEROIDS_H

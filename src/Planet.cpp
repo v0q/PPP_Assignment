@@ -20,19 +20,17 @@ Planet::Planet()
   boost::random::uniform_int_distribution<> u_random(25, 125);
   max_clouds = u_random(rng);
 
-  loadModel("models/p_surface.obj", p_surface);
-  loadModel("models/p_mountains.obj", p_mountains);
-  loadModel("models/p_waters.obj", p_waters);
-  loadModel("models/p_waterbottoms.obj", p_waterbottoms);
-  loadModel("models/tree_trunk.obj", t_trunk);
-  loadModel("models/tree_leaves.obj", t_leaves);
-  loadModel("models/cloud_1.obj", m_cloud);
-
-  loadTexture("textures/cloud_particle.png", c_texture);
+  loadModel("models/p_surface.obj", m_pSurface);
+  loadModel("models/p_mountains.obj", m_pMountains);
+  loadModel("models/p_waters.obj", m_pWaters);
+  loadModel("models/p_waterbottoms.obj", m_pSeabeds);
+  loadModel("models/tree_trunk.obj", m_tTrunk);
+  loadModel("models/tree_leaves.obj", m_tLeaves);
+  loadModel("models/cloud_1.obj", m_cloudGeometry);
 
   genSurface();
   genMountains();
-  genWaterbottoms();
+  genSeabeds();
   genWaters();
   genTree();
   genClouds();
@@ -40,17 +38,17 @@ Planet::Planet()
 
 Planet::~Planet()
 {
-  freeModelMem(p_surface);
-  freeModelMem(p_mountains);
-  freeModelMem(p_waters);
-  freeModelMem(p_waterbottoms);
-  freeModelMem(t_trunk);
-  freeModelMem(t_leaves);
+  freeModelMem(m_pSurface);
+  freeModelMem(m_pMountains);
+  freeModelMem(m_pWaters);
+  freeModelMem(m_pSeabeds);
+  freeModelMem(m_tTrunk);
+  freeModelMem(m_tLeaves);
 
   tree_positions.clear();
   std::vector<Vec4>().swap(tree_positions);
   clouds.clear();
-  std::vector<cloud>().swap(clouds);
+  std::vector<m_cloud>().swap(clouds);
 }
 
 void Planet::draw()
@@ -89,9 +87,9 @@ void Planet::draw()
   for(int i = 0; i < max_clouds; ++i)
   {
     glPushMatrix();
-      glRotatef(clouds[i].rot += 0.1f, clouds[i].rAxis.m_x, clouds[i].rAxis.m_y, clouds[i].rAxis.m_z);
+      glRotatef(clouds[i].m_rot += 0.1f, clouds[i].m_rAxis.m_x, clouds[i].m_rAxis.m_y, clouds[i].m_rAxis.m_z);
       glTranslatef(0.0f, 1.0f, 0.0f);
-      glScalef(clouds[i].scale, clouds[i].scale, clouds[i].scale);
+      glScalef(clouds[i].m_scale, clouds[i].m_scale, clouds[i].m_scale);
       glCallList(c_displayList[0]);
     glPopMatrix();
   }
@@ -101,13 +99,13 @@ void Planet::genSurface()
 {
   float min = 0.86f;
   float max = 0.92f;
-  bool *stored_position = new bool[(int)p_surface.Verts.size()];
+  bool *stored_position = new bool[(int)m_pSurface.m_Verts.size()];
 
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)p_surface.Ind.size(); i += 9)
+      for(int i = 0; i < (int)m_pSurface.m_Ind.size(); i += 9)
       {
         float r[3];
         float g[3];
@@ -116,7 +114,7 @@ void Planet::genSurface()
         // Normalizing the vertex distance to 0 -> 1 for color calculatons
         for(int k = i; k < i + 9; k += 3)
         {
-          float hVal = (p_surface.Verts[p_surface.Ind[k] - 1].length() - min) / (max - min);
+          float hVal = (m_pSurface.m_Verts[m_pSurface.m_Ind[k] - 1].length() - min) / (max - min);
 
           if(hVal < 0.4f)
           {
@@ -125,10 +123,10 @@ void Planet::genSurface()
             g[j] = 0.592f + 0.1f*(hVal / 0.4f);
             b[j] = 0.31f;
 
-            if(stored_position[p_surface.Ind[k] - 1] == false)
+            if(stored_position[m_pSurface.m_Ind[k] - 1] == false)
             {
-              tree_positions.push_back(Vec4(p_surface.Verts[p_surface.Ind[k] - 1]));
-              stored_position[p_surface.Ind[k] - 1] = true;
+              tree_positions.push_back(Vec4(m_pSurface.m_Verts[m_pSurface.m_Ind[k] - 1]));
+              stored_position[m_pSurface.m_Ind[k] - 1] = true;
             }
           }
           else
@@ -141,15 +139,15 @@ void Planet::genSurface()
           ++j;
         }
 
-        p_surface.Norms[p_surface.Ind[i + 2] - 1].normalGL();
+        m_pSurface.m_Norms[m_pSurface.m_Ind[i + 2] - 1].normalGL();
         glColor3f(r[0], g[0], b[0]);
-        p_surface.Verts[p_surface.Ind[i] - 1].vertexGL();
+        m_pSurface.m_Verts[m_pSurface.m_Ind[i] - 1].vertexGL();
 
-        //glColor3f(r[1], g[1], b[1]);
-        p_surface.Verts[p_surface.Ind[i + 3] - 1].vertexGL();
+        glColor3f(r[1], g[1], b[1]);
+        m_pSurface.m_Verts[m_pSurface.m_Ind[i + 3] - 1].vertexGL();
 
-        //glColor3f(r[2], g[2], b[2]);
-        p_surface.Verts[p_surface.Ind[i + 6] - 1].vertexGL();
+        glColor3f(r[2], g[2], b[2]);
+        m_pSurface.m_Verts[m_pSurface.m_Ind[i + 6] - 1].vertexGL();
       }
 
     glEnd();
@@ -168,16 +166,16 @@ void Planet::genMountains()
   glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)p_mountains.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_pMountains.m_Ind.size(); i += 3)
       {
-        float hVal = (p_mountains.Verts[p_mountains.Ind[i] - 1].length() - min) / (max - min);
+        float hVal = (m_pMountains.m_Verts[m_pMountains.m_Ind[i] - 1].length() - min) / (max - min);
 
         if(hVal > 0.7f)
           glColor3f(0.357f, 0.329f, 0.267f);
         else
           glColor3f(0.31f - 0.1 * (hVal / 0.7f), 0.286f - 0.1 * (hVal / 0.7f), 0.235f - 0.1 * (hVal / 0.7f));
-        p_mountains.Norms[p_mountains.Ind[i + 2] - 1].normalGL();
-        p_mountains.Verts[p_mountains.Ind[i] - 1].vertexGL();
+        m_pMountains.m_Norms[m_pMountains.m_Ind[i + 2] - 1].normalGL();
+        m_pMountains.m_Verts[m_pMountains.m_Ind[i] - 1].vertexGL();
       }
 
     glEnd();
@@ -192,10 +190,10 @@ void Planet::genWaters()
 
     glBegin(GL_TRIANGLES);
       glColor4f(0.671f, 0.827f, 0.878f, 0.6);
-      for(int i = 0; i < (int)p_waters.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_pWaters.m_Ind.size(); i += 3)
       {
-        p_waters.Norms[p_waters.Ind[i + 2] - 1].normalGL();
-        p_waters.Verts[p_waters.Ind[i] - 1].vertexGL();
+        m_pWaters.m_Norms[m_pWaters.m_Ind[i + 2] - 1].normalGL();
+        m_pWaters.m_Verts[m_pWaters.m_Ind[i] - 1].vertexGL();
       }
 
     glEnd();
@@ -203,7 +201,7 @@ void Planet::genWaters()
   p_displayList.push_back(id);
 }
 
-void Planet::genWaterbottoms()
+void Planet::genSeabeds()
 {
   float min = 0.78f;
   float max = 0.9f;
@@ -211,17 +209,17 @@ void Planet::genWaterbottoms()
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)p_waterbottoms.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_pSeabeds.m_Ind.size(); i += 3)
       {
-        float hVal = (p_waterbottoms.Verts[p_waterbottoms.Ind[i] - 1].length() - min) / (max - min);
+        float hVal = (m_pSeabeds.m_Verts[m_pSeabeds.m_Ind[i] - 1].length() - min) / (max - min);
 
         if(hVal < 0.7f)
           glColor3f(0.60f, 0.698f, 0.729f);
         else
           glColor3f(0.686f + 0.15f*(hVal / 0.7f), 0.592f + 0.1f*(hVal / 0.7f), 0.31f);
 
-        p_waterbottoms.Norms[p_waterbottoms.Ind[i + 2] - 1].normalGL();
-        p_waterbottoms.Verts[p_waterbottoms.Ind[i] - 1].vertexGL();
+        m_pSeabeds.m_Norms[m_pSeabeds.m_Ind[i + 2] - 1].normalGL();
+        m_pSeabeds.m_Verts[m_pSeabeds.m_Ind[i] - 1].vertexGL();
       }
 
     glEnd();
@@ -236,10 +234,10 @@ void Planet::genTree()
 
     glBegin(GL_TRIANGLES);
       glColor3f(0.165f, 0.106f, 0.039f);
-      for(int i = 0; i < (int)t_trunk.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_tTrunk.m_Ind.size(); i += 3)
       {
-        t_trunk.Norms[t_trunk.Ind[i + 2] - 1].normalGL();
-        t_trunk.Verts[t_trunk.Ind[i] - 1].vertexGL();
+        m_tTrunk.m_Norms[m_tTrunk.m_Ind[i + 2] - 1].normalGL();
+        m_tTrunk.m_Verts[m_tTrunk.m_Ind[i] - 1].vertexGL();
       }
     glEnd();
 
@@ -251,10 +249,10 @@ void Planet::genTree()
   glNewList(id, GL_COMPILE);
 
     glBegin(GL_TRIANGLES);
-      for(int i = 0; i < (int)t_leaves.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_tLeaves.m_Ind.size(); i += 3)
       {
-        t_leaves.Norms[t_leaves.Ind[i + 2] - 1].normalGL();
-        t_leaves.Verts[t_leaves.Ind[i] - 1].vertexGL();
+        m_tLeaves.m_Norms[m_tLeaves.m_Ind[i + 2] - 1].normalGL();
+        m_tLeaves.m_Verts[m_tLeaves.m_Ind[i] - 1].vertexGL();
       }
     glEnd();
 
@@ -270,10 +268,10 @@ void Planet::genClouds()
 
     glBegin(GL_TRIANGLES);
       glColor3f(1, 1, 1);
-      for(int i = 0; i < (int)m_cloud.Ind.size(); i += 3)
+      for(int i = 0; i < (int)m_cloudGeometry.m_Ind.size(); i += 3)
       {
-        m_cloud.Norms[m_cloud.Ind[i + 2] - 1].normalGL();
-        m_cloud.Verts[m_cloud.Ind[i] - 1].vertexGL();
+        m_cloudGeometry.m_Norms[m_cloudGeometry.m_Ind[i + 2] - 1].normalGL();
+        m_cloudGeometry.m_Verts[m_cloudGeometry.m_Ind[i] - 1].vertexGL();
       }
     glEnd();
 
@@ -285,14 +283,14 @@ void Planet::genClouds()
 
   for(int i = 0; i < max_clouds; ++i)
   {
-    cloud aCloud;
-    aCloud.rAxis = Vec4(u_random(rng)/100.0f * 2.0f - 1.0f,
+    m_cloud aCloud;
+    aCloud.m_rAxis = Vec4(u_random(rng)/100.0f * 2.0f - 1.0f,
                         u_random(rng)/100.0f * 2.0f - 1.0f,
                         u_random(rng)/100.0f * 2.0f - 1.0f);
-    aCloud.rAxis.normalize();
+    aCloud.m_rAxis.normalize();
 
-    aCloud.rot = u_random(rng)*3.6f;
-    aCloud.scale = u_random(rng) / (100.0f * 20.0f) + 0.01f;
+    aCloud.m_rot = u_random(rng)*3.6f;
+    aCloud.m_scale = u_random(rng) / (100.0f * 20.0f) + 0.01f;
 
     clouds.push_back(aCloud);
   }

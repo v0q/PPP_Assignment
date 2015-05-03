@@ -1,3 +1,26 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+ Code stripped down from the frames.h code
+ © by Toby Howard
+*/
+
+#ifndef ORTHOTEXT_H
+#define ORTHOTEXT_H
+
+// ---------------------------------------------------------------------------------------
+/// @file OrthoText.h
+/// @brief Structure to hold and functions to load OBJ-file data and freeing up the used
+///        memory in the end.
+/// @version 2.1
+/// @author Toby Howard. toby.howardy@manchester.ac.uk. Stripped down by Teemu Lindborg
+/// @date 03/01/13
+/// Revision History:
+///   -
+/// @todo Go through the snippet and understand it completely to be able to comment this
+///       properly
+// ---------------------------------------------------------------------------------------
+
 #ifdef LINUX
   #include <GL/glut.h>
 #endif
@@ -43,3 +66,5 @@ void OrthoText(void *font, const std::string &_str, GLfloat x, GLfloat y)
 
   if (lightingOn) glEnable(GL_LIGHTING);
 }
+
+#endif

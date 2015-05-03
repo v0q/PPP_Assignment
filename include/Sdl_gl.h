@@ -29,7 +29,7 @@ class SDL_GL
     bool isActive() const;
     void handleInput(Player &io_p, Camera &_cam);
 
-  private:
+  protected:
     SDL_GLContext gl;
     SDL_GLContext createOpenGLContext();
     bool act;
