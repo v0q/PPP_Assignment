@@ -22,6 +22,7 @@ Player::Player(float _x, float _y, float _z) : score(0), pos(_x, _y, _z, 1.0f), 
 
   loadTexture("textures/projectile4.png", particleTexId);
   loadTexture("textures/animated_explosion.png", projectileId);
+  loadTexture("textures/engine_flame.png", engFireTexId);
 #ifdef LINUX
   loadTexture("textures/ss_texture_90.png", shipTexId);
 #endif
@@ -66,6 +67,10 @@ void Player::drawPlayer()
 
     // Move player to the correct position
     glTranslatef(xMov, yMov, -pos.length()+WORLDRADIUS+PLAYEROFFSET);
+
+#ifdef LINUX
+    glRotatef(-90, 0, 0, 1);
+#endif
 
     glBegin(GL_POINTS);
       glColor3f(0, 0, 0);
@@ -315,10 +320,6 @@ void Player::ship()
 
     glRotatef(90, 1, 0, 0);
 
-#ifdef LINUX
-    glRotatef(-90, 0, 1, 0);
-#endif
-
     glScalef(0.02f, 0.02f, 0.02f);
 
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -420,45 +421,51 @@ void Player::drawParticles()
 void Player::engineFire()
 {
   float tDim = 1.0/5.0;
-  static int step = 0;
+  static int step = 5;
 
   float xMin = tDim * (step%5);
   float xMax = tDim * (step%5 + 1);
   float yMin = tDim * (step/5);
   float yMax = tDim * (step/5 + 1);
 
-  step = (step < 25 ? step + 1 : 0);
+  step = (step < 20 ? step + 1 : 10);
 
-  std::cout << step << "\n";
+  float r = 0.1f;
 
-  float r = 0.04f;
   glBindTexture(GL_TEXTURE_2D, projectileId);
-  glTranslatef(0.1f, 0.09f, 0.0f);
-  glPointSize(10);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+  glDepthMask(GL_FALSE);
+
+  glTranslatef(0.0f, 0.09f, 0.0f);
+
   glBegin(GL_TRIANGLES);
     glNormal3f(0.0f, 1.0f, 0.0f);
     // Bot left
     glTexCoord2f(xMin, yMax);
-    glVertex3f(r*4.0f, 0, r);
+    glVertex3f(r, 0, r*4.0f);
 
     // Top right
     glTexCoord2f(xMax, yMin);
-    glVertex3f(0, 0, -r);
+    glVertex3f(-r, 0, r);
 
     // Top left
     glTexCoord2f(xMin, yMin);
-    glVertex3f(0, 0, r);
+    glVertex3f(r, 0, 0);
 
     // Top right
     glTexCoord2f(xMax, yMin);
-    glVertex3f(0, 0, -r);
+    glVertex3f(-r, 0, 0);
 
     // Bot left
     glTexCoord2f(xMin, yMax);
-    glVertex3f(r*4.0f, 0, r);
+    glVertex3f(r, 0, r*4.0f);
 
     // Bot right
     glTexCoord2f(xMax, yMax);
-    glVertex3f(r*4.0f, 0, -r);
+    glVertex3f(-r, 0, r*4.0f);
   glEnd();
+
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glDepthMask(GL_TRUE);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }

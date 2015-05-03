@@ -60,7 +60,7 @@ class Player
     float rot, turn;
     float xMov, yMov;
     int life, moving;
-    GLuint shipTexId, projectileId, particleTexId;
+    GLuint shipTexId, projectileId, particleTexId, engFireTexId;
 };
 
 #endif
