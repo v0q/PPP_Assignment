@@ -23,15 +23,15 @@ World.cpp 	- lines:	 43	 - 50<br />
 
 Moving:<br />
 Game Controller
-<p>Left stick to move
+<p>Left stick to move<br />
 Right stick to aim and fire</p>
 Keyboard
-<p>W 	- up
-S 	-	down
-A 	- left
-D 	- right
-
-SPACE 	- shoot
-
-LEFT ARROW 		- turn aim ccw
+<p>W 	- up<br />
+S 	-	down<br />
+A 	- left<br />
+D 	- right<br />
+<br />
+SPACE 	- shoot<br />
+<br />
+LEFT ARROW 		- turn aim ccw<br />
 RIGHT ARROW 	- turn aim cw</p>
