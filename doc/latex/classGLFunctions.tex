@@ -1,0 +1,76 @@
+\hypertarget{classGLFunctions}{
+\section{GLFunctions Class Reference}
+\label{classGLFunctions}\index{GLFunctions@{GLFunctions}}
+}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classMat4}{Mat4} \hyperlink{classGLFunctions_ad495c3d29a2c1215a57817cf57d25f73}{orientation} (const \hyperlink{classVec4}{Vec4} \&\_\-eye, const \hyperlink{classVec4}{Vec4} \&\_\-look, const \hyperlink{classVec4}{Vec4} \&\_\-up)
+\begin{DoxyCompactList}\small\item\em Calculates the modelview/look at matrix, used to orient the player as well. \item\end{DoxyCompactList}\item 
+static void \hyperlink{classGLFunctions_a85268eb7e53538a0e00da8e8f66ca3d1}{perspective} (const float \_\-fovy, const float \_\-aspect, const float \_\-zNear, const float \_\-zFar)
+\begin{DoxyCompactList}\small\item\em Generates a projection matrix and loads it. \item\end{DoxyCompactList}\item 
+static float \hyperlink{classGLFunctions_a408bdb911a650c5517d7fca5b2e29ac1}{radians} (const float \_\-deg)
+\begin{DoxyCompactList}\small\item\em Converts degrees into radians. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classGLFunctions_a7115ed642d23e01b54d00a09da3c8ef3}{
+\hyperlink{classGLFunctions_a7115ed642d23e01b54d00a09da3c8ef3}{GLFunctions} ()}
+\label{classGLFunctions_a7115ed642d23e01b54d00a09da3c8ef3}
+
+\begin{DoxyCompactList}\small\item\em Default ctor. \item\end{DoxyCompactList}\item 
+\hypertarget{classGLFunctions_a09aea45a6200abad5aaa4bd2e2609a54}{
+\hyperlink{classGLFunctions_a09aea45a6200abad5aaa4bd2e2609a54}{GLFunctions} (const \hyperlink{classGLFunctions}{GLFunctions} \&)}
+\label{classGLFunctions_a09aea45a6200abad5aaa4bd2e2609a54}
+
+\begin{DoxyCompactList}\small\item\em Default copy ctor. \item\end{DoxyCompactList}\item 
+\hypertarget{classGLFunctions_a1f5320ef521dcd81ba168bc2bbd3259b}{
+\hyperlink{classGLFunctions_a1f5320ef521dcd81ba168bc2bbd3259b}{$\sim$GLFunctions} ()}
+\label{classGLFunctions_a1f5320ef521dcd81ba168bc2bbd3259b}
+
+\begin{DoxyCompactList}\small\item\em Default dtor. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classGLFunctions_ad495c3d29a2c1215a57817cf57d25f73}{
+\index{GLFunctions@{GLFunctions}!orientation@{orientation}}
+\index{orientation@{orientation}!GLFunctions@{GLFunctions}}
+\subsubsection[{orientation}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Mat4} GLFunctions::orientation (const {\bf Vec4} \& {\em \_\-eye}, \/  const {\bf Vec4} \& {\em \_\-look}, \/  const {\bf Vec4} \& {\em \_\-up})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classGLFunctions_ad495c3d29a2c1215a57817cf57d25f73}
+
+
+Calculates the modelview/look at matrix, used to orient the player as well. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-eye}]Eye position vector of the camera \item[\mbox{$\leftarrow$} {\em \_\-look}]Look at vector \item[\mbox{$\leftarrow$} {\em \_\-up}]Up vector of the camera \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The modelview/look at matrix 
+\end{DoxyReturn}
+\hypertarget{classGLFunctions_a85268eb7e53538a0e00da8e8f66ca3d1}{
+\index{GLFunctions@{GLFunctions}!perspective@{perspective}}
+\index{perspective@{perspective}!GLFunctions@{GLFunctions}}
+\subsubsection[{perspective}]{\setlength{\rightskip}{0pt plus 5cm}void GLFunctions::perspective (const float {\em \_\-fovy}, \/  const float {\em \_\-aspect}, \/  const float {\em \_\-zNear}, \/  const float {\em \_\-zFar})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classGLFunctions_a85268eb7e53538a0e00da8e8f66ca3d1}
+
+
+Generates a projection matrix and loads it. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-fovy}]Field of view angle \item[\mbox{$\leftarrow$} {\em \_\-aspect}]Aspect ratio \item[\mbox{$\leftarrow$} {\em \_\-zNear}]Near clipping plane \item[\mbox{$\leftarrow$} {\em \_\-zFar}]Far clipping plane \end{DoxyParams}
+\hypertarget{classGLFunctions_a408bdb911a650c5517d7fca5b2e29ac1}{
+\index{GLFunctions@{GLFunctions}!radians@{radians}}
+\index{radians@{radians}!GLFunctions@{GLFunctions}}
+\subsubsection[{radians}]{\setlength{\rightskip}{0pt plus 5cm}float GLFunctions::radians (const float {\em \_\-deg})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classGLFunctions_a408bdb911a650c5517d7fca5b2e29ac1}
+
+
+Converts degrees into radians. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-deg}]Degree to convert \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Radian value 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/NCCA/\hyperlink{GLFunctions_8h}{GLFunctions.h}\item 
+src/NCCA/\hyperlink{GLFunctions_8cpp}{GLFunctions.cpp}\end{DoxyCompactItemize}

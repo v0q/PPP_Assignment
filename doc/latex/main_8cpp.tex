@@ -1,0 +1,27 @@
+\hypertarget{main_8cpp}{
+\section{src/main.cpp File Reference}
+\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+}
+
+
+The main file of the project where the main loop is run and the main objects created and called. Also calls the \char`\"{}main\char`\"{} functions of each object to render the game and handle input etc.  
+{\ttfamily \#include \char`\"{}Sdl\_\-gl.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}Camera.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}World.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}Player.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}Asteroids.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}frames.h\char`\"{}}\par
+{\ttfamily \#include \char`\"{}OrthoText.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{
+int {\bfseries main} ()}
+\label{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The main file of the project where the main loop is run and the main objects created and called. Also calls the \char`\"{}main\char`\"{} functions of each object to render the game and handle input etc. \begin{Desc}
+\item[\hyperlink{todo__todo000018}{Todo}]Tidy up, make the loop work more like the GL pipeline describes as apparently the normal way to do it is to set the MatrixMode to projection loadIdentity, then load modelview, load identity and render afterwards. \end{Desc}

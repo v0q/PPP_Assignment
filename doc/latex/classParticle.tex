@@ -1,0 +1,79 @@
+\hypertarget{classParticle}{
+\section{Particle Class Reference}
+\label{classParticle}\index{Particle@{Particle}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classParticle_aada70e88e292f2c4185e19aa118a1406}{Particle} (const \hyperlink{classVec4}{Vec4} \&\_\-p, const int \_\-l=0)
+\begin{DoxyCompactList}\small\item\em Default ctor for a particle. \item\end{DoxyCompactList}\item 
+\hypertarget{classParticle_ad030d0fe7b88cf81744b127c99244ff4}{
+\hyperlink{classParticle_ad030d0fe7b88cf81744b127c99244ff4}{$\sim$Particle} ()}
+\label{classParticle_ad030d0fe7b88cf81744b127c99244ff4}
+
+\begin{DoxyCompactList}\small\item\em Default dtor. \item\end{DoxyCompactList}\item 
+\hypertarget{classParticle_ae16ef088e6a411b1a9d926f4d56bdcf3}{
+void \hyperlink{classParticle_ae16ef088e6a411b1a9d926f4d56bdcf3}{draw} ()}
+\label{classParticle_ae16ef088e6a411b1a9d926f4d56bdcf3}
+
+\begin{DoxyCompactList}\small\item\em Draws and calculates the color of the particle based on elapsed life relative to its maximum lifetime. \item\end{DoxyCompactList}\item 
+\hypertarget{classParticle_aa9d73f927c8cdf0c09f7520fa3d2ce46}{
+void \hyperlink{classParticle_aa9d73f927c8cdf0c09f7520fa3d2ce46}{move} ()}
+\label{classParticle_aa9d73f927c8cdf0c09f7520fa3d2ce46}
+
+\begin{DoxyCompactList}\small\item\em Moves the particle after it's born. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classParticle_a281390be9b1a6d0bf3c7506b01cae304}{
+int \hyperlink{classParticle_a281390be9b1a6d0bf3c7506b01cae304}{m\_\-life}}
+\label{classParticle_a281390be9b1a6d0bf3c7506b01cae304}
+
+\begin{DoxyCompactList}\small\item\em Holds the elapsed life of a particle. \item\end{DoxyCompactList}\item 
+\hypertarget{classParticle_a14dfa07ffad243498ec4c4ae536e74ed}{
+int \hyperlink{classParticle_a14dfa07ffad243498ec4c4ae536e74ed}{m\_\-max\_\-life}}
+\label{classParticle_a14dfa07ffad243498ec4c4ae536e74ed}
+
+\begin{DoxyCompactList}\small\item\em Holds the maximum lifetime of a particle. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classParticle_a7a1d6e0d428e9f2fcd933f7129022a5d}{
+float \hyperlink{classParticle_a7a1d6e0d428e9f2fcd933f7129022a5d}{m\_\-moveX}}
+\label{classParticle_a7a1d6e0d428e9f2fcd933f7129022a5d}
+
+\begin{DoxyCompactList}\small\item\em Variables holding the movement amount on each axis for a particle. \item\end{DoxyCompactList}\item 
+\hypertarget{classParticle_afb65ffca1b978278069595f090c60a20}{
+float {\bfseries m\_\-moveY}}
+\label{classParticle_afb65ffca1b978278069595f090c60a20}
+
+\item 
+\hypertarget{classParticle_a28dd76ca0c35fbb51eceb022d4809d48}{
+float {\bfseries m\_\-moveZ}}
+\label{classParticle_a28dd76ca0c35fbb51eceb022d4809d48}
+
+\item 
+\hypertarget{classParticle_a6bf06401e2e262e4db285978b98adbde}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classParticle_a6bf06401e2e262e4db285978b98adbde}{m\_\-pos}}
+\label{classParticle_a6bf06401e2e262e4db285978b98adbde}
+
+\begin{DoxyCompactList}\small\item\em The actual position vector of a particle. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classParticle_aada70e88e292f2c4185e19aa118a1406}{
+\index{Particle@{Particle}!Particle@{Particle}}
+\index{Particle@{Particle}!Particle@{Particle}}
+\subsubsection[{Particle}]{\setlength{\rightskip}{0pt plus 5cm}Particle::Particle (const {\bf Vec4} \& {\em \_\-p}, \/  const int {\em \_\-l} = {\ttfamily 0})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classParticle_aada70e88e292f2c4185e19aa118a1406}
+
+
+Default ctor for a particle. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-p}]Vector for initial position of the particle \item[\mbox{$\leftarrow$} {\em \_\-l}]Maximum lifetime of the given particle \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Particles_8h}{Particles.h}\item 
+src/\hyperlink{Particles_8cpp}{Particles.cpp}\end{DoxyCompactItemize}

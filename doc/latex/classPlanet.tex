@@ -1,0 +1,139 @@
+\hypertarget{classPlanet}{
+\section{Planet Class Reference}
+\label{classPlanet}\index{Planet@{Planet}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structPlanet_1_1m__cloud}{m\_\-cloud}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPlanet_ac88200b337a62e1377858e3116f9412b}{
+\hyperlink{classPlanet_ac88200b337a62e1377858e3116f9412b}{Planet} ()}
+\label{classPlanet_ac88200b337a62e1377858e3116f9412b}
+
+\begin{DoxyCompactList}\small\item\em Default ctor for the planet. Loads the models and calls the generator functions. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_aaa1aaed9d4ef90b4836531edb7b18e0a}{
+\hyperlink{classPlanet_aaa1aaed9d4ef90b4836531edb7b18e0a}{$\sim$Planet} ()}
+\label{classPlanet_aaa1aaed9d4ef90b4836531edb7b18e0a}
+
+\begin{DoxyCompactList}\small\item\em Default dtor. Frees the memory used by the models etc. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_afe1d5a814cade5105996bb94018842bb}{
+void \hyperlink{classPlanet_afe1d5a814cade5105996bb94018842bb}{draw} ()}
+\label{classPlanet_afe1d5a814cade5105996bb94018842bb}
+
+\begin{DoxyCompactList}\small\item\em Calls the correct displaylists, translates, performs rotations and scaling and draws all the planet elements. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPlanet_ab590fe73444345deb28aad1a74684dc4}{
+void \hyperlink{classPlanet_ab590fe73444345deb28aad1a74684dc4}{genSurface} ()}
+\label{classPlanet_ab590fe73444345deb28aad1a74684dc4}
+
+\begin{DoxyCompactList}\small\item\em Loads the the planet's surface to a displaylist and adjusts the vertex colors based on the distance/\char`\"{}height\char`\"{} of the vertex. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a1cb39a0e606ac2a787246132f317b091}{
+void \hyperlink{classPlanet_a1cb39a0e606ac2a787246132f317b091}{genMountains} ()}
+\label{classPlanet_a1cb39a0e606ac2a787246132f317b091}
+
+\begin{DoxyCompactList}\small\item\em Loads the planet's mountains to a displaylist and does some minor height based coloring. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_af5f1a56cdca0032d11e0fc832fa4e651}{
+void \hyperlink{classPlanet_af5f1a56cdca0032d11e0fc832fa4e651}{genWaters} ()}
+\label{classPlanet_af5f1a56cdca0032d11e0fc832fa4e651}
+
+\begin{DoxyCompactList}\small\item\em Loads the water surfaces to a displaylist and sets 'em to be a bit transparent. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_af36ec7e21f002d8b41fdaa579473061f}{
+void \hyperlink{classPlanet_af36ec7e21f002d8b41fdaa579473061f}{genSeabeds} ()}
+\label{classPlanet_af36ec7e21f002d8b41fdaa579473061f}
+
+\begin{DoxyCompactList}\small\item\em Loads the seabeds to a displaylist and does minor height based coloring. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_ae748a8851f98ced09160dd5f32b66ce8}{
+void \hyperlink{classPlanet_ae748a8851f98ced09160dd5f32b66ce8}{genTree} ()}
+\label{classPlanet_ae748a8851f98ced09160dd5f32b66ce8}
+
+\begin{DoxyCompactList}\small\item\em Loads the tree leaves and trunk data to a displaylist. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a07562d7e4f8cbf2b415d9f015a4460b6}{
+void \hyperlink{classPlanet_a07562d7e4f8cbf2b415d9f015a4460b6}{genClouds} ()}
+\label{classPlanet_a07562d7e4f8cbf2b415d9f015a4460b6}
+
+\begin{DoxyCompactList}\small\item\em Loads the cloud model(s) to a displaylist and generates the positions and random rotation axes for each cloud. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPlanet_afb186049b5eae6b99a74cbf60dc9e70f}{
+int \hyperlink{classPlanet_afb186049b5eae6b99a74cbf60dc9e70f}{max\_\-clouds}}
+\label{classPlanet_afb186049b5eae6b99a74cbf60dc9e70f}
+
+\begin{DoxyCompactList}\small\item\em Maximum amount of clouds we can have on the scene, this is randomised. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a1d388c9826a2189f5799ba6cb4dc38eb}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_a1d388c9826a2189f5799ba6cb4dc38eb}{m\_\-pSurface}}
+\label{classPlanet_a1d388c9826a2189f5799ba6cb4dc38eb}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the planet surface data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_adb4453e2574c20fc967204ad23cc0c67}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_adb4453e2574c20fc967204ad23cc0c67}{m\_\-pMountains}}
+\label{classPlanet_adb4453e2574c20fc967204ad23cc0c67}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the mountain data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a737de75291cdff5e7fd56929c2f439b7}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_a737de75291cdff5e7fd56929c2f439b7}{m\_\-pWaters}}
+\label{classPlanet_a737de75291cdff5e7fd56929c2f439b7}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the water surface data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_aa3fa2fff1b882241a76394a6813b81aa}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_aa3fa2fff1b882241a76394a6813b81aa}{m\_\-pSeabeds}}
+\label{classPlanet_aa3fa2fff1b882241a76394a6813b81aa}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the seabed data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_af501ae7a43df5b1630d30eb27cdb372b}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_af501ae7a43df5b1630d30eb27cdb372b}{m\_\-tLeaves}}
+\label{classPlanet_af501ae7a43df5b1630d30eb27cdb372b}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the tree leaf data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a52be42c94405bfdc71aee6569f28c2ce}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_a52be42c94405bfdc71aee6569f28c2ce}{m\_\-tTrunk}}
+\label{classPlanet_a52be42c94405bfdc71aee6569f28c2ce}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the tree trunk data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a1d591cb3f32e88fb5dc3dcb9de7e9f9f}{
+\hyperlink{structmodel}{model} \hyperlink{classPlanet_a1d591cb3f32e88fb5dc3dcb9de7e9f9f}{m\_\-cloudGeometry}}
+\label{classPlanet_a1d591cb3f32e88fb5dc3dcb9de7e9f9f}
+
+\begin{DoxyCompactList}\small\item\em Model structure used to store the cloud data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_ad2b3fdf33c8b9bf277e204dcb9ccd151}{
+std::vector$<$ \hyperlink{classVec4}{Vec4} $>$ \hyperlink{classPlanet_ad2b3fdf33c8b9bf277e204dcb9ccd151}{tree\_\-positions}}
+\label{classPlanet_ad2b3fdf33c8b9bf277e204dcb9ccd151}
+
+\begin{DoxyCompactList}\small\item\em stl vector used to store the location of each tree \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a6b0ca9d5a52bb111d70d4f78a6e35300}{
+std::vector$<$ \hyperlink{structPlanet_1_1m__cloud}{m\_\-cloud} $>$ \hyperlink{classPlanet_a6b0ca9d5a52bb111d70d4f78a6e35300}{clouds}}
+\label{classPlanet_a6b0ca9d5a52bb111d70d4f78a6e35300}
+
+\begin{DoxyCompactList}\small\item\em stl vector used to store the cloud data \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a14a5c1a90c0b7f1f9477ede1de1db85e}{
+std::vector$<$ GLuint $>$ \hyperlink{classPlanet_a14a5c1a90c0b7f1f9477ede1de1db85e}{p\_\-displayList}}
+\label{classPlanet_a14a5c1a90c0b7f1f9477ede1de1db85e}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the displaylists for the planet's elements \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_ad933cda019cd99d8179813f3e0a36be3}{
+std::vector$<$ GLuint $>$ \hyperlink{classPlanet_ad933cda019cd99d8179813f3e0a36be3}{c\_\-displayList}}
+\label{classPlanet_ad933cda019cd99d8179813f3e0a36be3}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the displaylists for the clouds \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_a54967034d5e5e7f25de195f898d4de42}{
+std::vector$<$ GLuint $>$ \hyperlink{classPlanet_a54967034d5e5e7f25de195f898d4de42}{t\_\-displayList}}
+\label{classPlanet_a54967034d5e5e7f25de195f898d4de42}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the displaylists for the trees \item\end{DoxyCompactList}\item 
+\hypertarget{classPlanet_ae7380f1c1344ca0c662d7321eaac89c6}{
+boost::mt19937 \hyperlink{classPlanet_ae7380f1c1344ca0c662d7321eaac89c6}{rng}}
+\label{classPlanet_ae7380f1c1344ca0c662d7321eaac89c6}
+
+\begin{DoxyCompactList}\small\item\em Boost random number generator. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Planet_8h}{Planet.h}\item 
+src/\hyperlink{Planet_8cpp}{Planet.cpp}\end{DoxyCompactItemize}

@@ -1,0 +1,70 @@
+\hypertarget{LoadOBJ_8h}{
+\section{include/LoadOBJ.h File Reference}
+\label{LoadOBJ_8h}\index{include/LoadOBJ.h@{include/LoadOBJ.h}}
+}
+
+
+Structure to hold and functions to load OBJ-\/file data and freeing up the used memory in the end.  
+{\ttfamily \#include $<$string$>$}\par
+{\ttfamily \#include $<$boost/tokenizer.hpp$>$}\par
+{\ttfamily \#include \char`\"{}NCCA/Vec4.h\char`\"{}}\par
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmodel}{model}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{LoadOBJ_8h_a8b3b3c275eb46680d92090efb407c5df}{
+typedef boost::tokenizer$<$ boost::char\_\-separator$<$ char $>$ $>$ {\bfseries tokenizer}}
+\label{LoadOBJ_8h_a8b3b3c275eb46680d92090efb407c5df}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{LoadOBJ_8h_a1241d7eaf39c8116625fadf861ef0413}{loadModel} (const std::string \&\_\-n, \hyperlink{structmodel}{model} \&o\_\-m)
+\begin{DoxyCompactList}\small\item\em Parse an OBJ-\/file and store the data in to the provided \hyperlink{structmodel}{model} structure. \item\end{DoxyCompactList}\item 
+void \hyperlink{LoadOBJ_8h_a86b0a119a5f2809107ae7aaf34860bdf}{freeModelMem} (\hyperlink{structmodel}{model} \&o\_\-m)
+\begin{DoxyCompactList}\small\item\em Function to clear the stl vectors and freeing up the memory used to store the \hyperlink{structmodel}{model} data. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Structure to hold and functions to load OBJ-\/file data and freeing up the used memory in the end. \begin{DoxyVersion}{Version}
+1.0 
+\end{DoxyVersion}
+\begin{DoxyAuthor}{Author}
+Teemu Lindborg 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+03/05/15 Revision History:
+\begin{DoxyItemize}
+\item 
+\end{DoxyItemize}
+\end{DoxyDate}
+\begin{Desc}
+\item[\hyperlink{todo__todo000006}{Todo}]Nothing for now, maybe use namespaces and possibly tidy up the code. Possibly turn this in to a mesh class that would have draw functions etc. For now as depending on the mesh it might be handled differently the drawing will be done where ever it's needed. \end{Desc}
+
+
+\subsection{Function Documentation}
+\hypertarget{LoadOBJ_8h_a86b0a119a5f2809107ae7aaf34860bdf}{
+\index{LoadOBJ.h@{LoadOBJ.h}!freeModelMem@{freeModelMem}}
+\index{freeModelMem@{freeModelMem}!LoadOBJ.h@{LoadOBJ.h}}
+\subsubsection[{freeModelMem}]{\setlength{\rightskip}{0pt plus 5cm}void freeModelMem ({\bf model} \& {\em o\_\-m})}}
+\label{LoadOBJ_8h_a86b0a119a5f2809107ae7aaf34860bdf}
+
+
+Function to clear the stl vectors and freeing up the memory used to store the \hyperlink{structmodel}{model} data. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\rightarrow$} {\em o\_\-m}]The structure where the data is stored in. \end{DoxyParams}
+\hypertarget{LoadOBJ_8h_a1241d7eaf39c8116625fadf861ef0413}{
+\index{LoadOBJ.h@{LoadOBJ.h}!loadModel@{loadModel}}
+\index{loadModel@{loadModel}!LoadOBJ.h@{LoadOBJ.h}}
+\subsubsection[{loadModel}]{\setlength{\rightskip}{0pt plus 5cm}void loadModel (const std::string \& {\em \_\-n}, \/  {\bf model} \& {\em o\_\-m})}}
+\label{LoadOBJ_8h_a1241d7eaf39c8116625fadf861ef0413}
+
+
+Parse an OBJ-\/file and store the data in to the provided \hyperlink{structmodel}{model} structure. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-n}]Path to the OBJ-\/file \item[\mbox{$\rightarrow$} {\em o\_\-m}]Model structure to store the data in \end{DoxyParams}

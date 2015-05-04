@@ -1,0 +1,53 @@
+\hypertarget{Icosahedron_8h}{
+\section{include/Icosahedron.h File Reference}
+\label{Icosahedron_8h}\index{include/Icosahedron.h@{include/Icosahedron.h}}
+}
+
+
+Header file holding the vector data for icosahedron and octahedron shapes both of which can be used for the atmosphere by passing either one to the subdivision function in \hyperlink{World_8cpp}{World.cpp}. This way we achieve a geodesic dome for the atmosphere.  
+{\ttfamily \#include \char`\"{}NCCA/Vec4.h\char`\"{}}\par
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{Icosahedron_8h_ae78103ab33f03590e84ff7bc735629d7}{
+float \hyperlink{Icosahedron_8h_ae78103ab33f03590e84ff7bc735629d7}{c} = 0.525731}
+\label{Icosahedron_8h_ae78103ab33f03590e84ff7bc735629d7}
+
+\begin{DoxyCompactList}\small\item\em Hard calculated constants that are used for as vertex coordinates. \item\end{DoxyCompactList}\item 
+\hypertarget{Icosahedron_8h_a874f74a4dc1c9a0cd9c6e0d79c298f55}{
+float {\bfseries s} = 0.850651}
+\label{Icosahedron_8h_a874f74a4dc1c9a0cd9c6e0d79c298f55}
+
+\item 
+\hypertarget{Icosahedron_8h_a7d6bf6bcd1bb096fdabc876478438f4c}{
+\hyperlink{classVec4}{Vec4} \hyperlink{Icosahedron_8h_a7d6bf6bcd1bb096fdabc876478438f4c}{icosHedron} \mbox{[}20\mbox{]}\mbox{[}3\mbox{]}}
+\label{Icosahedron_8h_a7d6bf6bcd1bb096fdabc876478438f4c}
+
+\begin{DoxyCompactList}\small\item\em Triangle data for the icosahedron shape. \item\end{DoxyCompactList}\item 
+\hypertarget{Icosahedron_8h_a1c030a1d53bd0a96149237994818b255}{
+float \hyperlink{Icosahedron_8h_a1c030a1d53bd0a96149237994818b255}{cOcta} = 1.0f}
+\label{Icosahedron_8h_a1c030a1d53bd0a96149237994818b255}
+
+\begin{DoxyCompactList}\small\item\em Vertex coordinate element for octahedron. \item\end{DoxyCompactList}\item 
+\hypertarget{Icosahedron_8h_a5ca5eed880a593656d977f40ca34bccf}{
+\hyperlink{classVec4}{Vec4} \hyperlink{Icosahedron_8h_a5ca5eed880a593656d977f40ca34bccf}{octaHedron} \mbox{[}8\mbox{]}\mbox{[}3\mbox{]}}
+\label{Icosahedron_8h_a5ca5eed880a593656d977f40ca34bccf}
+
+\begin{DoxyCompactList}\small\item\em Triangle data for the octahedron shape. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Header file holding the vector data for icosahedron and octahedron shapes both of which can be used for the atmosphere by passing either one to the subdivision function in \hyperlink{World_8cpp}{World.cpp}. This way we achieve a geodesic dome for the atmosphere. \begin{DoxyVersion}{Version}
+1.0 
+\end{DoxyVersion}
+\begin{DoxyAuthor}{Author}
+Teemu Lindborg 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+03/05/15 Revision History:
+\begin{DoxyItemize}
+\item 
+\end{DoxyItemize}
+\end{DoxyDate}
+\begin{Desc}
+\item[\hyperlink{todo__todo000005}{Todo}]Tidy up the shape definitions \end{Desc}

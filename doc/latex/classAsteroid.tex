@@ -1,0 +1,101 @@
+\hypertarget{classAsteroid}{
+\section{Asteroid Class Reference}
+\label{classAsteroid}\index{Asteroid@{Asteroid}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classAsteroid_a73e0331aafe2bdd1683446cfa20895de}{Asteroid} (const \hyperlink{classVec4}{Vec4} \&\_\-p, const \hyperlink{classVec4}{Vec4} \&\_\-d, const \hyperlink{classVec4}{Vec4} \&\_\-up, const \hyperlink{classVec4}{Vec4} \&\_\-side, const float \_\-s, const float \_\-sp, const float \_\-l, const int \_\-t)
+\begin{DoxyCompactList}\small\item\em Default constructor for an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_af2d697c3722cfb1c79997b6cf63c89df}{
+\hyperlink{classAsteroid_af2d697c3722cfb1c79997b6cf63c89df}{$\sim$Asteroid} ()}
+\label{classAsteroid_af2d697c3722cfb1c79997b6cf63c89df}
+
+\begin{DoxyCompactList}\small\item\em Default destructor. \item\end{DoxyCompactList}\item 
+void \hyperlink{classAsteroid_a1eab739445111f8736a2e7610645a7b2}{draw} (const std::vector$<$ GLuint $>$ \&\_\-dL)
+\begin{DoxyCompactList}\small\item\em Function that will call the correct displaylist, scale, rotate and translate the asteroid to its correct position. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_ae343af197b72522a9979838f474e4371}{
+void \hyperlink{classAsteroid_ae343af197b72522a9979838f474e4371}{move} ()}
+\label{classAsteroid_ae343af197b72522a9979838f474e4371}
+
+\begin{DoxyCompactList}\small\item\em Handles the movement of an asteroid. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classAsteroid_aa9a141e94dc9c3328ee36bd5788439d3}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classAsteroid_aa9a141e94dc9c3328ee36bd5788439d3}{m\_\-pos}}
+\label{classAsteroid_aa9a141e94dc9c3328ee36bd5788439d3}
+
+\begin{DoxyCompactList}\small\item\em Position vector of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_ad7544c80cbb98eef478c413d59a16e84}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classAsteroid_ad7544c80cbb98eef478c413d59a16e84}{m\_\-dir}}
+\label{classAsteroid_ad7544c80cbb98eef478c413d59a16e84}
+
+\begin{DoxyCompactList}\small\item\em Direction vector of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_ad3d65c68c23e3d270a5f2944e73b9ba9}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classAsteroid_ad3d65c68c23e3d270a5f2944e73b9ba9}{m\_\-up}}
+\label{classAsteroid_ad3d65c68c23e3d270a5f2944e73b9ba9}
+
+\begin{DoxyCompactList}\small\item\em Up vector of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_a22ca21a57cb5f5587063d900ad765393}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classAsteroid_a22ca21a57cb5f5587063d900ad765393}{m\_\-side}}
+\label{classAsteroid_a22ca21a57cb5f5587063d900ad765393}
+
+\begin{DoxyCompactList}\small\item\em Side vector of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_aa183e37d58dca92fea617a8ba49e1d67}{
+float \hyperlink{classAsteroid_aa183e37d58dca92fea617a8ba49e1d67}{m\_\-size}}
+\label{classAsteroid_aa183e37d58dca92fea617a8ba49e1d67}
+
+\begin{DoxyCompactList}\small\item\em Scale factor of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_a8ea924969eb4d8bed933928fd1014d80}{
+float \hyperlink{classAsteroid_a8ea924969eb4d8bed933928fd1014d80}{m\_\-speed}}
+\label{classAsteroid_a8ea924969eb4d8bed933928fd1014d80}
+
+\begin{DoxyCompactList}\small\item\em Speed of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_ae871719a00ceda313aec8f3ba330a7d7}{
+float \hyperlink{classAsteroid_ae871719a00ceda313aec8f3ba330a7d7}{m\_\-rot}}
+\label{classAsteroid_ae871719a00ceda313aec8f3ba330a7d7}
+
+\begin{DoxyCompactList}\small\item\em Rotation angle of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_ab93169c9faddc8533aef778fd09bb157}{
+int \hyperlink{classAsteroid_ab93169c9faddc8533aef778fd09bb157}{m\_\-life}}
+\label{classAsteroid_ab93169c9faddc8533aef778fd09bb157}
+
+\begin{DoxyCompactList}\small\item\em Health of an asteroid. \item\end{DoxyCompactList}\item 
+\hypertarget{classAsteroid_ab990d85db99a5796625c22791cd9f395}{
+int \hyperlink{classAsteroid_ab990d85db99a5796625c22791cd9f395}{c\_\-aType}}
+\label{classAsteroid_ab990d85db99a5796625c22791cd9f395}
+
+\begin{DoxyCompactList}\small\item\em 3d \hyperlink{structmodel}{model} \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classAsteroid_a73e0331aafe2bdd1683446cfa20895de}{
+\index{Asteroid@{Asteroid}!Asteroid@{Asteroid}}
+\index{Asteroid@{Asteroid}!Asteroid@{Asteroid}}
+\subsubsection[{Asteroid}]{\setlength{\rightskip}{0pt plus 5cm}Asteroid::Asteroid (const {\bf Vec4} \& {\em \_\-p}, \/  const {\bf Vec4} \& {\em \_\-d}, \/  const {\bf Vec4} \& {\em \_\-up}, \/  const {\bf Vec4} \& {\em \_\-side}, \/  const float {\em \_\-s}, \/  const float {\em \_\-sp}, \/  const float {\em \_\-l}, \/  const int {\em \_\-t})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classAsteroid_a73e0331aafe2bdd1683446cfa20895de}
+
+
+Default constructor for an asteroid. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-p}]Position vector \item[\mbox{$\leftarrow$} {\em \_\-d}]Direction vector \item[\mbox{$\leftarrow$} {\em \_\-up}]Up vector \item[\mbox{$\leftarrow$} {\em \_\-side}]Side vector \item[\mbox{$\leftarrow$} {\em \_\-s}]Scale factor \item[\mbox{$\leftarrow$} {\em \_\-sp}]Speed value \item[\mbox{$\leftarrow$} {\em \_\-l}]Life/health \item[\mbox{$\leftarrow$} {\em \_\-t}]\hyperlink{classAsteroid}{Asteroid} type for different models \end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classAsteroid_a1eab739445111f8736a2e7610645a7b2}{
+\index{Asteroid@{Asteroid}!draw@{draw}}
+\index{draw@{draw}!Asteroid@{Asteroid}}
+\subsubsection[{draw}]{\setlength{\rightskip}{0pt plus 5cm}void Asteroid::draw (const std::vector$<$ GLuint $>$ \& {\em \_\-dL})}}
+\label{classAsteroid_a1eab739445111f8736a2e7610645a7b2}
+
+
+Function that will call the correct displaylist, scale, rotate and translate the asteroid to its correct position. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-dL}]displaylist holding both asteroid models \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Asteroids_8h}{Asteroids.h}\item 
+src/\hyperlink{Asteroids_8cpp}{Asteroids.cpp}\end{DoxyCompactItemize}

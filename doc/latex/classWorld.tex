@@ -1,0 +1,193 @@
+\hypertarget{classWorld}{
+\section{World Class Reference}
+\label{classWorld}\index{World@{World}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classWorld_afa39d4e6f714a7a3691ac0c656f5e8a8}{
+\hyperlink{classWorld_afa39d4e6f714a7a3691ac0c656f5e8a8}{World} ()}
+\label{classWorld_afa39d4e6f714a7a3691ac0c656f5e8a8}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{classWorld}{World} constructor initialises and calls the building functions that are needed to draw/generate the world. Loads in the required models, textures and sounds. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a8c73fba541a5817fff65147ba47cd827}{
+\hyperlink{classWorld_a8c73fba541a5817fff65147ba47cd827}{$\sim$World} ()}
+\label{classWorld_a8c73fba541a5817fff65147ba47cd827}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{classWorld}{World} destructor that does cleaning up before the program quits. Frees the memory allocated for models and sounds and cleans up the stl lists and vectors. \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a6dd84a97b1bd38e94453cc31edcada8d}{initStars} (const int \_\-a)
+\begin{DoxyCompactList}\small\item\em Generates and randomly distributes \char`\"{}stars\char`\"{} around the world between the planet and the skybox. Stars (at least for now) are just simple GL\_\-POINTS. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a072497d989ccb4fe6828eafcb45ca497}{
+void \hyperlink{classWorld_a072497d989ccb4fe6828eafcb45ca497}{drawWorld} ()}
+\label{classWorld_a072497d989ccb4fe6828eafcb45ca497}
+
+\begin{DoxyCompactList}\small\item\em Calls all the functions and displaylists that render and display the world. Also calls the function that generates asteroids. \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a3bd949dfe9a3281fdf3e2523ed69942a}{subd} (const \hyperlink{classVec4}{Vec4} \&\_\-a, const \hyperlink{classVec4}{Vec4} \&\_\-b, const \hyperlink{classVec4}{Vec4} \&\_\-c, const int \_\-d) const 
+\begin{DoxyCompactList}\small\item\em Subdivides a triangle as many times as the user wants and calls the drawing function in the end. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classWorld_adda9a4f4bf708b6d2b81cb70b139228c}{
+std::vector$<$ \hyperlink{classAsteroid}{Asteroid} $>$ \hyperlink{classWorld_adda9a4f4bf708b6d2b81cb70b139228c}{m\_\-asteroids}}
+\label{classWorld_adda9a4f4bf708b6d2b81cb70b139228c}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the living asteroids \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a08591bf1d4b62d09c4060a7dc159f495}{
+std::list$<$ int $>$ \hyperlink{classWorld_a08591bf1d4b62d09c4060a7dc159f495}{m\_\-aColIndices}}
+\label{classWorld_a08591bf1d4b62d09c4060a7dc159f495}
+
+\begin{DoxyCompactList}\small\item\em stl list holding the indices of living asteroids that have reached the atmosphere. Used for collision detection. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a22414b5f75b734ff457850a05229d305}{
+int \hyperlink{classWorld_a22414b5f75b734ff457850a05229d305}{m\_\-maxAsteroids}}
+\label{classWorld_a22414b5f75b734ff457850a05229d305}
+
+\begin{DoxyCompactList}\small\item\em Variable telling how many asteroids can be alive at the same time, if this value is reached no more asteroids are generated before old ones are destroyed. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classWorld_afe713d51edb875a7b610998fa85d18c3}{
+void \hyperlink{classWorld_afe713d51edb875a7b610998fa85d18c3}{drawStars} () const }
+\label{classWorld_afe713d51edb875a7b610998fa85d18c3}
+
+\begin{DoxyCompactList}\small\item\em Function that will draw the generated stars and set the opacity which for now is only randomly generated, could implement the opacity (visibility) to depend on the distance of the star. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a78116b1eb8f3df6cdb8f0d0c6ee71d0c}{
+void \hyperlink{classWorld_a78116b1eb8f3df6cdb8f0d0c6ee71d0c}{drawPlanet} ()}
+\label{classWorld_a78116b1eb8f3df6cdb8f0d0c6ee71d0c}
+
+\begin{DoxyCompactList}\small\item\em Scales and calls the draw function from the planet object. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_acd929be916faa5c4ede7d3bfe35ac3e4}{
+void \hyperlink{classWorld_acd929be916faa5c4ede7d3bfe35ac3e4}{atmosphere} ()}
+\label{classWorld_acd929be916faa5c4ede7d3bfe35ac3e4}
+
+\begin{DoxyCompactList}\small\item\em Calls the tSphere function that subdivides an icosahedron to generate a geodesic dome that will be displayed in wireframe mode (to have the look of the original game for the atmosphere). Also scales the sphere and restores the fill mode. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a94bcffbbf293e01abfbe7c3c9da4dc83}{
+void \hyperlink{classWorld_a94bcffbbf293e01abfbe7c3c9da4dc83}{skybox} ()}
+\label{classWorld_a94bcffbbf293e01abfbe7c3c9da4dc83}
+
+\begin{DoxyCompactList}\small\item\em Generates the displaylist from the skybox \hyperlink{structmodel}{model} (using a mesh here for the easy texture coordinates), scales it and attaches a texture to it. Also disables depth mask as nothing's behind the skybox so no need to check for what's behind it. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a84d83e54fbfa8a696a00b6ed45ba43ca}{
+void \hyperlink{classWorld_a84d83e54fbfa8a696a00b6ed45ba43ca}{generate\_\-Asteroids} ()}
+\label{classWorld_a84d83e54fbfa8a696a00b6ed45ba43ca}
+
+\begin{DoxyCompactList}\small\item\em Uses boost random uniform int distribution to have asteroids spawn every now and then if the amount of living asteroids has not exceeded the maximum value. Uses the boost rng to generate a random starting position for an asteroid and calculates the direction and randomly chooses a side vector for the asteroid and calculates the up vector by taking the cross product of the position and side vectors. The up and side vectors are used to calculate the movement when the asteroid reaches the atmosphere. Also randomly generates a scale factor and chooses the asteroid type. Lastly it the function handles the drawing and destroyal of the asteroids. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a15d2bfd4eb929781af8ffabbf5d8398b}{
+void \hyperlink{classWorld_a15d2bfd4eb929781af8ffabbf5d8398b}{genALists} ()}
+\label{classWorld_a15d2bfd4eb929781af8ffabbf5d8398b}
+
+\begin{DoxyCompactList}\small\item\em Generates the displaylists from the asteroid meshes loaded in when the \hyperlink{classWorld}{World} object was created. \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_af0ea326fb21e89cbc1bec14127e8289f}{tSphere} (const int \_\-d) const 
+\begin{DoxyCompactList}\small\item\em Geodesic sphere \char`\"{}generator\char`\"{}. Uses the icosahedron shape define in \hyperlink{Icosahedron_8h}{Icosahedron.h} to run through the triangles defined, subdivides them and normalises the new verts to generate a spherical shape. \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_ac4ef03315e97218465a6fb29d6cded14}{drawTriangle} (const \hyperlink{classVec4}{Vec4} \&\_\-a, const \hyperlink{classVec4}{Vec4} \&\_\-b, const \hyperlink{classVec4}{Vec4} \&\_\-c) const 
+\begin{DoxyCompactList}\small\item\em Draws a triangle from the given vertices (\hyperlink{classVec4}{Vec4}), also generates a normal vector by adding the three vertex vectors together and normalising the resulting vector. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a580de360b07c68cc9e52c607c71eff4d}{
+void \hyperlink{classWorld_a580de360b07c68cc9e52c607c71eff4d}{partByDist} ()}
+\label{classWorld_a580de360b07c68cc9e52c607c71eff4d}
+
+\begin{DoxyCompactList}\small\item\em Does simple spatial partitioning on the asteroids by checking the distance of each asteroid from the origin and records the indices of the asteroids that have reached the atmosphere, this is then used to only check collisions on the asteroids are on the atmosphere. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classWorld_a1c649fe8a19a048d4ca131578101cbda}{
+\hyperlink{classPlanet}{Planet} \hyperlink{classWorld_a1c649fe8a19a048d4ca131578101cbda}{m\_\-planet}}
+\label{classWorld_a1c649fe8a19a048d4ca131578101cbda}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{classPlanet}{Planet} object that will generate the planet related stuff and that's used to call the planet drawing inside drawWorld. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_afb63c8c2786c5ca075117390da41b686}{
+\hyperlink{structmodel}{model} \hyperlink{classWorld_afb63c8c2786c5ca075117390da41b686}{m\_\-skybox}}
+\label{classWorld_afb63c8c2786c5ca075117390da41b686}
+
+\begin{DoxyCompactList}\small\item\em Model structure holding the skybox data. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a18712977dcb95653341b40dced1fd4e0}{
+\hyperlink{structmodel}{model} \hyperlink{classWorld_a18712977dcb95653341b40dced1fd4e0}{m\_\-asteroid} \mbox{[}2\mbox{]}}
+\label{classWorld_a18712977dcb95653341b40dced1fd4e0}
+
+\begin{DoxyCompactList}\small\item\em Model structure array holding the different asteroid meshes. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_af09067d4e919fda4125856b3b392dfbd}{
+std::vector$<$ \hyperlink{classVec4}{Vec4} $>$ \hyperlink{classWorld_af09067d4e919fda4125856b3b392dfbd}{m\_\-stars}}
+\label{classWorld_af09067d4e919fda4125856b3b392dfbd}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the star positions \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a6b528ace279b3e4421eafb30880e6471}{
+std::vector$<$ GLuint $>$ \hyperlink{classWorld_a6b528ace279b3e4421eafb30880e6471}{m\_\-wDisplayList}}
+\label{classWorld_a6b528ace279b3e4421eafb30880e6471}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the world displaylist (atmosphere, skybox) \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a03863f462870a166d787483af999617b}{
+std::vector$<$ GLuint $>$ \hyperlink{classWorld_a03863f462870a166d787483af999617b}{m\_\-aDisplayList}}
+\label{classWorld_a03863f462870a166d787483af999617b}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the displaylist of the asteroids \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a231cda33e6e569e72479289e030b1e08}{
+Mix\_\-Chunk $\ast$ \hyperlink{classWorld_a231cda33e6e569e72479289e030b1e08}{m\_\-aExplosion}}
+\label{classWorld_a231cda33e6e569e72479289e030b1e08}
+
+\begin{DoxyCompactList}\small\item\em Audio chunk holding the asteroid explosion sound data. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a70cc3d6885284803dc0ba6d55c79e2d9}{
+Mix\_\-Chunk $\ast$ \hyperlink{classWorld_a70cc3d6885284803dc0ba6d55c79e2d9}{m\_\-bgMusic}}
+\label{classWorld_a70cc3d6885284803dc0ba6d55c79e2d9}
+
+\begin{DoxyCompactList}\small\item\em Audio chunk that'll hold the data for the actual background music. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a46c0338665c6bf3a59f4830e446ef8d0}{
+GLuint \hyperlink{classWorld_a46c0338665c6bf3a59f4830e446ef8d0}{m\_\-skyBoxTexId}}
+\label{classWorld_a46c0338665c6bf3a59f4830e446ef8d0}
+
+\begin{DoxyCompactList}\small\item\em GLuints that'll contain the skybox and asteroid textures respectively. \item\end{DoxyCompactList}\item 
+\hypertarget{classWorld_a270df47c2ee895db634b7b13304ee6c7}{
+GLuint {\bfseries m\_\-aTexId}}
+\label{classWorld_a270df47c2ee895db634b7b13304ee6c7}
+
+\item 
+\hypertarget{classWorld_a7cff9b24861c9edd4da9890f4935377f}{
+boost::mt19937 \hyperlink{classWorld_a7cff9b24861c9edd4da9890f4935377f}{m\_\-rng}}
+\label{classWorld_a7cff9b24861c9edd4da9890f4935377f}
+
+\begin{DoxyCompactList}\small\item\em Random number generator from boost random library. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classWorld_ac4ef03315e97218465a6fb29d6cded14}{
+\index{World@{World}!drawTriangle@{drawTriangle}}
+\index{drawTriangle@{drawTriangle}!World@{World}}
+\subsubsection[{drawTriangle}]{\setlength{\rightskip}{0pt plus 5cm}void World::drawTriangle (const {\bf Vec4} \& {\em \_\-a}, \/  const {\bf Vec4} \& {\em \_\-b}, \/  const {\bf Vec4} \& {\em \_\-c}) const\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classWorld_ac4ef03315e97218465a6fb29d6cded14}
+
+
+Draws a triangle from the given vertices (\hyperlink{classVec4}{Vec4}), also generates a normal vector by adding the three vertex vectors together and normalising the resulting vector. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-a}]First vertex of the triangle \item[\mbox{$\leftarrow$} {\em \_\-b}]Second vertex of the triangle \item[\mbox{$\leftarrow$} {\em \_\-c}]Third vertex of the triangle \end{DoxyParams}
+\hypertarget{classWorld_a6dd84a97b1bd38e94453cc31edcada8d}{
+\index{World@{World}!initStars@{initStars}}
+\index{initStars@{initStars}!World@{World}}
+\subsubsection[{initStars}]{\setlength{\rightskip}{0pt plus 5cm}void World::initStars (const int {\em \_\-a})}}
+\label{classWorld_a6dd84a97b1bd38e94453cc31edcada8d}
+
+
+Generates and randomly distributes \char`\"{}stars\char`\"{} around the world between the planet and the skybox. Stars (at least for now) are just simple GL\_\-POINTS. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-a}]Amount of stars to generate \end{DoxyParams}
+\hypertarget{classWorld_a3bd949dfe9a3281fdf3e2523ed69942a}{
+\index{World@{World}!subd@{subd}}
+\index{subd@{subd}!World@{World}}
+\subsubsection[{subd}]{\setlength{\rightskip}{0pt plus 5cm}void World::subd (const {\bf Vec4} \& {\em \_\-a}, \/  const {\bf Vec4} \& {\em \_\-b}, \/  const {\bf Vec4} \& {\em \_\-c}, \/  const int {\em \_\-d}) const}}
+\label{classWorld_a3bd949dfe9a3281fdf3e2523ed69942a}
+
+
+Subdivides a triangle as many times as the user wants and calls the drawing function in the end. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-a}]Point A of a triangle \item[\mbox{$\leftarrow$} {\em \_\-b}]Point B of a triangle \item[\mbox{$\leftarrow$} {\em \_\-c}]Point C of a triangle \item[\mbox{$\leftarrow$} {\em \_\-d}]Desired subdivisions / subdivision level \end{DoxyParams}
+\hypertarget{classWorld_af0ea326fb21e89cbc1bec14127e8289f}{
+\index{World@{World}!tSphere@{tSphere}}
+\index{tSphere@{tSphere}!World@{World}}
+\subsubsection[{tSphere}]{\setlength{\rightskip}{0pt plus 5cm}void World::tSphere (const int {\em \_\-d}) const\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classWorld_af0ea326fb21e89cbc1bec14127e8289f}
+
+
+Geodesic sphere \char`\"{}generator\char`\"{}. Uses the icosahedron shape define in \hyperlink{Icosahedron_8h}{Icosahedron.h} to run through the triangles defined, subdivides them and normalises the new verts to generate a spherical shape. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-d}]Desired subdivision levels \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{World_8h}{World.h}\item 
+src/\hyperlink{World_8cpp}{World.cpp}\end{DoxyCompactItemize}

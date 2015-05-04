@@ -1,0 +1,210 @@
+\hypertarget{classPlayer}{
+\section{Player Class Reference}
+\label{classPlayer}\index{Player@{Player}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPlayer_a699a172ce5dd9adcf86c394872ccae86}{Player} (const float \_\-x=1.0f, const float \_\-y=1.0f, const float \_\-z=1.0f)
+\begin{DoxyCompactList}\small\item\em Constructor for the player that loads the \hyperlink{structmodel}{model}, textures, audio and initialises the player class member variables. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a749d2c00e1fe0f5c2746f7505a58c062}{
+\hyperlink{classPlayer_a749d2c00e1fe0f5c2746f7505a58c062}{$\sim$Player} ()}
+\label{classPlayer_a749d2c00e1fe0f5c2746f7505a58c062}
+
+\begin{DoxyCompactList}\small\item\em Default dtor, clears the projectile and particle vectors, frees the memory allocated for the ship \hyperlink{structmodel}{model} and audio. Cleans up. \item\end{DoxyCompactList}\item 
+bool \hyperlink{classPlayer_a06e38c0f57e67eb006c9d09779bd8f8f}{isAlive} ()
+\begin{DoxyCompactList}\small\item\em Checks the player's health and returns whether the player's still alive. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a2f8ee4f71ca93f8c5546d06247794fdd}{
+void \hyperlink{classPlayer_a2f8ee4f71ca93f8c5546d06247794fdd}{drawPlayer} ()}
+\label{classPlayer_a2f8ee4f71ca93f8c5546d06247794fdd}
+
+\begin{DoxyCompactList}\small\item\em Calls the displaylist with the ship \hyperlink{structmodel}{model} in and handles the translates and rotations of the player. \item\end{DoxyCompactList}\item 
+void \hyperlink{classPlayer_a118b1baca4ab10f79d2bbbde90a9444e}{handleMovement} (SDL\_\-GameController $\ast$\_\-c, \hyperlink{classCamera}{Camera} \&io\_\-cam)
+\begin{DoxyCompactList}\small\item\em Handles the movement of the player (camera) and calculates the new up and side vectors for both. Calculates the rotation and tilting of the ship. Also calculates the little movement of the shipthat simulates the effect where it takes a short while for the camera to catch up with the movement of the player. \item\end{DoxyCompactList}\item 
+void \hyperlink{classPlayer_aadb3a7621f71cc1be367442b11912cb5}{checkCollisions} (std::vector$<$ \hyperlink{classAsteroid}{Asteroid} $>$ \&io\_\-a, std::list$<$ int $>$ \&io\_\-aInd)
+\begin{DoxyCompactList}\small\item\em Checks for collisions between player-\/asteroids and projectiles-\/asteroids. A primitive spatial partitioning is used where the collisions are only checked against asteroids that have reached the atmosphere. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_ae4cd641661b40418d556205b4dc6c2d6}{
+void \hyperlink{classPlayer_ae4cd641661b40418d556205b4dc6c2d6}{drawParticles} ()}
+\label{classPlayer_ae4cd641661b40418d556205b4dc6c2d6}
+
+\begin{DoxyCompactList}\small\item\em Runs through the living particles vector calls for the draw and move functions of a particle, also increases the elapsed life and checks whether it has reached the max lifespan of the particle. Kills the particles when they've reach the max life. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPlayer_aaa55581c65287e0e8f7b62997b734913}{
+std::vector$<$ \hyperlink{classParticle}{Particle} $>$ \hyperlink{classPlayer_aaa55581c65287e0e8f7b62997b734913}{m\_\-particles}}
+\label{classPlayer_aaa55581c65287e0e8f7b62997b734913}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding the live particles that are born from collision: asteroid-\/projectile \& asteroid-\/player \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_acb96e511b658bd56e15d327d0e51b5f3}{
+int \hyperlink{classPlayer_acb96e511b658bd56e15d327d0e51b5f3}{m\_\-score}}
+\label{classPlayer_acb96e511b658bd56e15d327d0e51b5f3}
+
+\begin{DoxyCompactList}\small\item\em Player's score. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPlayer_a13cd7bb4538e7bb8d7c9bd47e84039b7}{
+void \hyperlink{classPlayer_a13cd7bb4538e7bb8d7c9bd47e84039b7}{ship} ()}
+\label{classPlayer_a13cd7bb4538e7bb8d7c9bd47e84039b7}
+
+\begin{DoxyCompactList}\small\item\em Generates the ship's displaylist from the \hyperlink{structmodel}{model} data. \item\end{DoxyCompactList}\item 
+void \hyperlink{classPlayer_ad13442ce6259aacf5e02ea1a76826ca9}{wrapRotation} (float \&io\_\-a)
+\begin{DoxyCompactList}\small\item\em Wraps degrees to positive values between 0 \& 360. \item\end{DoxyCompactList}\item 
+void \hyperlink{classPlayer_acf17b0c4c70aae116360032f44f50012}{shoot} (SDL\_\-GameController $\ast$\_\-c, const \hyperlink{classVec4}{Vec4} \&\_\-cu, const \hyperlink{classVec4}{Vec4} \&\_\-cl)
+\begin{DoxyCompactList}\small\item\em Handles the actual shooting, whenever the player is shooting pushes projectiles in to the stl vector and stores the players current position, up, left and normal vectors, aim direction. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPlayer_a9148215aedbac532a127fdcc95ec10c0}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classPlayer_a9148215aedbac532a127fdcc95ec10c0}{m\_\-pos}}
+\label{classPlayer_a9148215aedbac532a127fdcc95ec10c0}
+
+\begin{DoxyCompactList}\small\item\em Vector storing the player's position. Used for collision detection. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a7f636385efde8613a2bd2b78a7cc873e}{
+\hyperlink{classMat4}{Mat4} \hyperlink{classPlayer_a7f636385efde8613a2bd2b78a7cc873e}{m\_\-orientation}}
+\label{classPlayer_a7f636385efde8613a2bd2b78a7cc873e}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{classMat4}{Mat4} matrix where the camera's orientation is stored in, this is then used to orient/place the player in front of the camera using glMultMatrixf(). \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_adec0bc4700f53ed43ae83c6effe8a506}{
+\hyperlink{structmodel}{model} \hyperlink{classPlayer_adec0bc4700f53ed43ae83c6effe8a506}{m\_\-ship}}
+\label{classPlayer_adec0bc4700f53ed43ae83c6effe8a506}
+
+\begin{DoxyCompactList}\small\item\em Model structure holding the ship \hyperlink{structmodel}{model} data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_aee062ad31b2cd1d5b513388e684776b4}{
+std::vector$<$ \hyperlink{classProjectile}{Projectile} $>$ \hyperlink{classPlayer_aee062ad31b2cd1d5b513388e684776b4}{m\_\-p}}
+\label{classPlayer_aee062ad31b2cd1d5b513388e684776b4}
+
+\begin{DoxyCompactList}\small\item\em stl vector storing the living projectile data. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a37bf1b59ec223a8acb7cac90f30cb281}{
+std::vector$<$ GLuint $>$ \hyperlink{classPlayer_a37bf1b59ec223a8acb7cac90f30cb281}{m\_\-displayList}}
+\label{classPlayer_a37bf1b59ec223a8acb7cac90f30cb281}
+
+\begin{DoxyCompactList}\small\item\em stl vector holding displaylist for the ship \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a9627d04600c952222cfbce6a02b04c2f}{
+Mix\_\-Chunk $\ast$ \hyperlink{classPlayer_a9627d04600c952222cfbce6a02b04c2f}{s\_\-aFire}}
+\label{classPlayer_a9627d04600c952222cfbce6a02b04c2f}
+
+\begin{DoxyCompactList}\small\item\em Audio chunk for the firing sound. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_afad023e59830d88ab715731bed494cc3}{
+Mix\_\-Music $\ast$ \hyperlink{classPlayer_afad023e59830d88ab715731bed494cc3}{s\_\-bgSound}}
+\label{classPlayer_afad023e59830d88ab715731bed494cc3}
+
+\begin{DoxyCompactList}\small\item\em Music data storing the noise that's played when the player moves. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a11b460200664c981a63f7c2561a45511}{
+float \hyperlink{classPlayer_a11b460200664c981a63f7c2561a45511}{m\_\-aimDir}}
+\label{classPlayer_a11b460200664c981a63f7c2561a45511}
+
+\begin{DoxyCompactList}\small\item\em Aim direction angle for shooting. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a02bc7e439ffbc0b67a1da7e1ec1f84a6}{
+float \hyperlink{classPlayer_a02bc7e439ffbc0b67a1da7e1ec1f84a6}{m\_\-rot}}
+\label{classPlayer_a02bc7e439ffbc0b67a1da7e1ec1f84a6}
+
+\begin{DoxyCompactList}\small\item\em Rotation of the player (changes when the player changes direction). \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_add70461d866ea512c676bd845ff8e41c}{
+float \hyperlink{classPlayer_add70461d866ea512c676bd845ff8e41c}{m\_\-turn}}
+\label{classPlayer_add70461d866ea512c676bd845ff8e41c}
+
+\begin{DoxyCompactList}\small\item\em Tilt angle of the ship when player is turning. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_adf2ebd1f7764a2c58e87c3de5f9b8c1b}{
+float \hyperlink{classPlayer_adf2ebd1f7764a2c58e87c3de5f9b8c1b}{m\_\-xMov}}
+\label{classPlayer_adf2ebd1f7764a2c58e87c3de5f9b8c1b}
+
+\begin{DoxyCompactList}\small\item\em Variables used to translate the player from the dead center of the view to simulate the camera trying to catch up with the player when they're moving. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a012e67aa649ae598ac50c9200f4173f6}{
+float {\bfseries m\_\-yMov}}
+\label{classPlayer_a012e67aa649ae598ac50c9200f4173f6}
+
+\item 
+\hypertarget{classPlayer_a73d34798fcff9a49de129b8f4be47428}{
+int \hyperlink{classPlayer_a73d34798fcff9a49de129b8f4be47428}{m\_\-life}}
+\label{classPlayer_a73d34798fcff9a49de129b8f4be47428}
+
+\begin{DoxyCompactList}\small\item\em Player's health, used to check if player's alive or not. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_aa7a30e3db7e74ff6c90223f20e38742f}{
+GLuint \hyperlink{classPlayer_aa7a30e3db7e74ff6c90223f20e38742f}{m\_\-shipTexId}}
+\label{classPlayer_aa7a30e3db7e74ff6c90223f20e38742f}
+
+\begin{DoxyCompactList}\small\item\em Used to store the texture data of the ship. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a14ba1b8a2dd9a43f9c32893ba4150e94}{
+GLuint \hyperlink{classPlayer_a14ba1b8a2dd9a43f9c32893ba4150e94}{m\_\-projectileId}}
+\label{classPlayer_a14ba1b8a2dd9a43f9c32893ba4150e94}
+
+\begin{DoxyCompactList}\small\item\em Used to store the texture data of the projectiles. \item\end{DoxyCompactList}\item 
+\hypertarget{classPlayer_a63405cbf43f777ae02ffc31cd6a06de6}{
+GLuint \hyperlink{classPlayer_a63405cbf43f777ae02ffc31cd6a06de6}{m\_\-particleTexId}}
+\label{classPlayer_a63405cbf43f777ae02ffc31cd6a06de6}
+
+\begin{DoxyCompactList}\small\item\em Used to store the texture data of the fire particles. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classPlayer_a699a172ce5dd9adcf86c394872ccae86}{
+\index{Player@{Player}!Player@{Player}}
+\index{Player@{Player}!Player@{Player}}
+\subsubsection[{Player}]{\setlength{\rightskip}{0pt plus 5cm}Player::Player (const float {\em \_\-x} = {\ttfamily 1.0f}, \/  const float {\em \_\-y} = {\ttfamily 1.0f}, \/  const float {\em \_\-z} = {\ttfamily 1.0f})}}
+\label{classPlayer_a699a172ce5dd9adcf86c394872ccae86}
+
+
+Constructor for the player that loads the \hyperlink{structmodel}{model}, textures, audio and initialises the player class member variables. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-x}]Initial x pos \item[\mbox{$\leftarrow$} {\em \_\-y}]Initial y pos \item[\mbox{$\leftarrow$} {\em \_\-z}]Initial z pos \end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classPlayer_aadb3a7621f71cc1be367442b11912cb5}{
+\index{Player@{Player}!checkCollisions@{checkCollisions}}
+\index{checkCollisions@{checkCollisions}!Player@{Player}}
+\subsubsection[{checkCollisions}]{\setlength{\rightskip}{0pt plus 5cm}void Player::checkCollisions (std::vector$<$ {\bf Asteroid} $>$ \& {\em io\_\-a}, \/  std::list$<$ int $>$ \& {\em io\_\-aInd})}}
+\label{classPlayer_aadb3a7621f71cc1be367442b11912cb5}
+
+
+Checks for collisions between player-\/asteroids and projectiles-\/asteroids. A primitive spatial partitioning is used where the collisions are only checked against asteroids that have reached the atmosphere. 
+\begin{DoxyParams}{Parameters}
+\item[{\em io\mbox{]}}]io\_\-a stl vector holding all the asteroids \item[{\em io\mbox{]}}]io\_\-aInd stl list holding the indices of the asteroids that have reached the atmosphere \end{DoxyParams}
+\hypertarget{classPlayer_a118b1baca4ab10f79d2bbbde90a9444e}{
+\index{Player@{Player}!handleMovement@{handleMovement}}
+\index{handleMovement@{handleMovement}!Player@{Player}}
+\subsubsection[{handleMovement}]{\setlength{\rightskip}{0pt plus 5cm}void Player::handleMovement (SDL\_\-GameController $\ast$ {\em \_\-c}, \/  {\bf Camera} \& {\em io\_\-cam})}}
+\label{classPlayer_a118b1baca4ab10f79d2bbbde90a9444e}
+
+
+Handles the movement of the player (camera) and calculates the new up and side vectors for both. Calculates the rotation and tilting of the ship. Also calculates the little movement of the shipthat simulates the effect where it takes a short while for the camera to catch up with the movement of the player. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-c}]Holds the game controller structure, if this is NULL keyboard is used instead \item[{\em io\mbox{]}}]io\_\-cam \hyperlink{classCamera}{Camera} that's position will be updated (the camera actually moves and the player is just positioned in front of it) \end{DoxyParams}
+\hypertarget{classPlayer_a06e38c0f57e67eb006c9d09779bd8f8f}{
+\index{Player@{Player}!isAlive@{isAlive}}
+\index{isAlive@{isAlive}!Player@{Player}}
+\subsubsection[{isAlive}]{\setlength{\rightskip}{0pt plus 5cm}bool Player::isAlive ()}}
+\label{classPlayer_a06e38c0f57e67eb006c9d09779bd8f8f}
+
+
+Checks the player's health and returns whether the player's still alive. \begin{DoxyReturn}{Returns}
+True if player's health $>$ 0, false otherwise 
+\end{DoxyReturn}
+\hypertarget{classPlayer_acf17b0c4c70aae116360032f44f50012}{
+\index{Player@{Player}!shoot@{shoot}}
+\index{shoot@{shoot}!Player@{Player}}
+\subsubsection[{shoot}]{\setlength{\rightskip}{0pt plus 5cm}void Player::shoot (SDL\_\-GameController $\ast$ {\em \_\-c}, \/  const {\bf Vec4} \& {\em \_\-cu}, \/  const {\bf Vec4} \& {\em \_\-cl})\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classPlayer_acf17b0c4c70aae116360032f44f50012}
+
+
+Handles the actual shooting, whenever the player is shooting pushes projectiles in to the stl vector and stores the players current position, up, left and normal vectors, aim direction. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-c}]Game controller structure, used as the primary device controlling device if it's not NULL \item[\mbox{$\leftarrow$} {\em \_\-cu}]Camera's current up vector \item[\mbox{$\leftarrow$} {\em \_\-cl}]Camera's current left vector \end{DoxyParams}
+\hypertarget{classPlayer_ad13442ce6259aacf5e02ea1a76826ca9}{
+\index{Player@{Player}!wrapRotation@{wrapRotation}}
+\index{wrapRotation@{wrapRotation}!Player@{Player}}
+\subsubsection[{wrapRotation}]{\setlength{\rightskip}{0pt plus 5cm}void Player::wrapRotation (float \& {\em io\_\-a})\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classPlayer_ad13442ce6259aacf5e02ea1a76826ca9}
+
+
+Wraps degrees to positive values between 0 \& 360. 
+\begin{DoxyParams}{Parameters}
+\item[{\em io\mbox{]}}]io\_\-a Degree to be wrapped \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Player_8h}{Player.h}\item 
+src/\hyperlink{Player_8cpp}{Player.cpp}\end{DoxyCompactItemize}

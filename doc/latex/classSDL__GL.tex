@@ -1,0 +1,108 @@
+\hypertarget{classSDL__GL}{
+\section{SDL\_\-GL Class Reference}
+\label{classSDL__GL}\index{SDL\_\-GL@{SDL\_\-GL}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classSDL__GL_ab86fec81eac57f864f2240286dc9f174}{
+\hyperlink{classSDL__GL_ab86fec81eac57f864f2240286dc9f174}{SDL\_\-GL} ()}
+\label{classSDL__GL_ab86fec81eac57f864f2240286dc9f174}
+
+\begin{DoxyCompactList}\small\item\em Constructor that initialises SDL systems, Game controller subsystem, SDL mixer. Creates the SDL window, gl context and allows the game to run should all the necessary things start correctly. \item\end{DoxyCompactList}\item 
+\hypertarget{classSDL__GL_a0a6f3a1088ceb6a616faa32ab4794c59}{
+\hyperlink{classSDL__GL_a0a6f3a1088ceb6a616faa32ab4794c59}{$\sim$SDL\_\-GL} ()}
+\label{classSDL__GL_a0a6f3a1088ceb6a616faa32ab4794c59}
+
+\begin{DoxyCompactList}\small\item\em Default dtor that closes the opened systems and deletes the gl context. Cleans up the SDL and GL stuff. \item\end{DoxyCompactList}\item 
+void \hyperlink{classSDL__GL_afdb2059a9a295151d7d4bcaea4ec3f49}{SDLErrorExit} (const std::string \&\_\-msg)
+\begin{DoxyCompactList}\small\item\em Functions that quits SDL and exits printing out the error message should something not initialise properly. \item\end{DoxyCompactList}\item 
+\hypertarget{classSDL__GL_a902d897aef16c2c6bda4aa9f60802b4d}{
+void \hyperlink{classSDL__GL_a902d897aef16c2c6bda4aa9f60802b4d}{enableLighting} () const }
+\label{classSDL__GL_a902d897aef16c2c6bda4aa9f60802b4d}
+
+\begin{DoxyCompactList}\small\item\em Enables the lights and some texture related things like GL\_\-POINT\_\-SPRITE GL\_\-BLEND and so on. \item\end{DoxyCompactList}\item 
+bool \hyperlink{classSDL__GL_adee0be8bbc1db6c59ade77c047099927}{isActive} () const 
+\begin{DoxyCompactList}\small\item\em Checks if the main loop should be running, i.e. the game's active. \item\end{DoxyCompactList}\item 
+void \hyperlink{classSDL__GL_a9194ac801dcae2d282b79d7f055f9ec3}{handleInput} (\hyperlink{classPlayer}{Player} \&io\_\-p, \hyperlink{classCamera}{Camera} \&io\_\-cam)
+\begin{DoxyCompactList}\small\item\em Handles basic input and calls the functions that handle movement etc. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classSDL__GL_a1411b45fe46ad2f71d545378a799184c}{
+SDL\_\-Window $\ast$ \hyperlink{classSDL__GL_a1411b45fe46ad2f71d545378a799184c}{m\_\-win}}
+\label{classSDL__GL_a1411b45fe46ad2f71d545378a799184c}
+
+\begin{DoxyCompactList}\small\item\em SDL\_\-window that will display our game. Also the gl context will be rendering everything to this window. \item\end{DoxyCompactList}\item 
+\hypertarget{classSDL__GL_a1a9e39a266153aa13df9979526441b89}{
+SDL\_\-GameController $\ast$ \hyperlink{classSDL__GL_a1a9e39a266153aa13df9979526441b89}{m\_\-controller}}
+\label{classSDL__GL_a1a9e39a266153aa13df9979526441b89}
+
+\begin{DoxyCompactList}\small\item\em Structure that'll hold the controller attributes, should one be available. NULL otherwise. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+SDL\_\-GLContext \hyperlink{classSDL__GL_a4f6b35189cdf34868bcfc36bef2e1cf5}{createOpenGLContext} ()
+\begin{DoxyCompactList}\small\item\em Creates the GL Context. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classSDL__GL_a1a03799c74dde243ac135b5fcd13553d}{
+SDL\_\-GLContext \hyperlink{classSDL__GL_a1a03799c74dde243ac135b5fcd13553d}{m\_\-gl}}
+\label{classSDL__GL_a1a03799c74dde243ac135b5fcd13553d}
+
+\begin{DoxyCompactList}\small\item\em gl GLContext that we'll use to create the gl context \item\end{DoxyCompactList}\item 
+\hypertarget{classSDL__GL_ab237ae685aa4972a9ddcef4527cc425c}{
+bool \hyperlink{classSDL__GL_ab237ae685aa4972a9ddcef4527cc425c}{m\_\-act}}
+\label{classSDL__GL_ab237ae685aa4972a9ddcef4527cc425c}
+
+\begin{DoxyCompactList}\small\item\em Variable telling whether the program should be running or not. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classSDL__GL_a4f6b35189cdf34868bcfc36bef2e1cf5}{
+\index{SDL\_\-GL@{SDL\_\-GL}!createOpenGLContext@{createOpenGLContext}}
+\index{createOpenGLContext@{createOpenGLContext}!SDL_GL@{SDL\_\-GL}}
+\subsubsection[{createOpenGLContext}]{\setlength{\rightskip}{0pt plus 5cm}SDL\_\-GLContext SDL\_\-GL::createOpenGLContext ()\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classSDL__GL_a4f6b35189cdf34868bcfc36bef2e1cf5}
+
+
+Creates the GL Context. \begin{DoxyReturn}{Returns}
+Returns the created context 
+\end{DoxyReturn}
+\hypertarget{classSDL__GL_a9194ac801dcae2d282b79d7f055f9ec3}{
+\index{SDL\_\-GL@{SDL\_\-GL}!handleInput@{handleInput}}
+\index{handleInput@{handleInput}!SDL_GL@{SDL\_\-GL}}
+\subsubsection[{handleInput}]{\setlength{\rightskip}{0pt plus 5cm}void SDL\_\-GL::handleInput ({\bf Player} \& {\em io\_\-p}, \/  {\bf Camera} \& {\em io\_\-cam})}}
+\label{classSDL__GL_a9194ac801dcae2d282b79d7f055f9ec3}
+
+
+Handles basic input and calls the functions that handle movement etc. 
+\begin{DoxyParams}{Parameters}
+\item[{\em io\mbox{]}}]io\_\-p \hyperlink{classPlayer}{Player} object so we can call the movement functions \item[{\em io\mbox{]}}]io\_\-cam \hyperlink{classCamera}{Camera} object to be used for movement and calculations \end{DoxyParams}
+\hypertarget{classSDL__GL_adee0be8bbc1db6c59ade77c047099927}{
+\index{SDL\_\-GL@{SDL\_\-GL}!isActive@{isActive}}
+\index{isActive@{isActive}!SDL_GL@{SDL\_\-GL}}
+\subsubsection[{isActive}]{\setlength{\rightskip}{0pt plus 5cm}bool SDL\_\-GL::isActive () const}}
+\label{classSDL__GL_adee0be8bbc1db6c59ade77c047099927}
+
+
+Checks if the main loop should be running, i.e. the game's active. \begin{DoxyReturn}{Returns}
+True if the game should be running, false it we want to quit the program 
+\end{DoxyReturn}
+\hypertarget{classSDL__GL_afdb2059a9a295151d7d4bcaea4ec3f49}{
+\index{SDL\_\-GL@{SDL\_\-GL}!SDLErrorExit@{SDLErrorExit}}
+\index{SDLErrorExit@{SDLErrorExit}!SDL_GL@{SDL\_\-GL}}
+\subsubsection[{SDLErrorExit}]{\setlength{\rightskip}{0pt plus 5cm}void SDL\_\-GL::SDLErrorExit (const std::string \& {\em \_\-msg})}}
+\label{classSDL__GL_afdb2059a9a295151d7d4bcaea4ec3f49}
+
+
+Functions that quits SDL and exits printing out the error message should something not initialise properly. 
+\begin{DoxyParams}{Parameters}
+\item[{\em \_\-msg}]Message to be printed before the SDL error \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Sdl__gl_8h}{Sdl\_\-gl.h}\item 
+src/\hyperlink{Sdl__gl_8cpp}{Sdl\_\-gl.cpp}\end{DoxyCompactItemize}

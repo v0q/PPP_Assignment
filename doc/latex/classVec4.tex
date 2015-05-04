@@ -1,0 +1,313 @@
+\hypertarget{classVec4}{
+\section{Vec4 Class Reference}
+\label{classVec4}\index{Vec4@{Vec4}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classVec4_a208636976b38fb5b7a964cf87c28901f}{Vec4} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em Copy ctor that makes a copy of the rhs vector. \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4_a72a49d139b8312f1eac661223fbdf08a}{Vec4} (const float \_\-x=0.0f, const float \_\-y=0.0f, const float \_\-z=0.0f, const float \_\-w=1.0f)
+\begin{DoxyCompactList}\small\item\em Construct a 4d vector. \item\end{DoxyCompactList}\item 
+\hypertarget{classVec4_ab6408ead37201958bbf4a9680b8d65a9}{
+void \hyperlink{classVec4_ab6408ead37201958bbf4a9680b8d65a9}{colourGL} () const }
+\label{classVec4_ab6408ead37201958bbf4a9680b8d65a9}
+
+\begin{DoxyCompactList}\small\item\em Calls the current Vector as glColor4fv();. \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4}{Vec4} \hyperlink{classVec4_a5a2139b9f193e528e8f9bee0d0a14652}{cross} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em Calculates the cross product between two vectors. \item\end{DoxyCompactList}\item 
+float \hyperlink{classVec4_a91498b8d3af850201aababdeb523c58e}{dot} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em Calculate the dot product of two vectors. \item\end{DoxyCompactList}\item 
+float \hyperlink{classVec4_a08573e03357a6d14294da98c46cbab58}{length} () const 
+\begin{DoxyCompactList}\small\item\em Calculates the length of the vector. \item\end{DoxyCompactList}\item 
+float \hyperlink{classVec4_ae2413a4eb232a55f15bafa13e49e75b7}{lengthSquared} () const 
+\begin{DoxyCompactList}\small\item\em Calculate the length squared of the vector. \item\end{DoxyCompactList}\item 
+\hypertarget{classVec4_aefca6527cea99964c2075a02de8b341d}{
+void \hyperlink{classVec4_aefca6527cea99964c2075a02de8b341d}{normalGL} () const }
+\label{classVec4_aefca6527cea99964c2075a02de8b341d}
+
+\begin{DoxyCompactList}\small\item\em Calls the current vector as glNormal3f(m\_\-x, m\_\-y, m\_\-z). \item\end{DoxyCompactList}\item 
+\hypertarget{classVec4_a09551d165456d7fcff73bf96118790f3}{
+void \hyperlink{classVec4_a09551d165456d7fcff73bf96118790f3}{normalInvGL} () const }
+\label{classVec4_a09551d165456d7fcff73bf96118790f3}
+
+\begin{DoxyCompactList}\small\item\em Calls the current vector as glNormal3f(-\/m\_\-x, -\/m\_\-y, -\/m\_\-z). \item\end{DoxyCompactList}\item 
+\hypertarget{classVec4_ac6ff2b58916c17fd5bc29b4b53a4629c}{
+void \hyperlink{classVec4_ac6ff2b58916c17fd5bc29b4b53a4629c}{textureGL} () const }
+\label{classVec4_ac6ff2b58916c17fd5bc29b4b53a4629c}
+
+\begin{DoxyCompactList}\small\item\em Calls the current vector as glTexCoord2f(m\_\-x, m\_\-y). \item\end{DoxyCompactList}\item 
+\hypertarget{classVec4_ae637ea15f081d10860629ec70f95929a}{
+void \hyperlink{classVec4_ae637ea15f081d10860629ec70f95929a}{vertexGL} () const }
+\label{classVec4_ae637ea15f081d10860629ec70f95929a}
+
+\begin{DoxyCompactList}\small\item\em Calls the current vector as glVertex3f(m\_\-x, m\_\-y, m\_\-z). \item\end{DoxyCompactList}\item 
+\hypertarget{classVec4_aecf9d5a3003c2a443098b4d80bc9dea6}{
+void \hyperlink{classVec4_aecf9d5a3003c2a443098b4d80bc9dea6}{normalize} ()}
+\label{classVec4_aecf9d5a3003c2a443098b4d80bc9dea6}
+
+\begin{DoxyCompactList}\small\item\em Normalizes the vector. \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4}{Vec4} \hyperlink{classVec4_ab73619ea670cbd2eb25e5a3ef49dfd9a}{operator$\ast$} (const \hyperlink{classMat4}{Mat4} \&\_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em $\ast$ operator multiplies a vector by a matrix V $\ast$ M \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4}{Vec4} \hyperlink{classVec4_a7404d7984c8612d9e9cac17c8609b808}{operator$\ast$} (const float \_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em $\ast$ operator to multiply a vector by a scalar V1 $\ast$ \_\-rhs \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4}{Vec4} \hyperlink{classVec4_a294635742b4d62d2a6062f9cb6bb3a4a}{operator/} (const float \_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em / operator to divide the vector by a scalar. V1 / \_\-rhs \item\end{DoxyCompactList}\item 
+void \hyperlink{classVec4_a98eed34b9e22227e1e448bbc9345f50e}{operator$\ast$=} (const float \_\-rhs)
+\begin{DoxyCompactList}\small\item\em $\ast$= operator to multiply the current vector by a scalar. V $\ast$= \_\-rhs \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4}{Vec4} \hyperlink{classVec4_a58014ec694674a8c27587a03037f0f09}{operator+} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em + operator to do vector addition. Adds to vectors together. V1 + V2 \item\end{DoxyCompactList}\item 
+void \hyperlink{classVec4_a9d7dbf4c6dc031cbed8a0d5938021821}{operator+=} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em += operator to add V2 to the current vector V1 += V2 \item\end{DoxyCompactList}\item 
+\hyperlink{classVec4}{Vec4} \hyperlink{classVec4_ae2579c5b5ce533033325ebd78bf3d544}{operator-\/} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs) const 
+\begin{DoxyCompactList}\small\item\em 
+\begin{DoxyItemize}
+\item operator for vector substraction. V1 -\/ V2 
+\end{DoxyItemize}\item\end{DoxyCompactList}\item 
+void \hyperlink{classVec4_a92e2e5400ea9c6697360462276175034}{operator-\/=} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em -\/= operator to substract V2 from the current vector V1 -\/= V2 \item\end{DoxyCompactList}\item 
+bool \hyperlink{classVec4_aa34841d8ecafffb09c3d01e028e0b09e}{operator==} (const \hyperlink{classVec4}{Vec4} \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em == operator to check if two vectors are the same V1 == V2 \item\end{DoxyCompactList}\item 
+float \& \hyperlink{classVec4_abc23f7a2a8788cd4ba1bb990f3ad51e4}{operator\mbox{[}$\,$\mbox{]}} (const int \_\-i)
+\begin{DoxyCompactList}\small\item\em subscript operator \hyperlink{classVec4}{Vec4} v; v\mbox{[}0\mbox{]}==1.0; =$>$ set x \item\end{DoxyCompactList}\item 
+void \hyperlink{classVec4_a48e70640181547614a4d72be0dcb9a35}{set} (const float \_\-x, const float \_\-y, const float \_\-z, const float \_\-w=1.0f)
+\begin{DoxyCompactList}\small\item\em Set values to the vector. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classVec4_a8f0e755891bc3e425a0dcc2d95271128}{
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>float \hyperlink{classVec4_ad190612b89be1dc86c19758d216e4f3b}{m\_openGL} \mbox{[}4\mbox{]}\\
+\>\>{\em Vector element, mapped to m\_openGL\mbox{[}4\mbox{]} by union, useful for GL fv formats. }\\
+\hypertarget{unionVec4_1_1@4_afd2b5891329ef3fc9b8a749eab8b0008}{
+\>struct \{\\
+\>\>float \hyperlink{classVec4_a1eb954015f31ac916de8d5c0b081d079}{m\_x}\\
+\>\>\>{\em Vector x-\/element, maps to m\_openGL\mbox{[}0\mbox{]}. }\\
+\>\>float \hyperlink{classVec4_ad6dd583b7222792668edb7b583f04709}{m\_y}\\
+\>\>\>{\em Vector y-\/element, maps to m\_openGL\mbox{[}1\mbox{]}. }\\
+\>\>float \hyperlink{classVec4_a9ad3862547ec0dbb4bd4218e243456a9}{m\_z}\\
+\>\>\>{\em Vector z-\/element, maps to m\_openGL\mbox{[}2\mbox{]}. }\\
+\>\>float \hyperlink{classVec4_a938a765475ace1b9edf29369d1a0adaf}{m\_w}\\
+\>\>\>{\em Vector z-\/element, maps to m\_openGL\mbox{[}3\mbox{]}. }\\
+\>\} }
+\label{unionVec4_1_1@4_afd2b5891329ef3fc9b8a749eab8b0008}
+\\
+\}; }
+\label{classVec4_a8f0e755891bc3e425a0dcc2d95271128}
+\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classVec4_a208636976b38fb5b7a964cf87c28901f}{
+\index{Vec4@{Vec4}!Vec4@{Vec4}}
+\index{Vec4@{Vec4}!Vec4@{Vec4}}
+\subsubsection[{Vec4}]{\setlength{\rightskip}{0pt plus 5cm}Vec4::Vec4 (const {\bf Vec4} \& {\em \_\-rhs})}}
+\label{classVec4_a208636976b38fb5b7a964cf87c28901f}
+
+
+Copy ctor that makes a copy of the rhs vector. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Vector to be copied \end{DoxyParams}
+\hypertarget{classVec4_a72a49d139b8312f1eac661223fbdf08a}{
+\index{Vec4@{Vec4}!Vec4@{Vec4}}
+\index{Vec4@{Vec4}!Vec4@{Vec4}}
+\subsubsection[{Vec4}]{\setlength{\rightskip}{0pt plus 5cm}Vec4::Vec4 (const float {\em \_\-x} = {\ttfamily 0.0f}, \/  const float {\em \_\-y} = {\ttfamily 0.0f}, \/  const float {\em \_\-z} = {\ttfamily 0.0f}, \/  const float {\em \_\-w} = {\ttfamily 1.0f})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classVec4_a72a49d139b8312f1eac661223fbdf08a}
+
+
+Construct a 4d vector. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-x}]Point/value x \item[\mbox{$\leftarrow$} {\em \_\-y}]Point/value y \item[\mbox{$\leftarrow$} {\em \_\-z}]Point/value z \item[\mbox{$\leftarrow$} {\em \_\-w}]Point/value w \end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classVec4_a5a2139b9f193e528e8f9bee0d0a14652}{
+\index{Vec4@{Vec4}!cross@{cross}}
+\index{cross@{cross}!Vec4@{Vec4}}
+\subsubsection[{cross}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec4} Vec4::cross (const {\bf Vec4} \& {\em \_\-rhs}) const}}
+\label{classVec4_a5a2139b9f193e528e8f9bee0d0a14652}
+
+
+Calculates the cross product between two vectors. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Rhs of v1 cross v2 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return the cross product of this vector with rhs 
+\end{DoxyReturn}
+\hypertarget{classVec4_a91498b8d3af850201aababdeb523c58e}{
+\index{Vec4@{Vec4}!dot@{dot}}
+\index{dot@{dot}!Vec4@{Vec4}}
+\subsubsection[{dot}]{\setlength{\rightskip}{0pt plus 5cm}float Vec4::dot (const {\bf Vec4} \& {\em \_\-rhs}) const}}
+\label{classVec4_a91498b8d3af850201aababdeb523c58e}
+
+
+Calculate the dot product of two vectors. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Rhs of v1 dot v2 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Dot product of the two vectors 
+\end{DoxyReturn}
+\hypertarget{classVec4_a08573e03357a6d14294da98c46cbab58}{
+\index{Vec4@{Vec4}!length@{length}}
+\index{length@{length}!Vec4@{Vec4}}
+\subsubsection[{length}]{\setlength{\rightskip}{0pt plus 5cm}float Vec4::length () const}}
+\label{classVec4_a08573e03357a6d14294da98c46cbab58}
+
+
+Calculates the length of the vector. \begin{DoxyReturn}{Returns}
+The length value 
+\end{DoxyReturn}
+\hypertarget{classVec4_ae2413a4eb232a55f15bafa13e49e75b7}{
+\index{Vec4@{Vec4}!lengthSquared@{lengthSquared}}
+\index{lengthSquared@{lengthSquared}!Vec4@{Vec4}}
+\subsubsection[{lengthSquared}]{\setlength{\rightskip}{0pt plus 5cm}float Vec4::lengthSquared () const}}
+\label{classVec4_ae2413a4eb232a55f15bafa13e49e75b7}
+
+
+Calculate the length squared of the vector. \begin{DoxyReturn}{Returns}
+The length squared 
+\end{DoxyReturn}
+\hypertarget{classVec4_a7404d7984c8612d9e9cac17c8609b808}{
+\index{Vec4@{Vec4}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Vec4@{Vec4}}
+\subsubsection[{operator$\ast$}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec4} Vec4::operator$\ast$ (const float {\em \_\-rhs}) const}}
+\label{classVec4_a7404d7984c8612d9e9cac17c8609b808}
+
+
+$\ast$ operator to multiply a vector by a scalar V1 $\ast$ \_\-rhs 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Scalar value to multiply with \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The resulting vector 
+\end{DoxyReturn}
+\hypertarget{classVec4_ab73619ea670cbd2eb25e5a3ef49dfd9a}{
+\index{Vec4@{Vec4}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Vec4@{Vec4}}
+\subsubsection[{operator$\ast$}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec4} Vec4::operator$\ast$ (const {\bf Mat4} \& {\em \_\-rhs}) const}}
+\label{classVec4_ab73619ea670cbd2eb25e5a3ef49dfd9a}
+
+
+$\ast$ operator multiplies a vector by a matrix V $\ast$ M 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Matrix to multiply the vector with \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Resulting vector 
+\end{DoxyReturn}
+\hypertarget{classVec4_a98eed34b9e22227e1e448bbc9345f50e}{
+\index{Vec4@{Vec4}!operator$\ast$=@{operator$\ast$=}}
+\index{operator$\ast$=@{operator$\ast$=}!Vec4@{Vec4}}
+\subsubsection[{operator$\ast$=}]{\setlength{\rightskip}{0pt plus 5cm}void Vec4::operator$\ast$= (const float {\em \_\-rhs})}}
+\label{classVec4_a98eed34b9e22227e1e448bbc9345f50e}
+
+
+$\ast$= operator to multiply the current vector by a scalar. V $\ast$= \_\-rhs 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Scalar value to multiply the vector with \end{DoxyParams}
+\hypertarget{classVec4_a58014ec694674a8c27587a03037f0f09}{
+\index{Vec4@{Vec4}!operator+@{operator+}}
+\index{operator+@{operator+}!Vec4@{Vec4}}
+\subsubsection[{operator+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec4} Vec4::operator+ (const {\bf Vec4} \& {\em \_\-rhs}) const}}
+\label{classVec4_a58014ec694674a8c27587a03037f0f09}
+
+
++ operator to do vector addition. Adds to vectors together. V1 + V2 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Rhs of the operation \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The resulting vector 
+\end{DoxyReturn}
+\hypertarget{classVec4_a9d7dbf4c6dc031cbed8a0d5938021821}{
+\index{Vec4@{Vec4}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!Vec4@{Vec4}}
+\subsubsection[{operator+=}]{\setlength{\rightskip}{0pt plus 5cm}void Vec4::operator+= (const {\bf Vec4} \& {\em \_\-rhs})}}
+\label{classVec4_a9d7dbf4c6dc031cbed8a0d5938021821}
+
+
++= operator to add V2 to the current vector V1 += V2 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Vector to be added \end{DoxyParams}
+\hypertarget{classVec4_ae2579c5b5ce533033325ebd78bf3d544}{
+\index{Vec4@{Vec4}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Vec4@{Vec4}}
+\subsubsection[{operator-\/}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec4} Vec4::operator-\/ (const {\bf Vec4} \& {\em \_\-rhs}) const}}
+\label{classVec4_ae2579c5b5ce533033325ebd78bf3d544}
+
+
+
+\begin{DoxyItemize}
+\item operator for vector substraction. V1 -\/ V2 
+\end{DoxyItemize}
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Rhs of the substraction \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The resulting vector 
+\end{DoxyReturn}
+\hypertarget{classVec4_a92e2e5400ea9c6697360462276175034}{
+\index{Vec4@{Vec4}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!Vec4@{Vec4}}
+\subsubsection[{operator-\/=}]{\setlength{\rightskip}{0pt plus 5cm}void Vec4::operator-\/= (const {\bf Vec4} \& {\em \_\-rhs})}}
+\label{classVec4_a92e2e5400ea9c6697360462276175034}
+
+
+-\/= operator to substract V2 from the current vector V1 -\/= V2 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Vector to be used for the substraction \end{DoxyParams}
+\hypertarget{classVec4_a294635742b4d62d2a6062f9cb6bb3a4a}{
+\index{Vec4@{Vec4}!operator/@{operator/}}
+\index{operator/@{operator/}!Vec4@{Vec4}}
+\subsubsection[{operator/}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vec4} Vec4::operator/ (const float {\em \_\-rhs}) const}}
+\label{classVec4_a294635742b4d62d2a6062f9cb6bb3a4a}
+
+
+/ operator to divide the vector by a scalar. V1 / \_\-rhs 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Scalar value to divide with \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The resulting vector 
+\end{DoxyReturn}
+\hypertarget{classVec4_aa34841d8ecafffb09c3d01e028e0b09e}{
+\index{Vec4@{Vec4}!operator==@{operator==}}
+\index{operator==@{operator==}!Vec4@{Vec4}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}bool Vec4::operator== (const {\bf Vec4} \& {\em \_\-rhs})}}
+\label{classVec4_aa34841d8ecafffb09c3d01e028e0b09e}
+
+
+== operator to check if two vectors are the same V1 == V2 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Vector to compare the first one with \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if two vectors are the same, false if not 
+\end{DoxyReturn}
+\hypertarget{classVec4_abc23f7a2a8788cd4ba1bb990f3ad51e4}{
+\index{Vec4@{Vec4}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!Vec4@{Vec4}}
+\subsubsection[{operator[]}]{\setlength{\rightskip}{0pt plus 5cm}float\& Vec4::operator\mbox{[}$\,$\mbox{]} (const int {\em \_\-i})}}
+\label{classVec4_abc23f7a2a8788cd4ba1bb990f3ad51e4}
+
+
+subscript operator \hyperlink{classVec4}{Vec4} v; v\mbox{[}0\mbox{]}==1.0; =$>$ set x 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-i}]Index to access \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value at given index 
+\end{DoxyReturn}
+\hypertarget{classVec4_a48e70640181547614a4d72be0dcb9a35}{
+\index{Vec4@{Vec4}!set@{set}}
+\index{set@{set}!Vec4@{Vec4}}
+\subsubsection[{set}]{\setlength{\rightskip}{0pt plus 5cm}void Vec4::set (const float {\em \_\-x}, \/  const float {\em \_\-y}, \/  const float {\em \_\-z}, \/  const float {\em \_\-w} = {\ttfamily 1.0f})}}
+\label{classVec4_a48e70640181547614a4d72be0dcb9a35}
+
+
+Set values to the vector. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-x}]Point/value x \item[\mbox{$\leftarrow$} {\em \_\-y}]Point/value y \item[\mbox{$\leftarrow$} {\em \_\-z}]Point/value z \item[\mbox{$\leftarrow$} {\em \_\-w}]Point/value w \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/NCCA/\hyperlink{Vec4_8h}{Vec4.h}\item 
+src/NCCA/\hyperlink{Vec4_8cpp}{Vec4.cpp}\end{DoxyCompactItemize}

@@ -1,0 +1,86 @@
+\hypertarget{classProjectile}{
+\section{Projectile Class Reference}
+\label{classProjectile}\index{Projectile@{Projectile}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classProjectile_ab1e373ca8aa5c3c064b272634167be30}{Projectile} (const float \&\_\-px, const float \&\_\-py, const float \&\_\-pz, const \hyperlink{classVec4}{Vec4} \&\_\-u, const \hyperlink{classVec4}{Vec4} \&\_\-l, const float \&\_\-nx, const float \&\_\-ny, const float \&\_\-nz, const float \&\_\-d, const float \&\_\-ml)
+\begin{DoxyCompactList}\small\item\em Constructor for a projectile, initialises all the attributes. \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_a94903e021fa2edab60ba3836ca0b937d}{
+\hyperlink{classProjectile_a94903e021fa2edab60ba3836ca0b937d}{$\sim$Projectile} ()}
+\label{classProjectile_a94903e021fa2edab60ba3836ca0b937d}
+
+\begin{DoxyCompactList}\small\item\em Default dtor. \item\end{DoxyCompactList}\item 
+void \hyperlink{classProjectile_af4bc39a4bae46e9bbd532a659be199ef}{drawProjectile} (const int \_\-itAmt, const \hyperlink{classVec4}{Vec4} \&\_\-cu, const \hyperlink{classVec4}{Vec4} \&\_\-cl)
+\begin{DoxyCompactList}\small\item\em Function that moves, animates the sprite and draws a projectile. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classProjectile_aac61deefc5ff724b5805f276d153601f}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classProjectile_aac61deefc5ff724b5805f276d153601f}{m\_\-pos}}
+\label{classProjectile_aac61deefc5ff724b5805f276d153601f}
+
+\begin{DoxyCompactList}\small\item\em Position vector of a projectile. \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_a41f6b9bdaf4a705907fe99f2860fff4d}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classProjectile_a41f6b9bdaf4a705907fe99f2860fff4d}{m\_\-up}}
+\label{classProjectile_a41f6b9bdaf4a705907fe99f2860fff4d}
+
+\begin{DoxyCompactList}\small\item\em Up vector of a projectile. \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_aebaaaab56128677ca47c609851f59a6c}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classProjectile_aebaaaab56128677ca47c609851f59a6c}{m\_\-left}}
+\label{classProjectile_aebaaaab56128677ca47c609851f59a6c}
+
+\begin{DoxyCompactList}\small\item\em Left vector of a projectile. \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_afb5ea8ae8d2d56c07cd20765ac050d15}{
+\hyperlink{classVec4}{Vec4} \hyperlink{classProjectile_afb5ea8ae8d2d56c07cd20765ac050d15}{m\_\-normal}}
+\label{classProjectile_afb5ea8ae8d2d56c07cd20765ac050d15}
+
+\begin{DoxyCompactList}\small\item\em Normal vector of a projectile. \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_a1df8d54fa3676617e444f1b1469ae445}{
+float \hyperlink{classProjectile_a1df8d54fa3676617e444f1b1469ae445}{m\_\-dir}}
+\label{classProjectile_a1df8d54fa3676617e444f1b1469ae445}
+
+\begin{DoxyCompactList}\small\item\em Direction to move the projectiles to (radians). \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_a9a382b56ddfaf2b96358db02cec0b794}{
+int \hyperlink{classProjectile_a9a382b56ddfaf2b96358db02cec0b794}{m\_\-life}}
+\label{classProjectile_a9a382b56ddfaf2b96358db02cec0b794}
+
+\begin{DoxyCompactList}\small\item\em Elapsed life of a particle. \item\end{DoxyCompactList}\item 
+\hypertarget{classProjectile_ab6dd4a4ce9ad5c436fdd0c789996d232}{
+int \hyperlink{classProjectile_ab6dd4a4ce9ad5c436fdd0c789996d232}{m\_\-maxLife}}
+\label{classProjectile_ab6dd4a4ce9ad5c436fdd0c789996d232}
+
+\begin{DoxyCompactList}\small\item\em Maximum life of a particle. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classProjectile_ab1e373ca8aa5c3c064b272634167be30}{
+\index{Projectile@{Projectile}!Projectile@{Projectile}}
+\index{Projectile@{Projectile}!Projectile@{Projectile}}
+\subsubsection[{Projectile}]{\setlength{\rightskip}{0pt plus 5cm}Projectile::Projectile (const float \& {\em \_\-px}, \/  const float \& {\em \_\-py}, \/  const float \& {\em \_\-pz}, \/  const {\bf Vec4} \& {\em \_\-u}, \/  const {\bf Vec4} \& {\em \_\-l}, \/  const float \& {\em \_\-nx}, \/  const float \& {\em \_\-ny}, \/  const float \& {\em \_\-nz}, \/  const float \& {\em \_\-d}, \/  const float \& {\em \_\-ml})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classProjectile_ab1e373ca8aa5c3c064b272634167be30}
+
+
+Constructor for a projectile, initialises all the attributes. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-px}]Position x value \item[\mbox{$\leftarrow$} {\em \_\-py}]Position y value \item[\mbox{$\leftarrow$} {\em \_\-pz}]Position z value \item[\mbox{$\leftarrow$} {\em \_\-u}]Up vector of the projectile, used for moving the projectile around the atmosphere \item[\mbox{$\leftarrow$} {\em \_\-l}]Left vector of the projectile, used for moving the projectile around the atmosphere \item[\mbox{$\leftarrow$} {\em \_\-nx}]X component of the normal vector \item[\mbox{$\leftarrow$} {\em \_\-ny}]Y component of the normal vector \item[\mbox{$\leftarrow$} {\em \_\-nz}]Z component of the normal vector \item[\mbox{$\leftarrow$} {\em \_\-d}]Direction angle in radians \item[\mbox{$\leftarrow$} {\em \_\-ml}]Maximum life of the projectile \end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classProjectile_af4bc39a4bae46e9bbd532a659be199ef}{
+\index{Projectile@{Projectile}!drawProjectile@{drawProjectile}}
+\index{drawProjectile@{drawProjectile}!Projectile@{Projectile}}
+\subsubsection[{drawProjectile}]{\setlength{\rightskip}{0pt plus 5cm}void Projectile::drawProjectile (const int {\em \_\-itAmt}, \/  const {\bf Vec4} \& {\em \_\-cu}, \/  const {\bf Vec4} \& {\em \_\-cl})}}
+\label{classProjectile_af4bc39a4bae46e9bbd532a659be199ef}
+
+
+Function that moves, animates the sprite and draws a projectile. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-itAmt}]Amount of iterations to for a projectile to have it move \char`\"{}smoothly\char`\"{} move between two points rather than skipping certain positions \item[\mbox{$\leftarrow$} {\em \_\-cu}]Up vector of the camera, used to bilboard the projectile \item[\mbox{$\leftarrow$} {\em \_\-cl}]Up vector of the camera, used to bilboard the projectile \end{DoxyParams}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Projectile_8h}{Projectile.h}\item 
+src/\hyperlink{Projectile_8cpp}{Projectile.cpp}\end{DoxyCompactItemize}

@@ -1,0 +1,45 @@
+\hypertarget{LoadOBJ_8cpp}{
+\section{src/LoadOBJ.cpp File Reference}
+\label{LoadOBJ_8cpp}\index{src/LoadOBJ.cpp@{src/LoadOBJ.cpp}}
+}
+
+
+Implementation mesh loading functions.  
+{\ttfamily \#include $<$fstream$>$}\par
+{\ttfamily \#include $<$iostream$>$}\par
+{\ttfamily \#include $<$boost/lexical\_\-cast.hpp$>$}\par
+{\ttfamily \#include $<$boost/format.hpp$>$}\par
+{\ttfamily \#include \char`\"{}LoadOBJ.h\char`\"{}}\par
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{LoadOBJ_8cpp_a1241d7eaf39c8116625fadf861ef0413}{loadModel} (const std::string \&\_\-n, \hyperlink{structmodel}{model} \&o\_\-m)
+\begin{DoxyCompactList}\small\item\em Parse an OBJ-\/file and store the data in to the provided \hyperlink{structmodel}{model} structure. \item\end{DoxyCompactList}\item 
+void \hyperlink{LoadOBJ_8cpp_a86b0a119a5f2809107ae7aaf34860bdf}{freeModelMem} (\hyperlink{structmodel}{model} \&o\_\-m)
+\begin{DoxyCompactList}\small\item\em Function to clear the stl vectors and freeing up the memory used to store the \hyperlink{structmodel}{model} data. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation mesh loading functions. 
+
+\subsection{Function Documentation}
+\hypertarget{LoadOBJ_8cpp_a86b0a119a5f2809107ae7aaf34860bdf}{
+\index{LoadOBJ.cpp@{LoadOBJ.cpp}!freeModelMem@{freeModelMem}}
+\index{freeModelMem@{freeModelMem}!LoadOBJ.cpp@{LoadOBJ.cpp}}
+\subsubsection[{freeModelMem}]{\setlength{\rightskip}{0pt plus 5cm}void freeModelMem ({\bf model} \& {\em o\_\-m})}}
+\label{LoadOBJ_8cpp_a86b0a119a5f2809107ae7aaf34860bdf}
+
+
+Function to clear the stl vectors and freeing up the memory used to store the \hyperlink{structmodel}{model} data. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\rightarrow$} {\em o\_\-m}]The structure where the data is stored in. \end{DoxyParams}
+\hypertarget{LoadOBJ_8cpp_a1241d7eaf39c8116625fadf861ef0413}{
+\index{LoadOBJ.cpp@{LoadOBJ.cpp}!loadModel@{loadModel}}
+\index{loadModel@{loadModel}!LoadOBJ.cpp@{LoadOBJ.cpp}}
+\subsubsection[{loadModel}]{\setlength{\rightskip}{0pt plus 5cm}void loadModel (const std::string \& {\em \_\-n}, \/  {\bf model} \& {\em o\_\-m})}}
+\label{LoadOBJ_8cpp_a1241d7eaf39c8116625fadf861ef0413}
+
+
+Parse an OBJ-\/file and store the data in to the provided \hyperlink{structmodel}{model} structure. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-n}]Path to the OBJ-\/file \item[\mbox{$\rightarrow$} {\em o\_\-m}]Model structure to store the data in \end{DoxyParams}

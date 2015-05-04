@@ -1,0 +1,155 @@
+\hypertarget{classMat4}{
+\section{Mat4 Class Reference}
+\label{classMat4}\index{Mat4@{Mat4}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classMat4_ab3c26812d63c39eaf57ef25cdda9c24c}{Mat4} (const float \_\-s=1.0f)
+\begin{DoxyCompactList}\small\item\em Construct \hyperlink{classMat4}{Mat4} as scale matrix \_\-s. \item\end{DoxyCompactList}\item 
+\hyperlink{classMat4_a962a2d2ba18f96eba15342175237e55c}{Mat4} (const \hyperlink{classMat4}{Mat4} \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classMat4}{Mat4}. \item\end{DoxyCompactList}\item 
+void \hyperlink{classMat4_a5b8ca6003dee9d49f2a008f1608bebaf}{operator$\ast$=} (const \hyperlink{classMat4}{Mat4} \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em $\ast$= operator, multiplies the current matrix with \_\-rhs matrix \item\end{DoxyCompactList}\item 
+\hyperlink{classMat4}{Mat4} \hyperlink{classMat4_a352383553a3abb84b876e222b355be6a}{operator$\ast$} (const double \&\_\-rhs)
+\begin{DoxyCompactList}\small\item\em $\ast$ operator, multiply to matrices together \item\end{DoxyCompactList}\item 
+\hypertarget{classMat4_ac5095599284b8c470c8e4a2b28321f83}{
+void \hyperlink{classMat4_ac5095599284b8c470c8e4a2b28321f83}{normalize} ()}
+\label{classMat4_ac5095599284b8c470c8e4a2b28321f83}
+
+\begin{DoxyCompactList}\small\item\em Function that normalizes the matrix. \item\end{DoxyCompactList}\item 
+\hypertarget{classMat4_ad4a8d1caecbfd18a61a9fe245e7463ab}{
+void \hyperlink{classMat4_ad4a8d1caecbfd18a61a9fe245e7463ab}{identity} ()}
+\label{classMat4_ad4a8d1caecbfd18a61a9fe245e7463ab}
+
+\begin{DoxyCompactList}\small\item\em Set the matrix to an identity matrix. \item\end{DoxyCompactList}\item 
+\hypertarget{classMat4_ab8a59432b5fa5ee98e336ce0b6aa1535}{
+void \hyperlink{classMat4_ab8a59432b5fa5ee98e336ce0b6aa1535}{loadModelView} () const }
+\label{classMat4_ab8a59432b5fa5ee98e336ce0b6aa1535}
+
+\begin{DoxyCompactList}\small\item\em Load gl modelview. \item\end{DoxyCompactList}\item 
+\hypertarget{classMat4_a421fdc614bb0b3e7346371aed1cf900c}{
+void \hyperlink{classMat4_a421fdc614bb0b3e7346371aed1cf900c}{loadProjection} () const }
+\label{classMat4_a421fdc614bb0b3e7346371aed1cf900c}
+
+\begin{DoxyCompactList}\small\item\em Load gl projection. \item\end{DoxyCompactList}\item 
+const \hyperlink{classMat4}{Mat4} \& \hyperlink{classMat4_a822f5da810857bfd6f639c12aed6dd61}{transpose} ()
+\begin{DoxyCompactList}\small\item\em Transpose matrix, switch from col major to row major and vice versa. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classMat4_a2cca9586be7e8f4776d52f91feaf7b0b}{
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>float \hyperlink{classMat4_a814619c2bc230d3d1b52dc1e72e33a10}{m\_m} \mbox{[}4\mbox{]}\mbox{[}4\mbox{]}\\
+\>\>{\em matrix element m\_m as a 4x4 array mapped by union to m\_nn elements and m\_openGL }\\
+\>float \hyperlink{classMat4_a81fc8afe42c23614ab86549aaf2f384c}{m\_openGL} \mbox{[}16\mbox{]}\\
+\>\>{\em the matrix in m\_openGL 16 Real array format useful for OpenGL fv formats mapped to m\_m\mbox{[}\mbox{]}\mbox{[}\mbox{]} elements and m\_xx elements }\\
+\hypertarget{unionMat4_1_1@0_a401018066c0f587c933117afe577f73f}{
+\>struct \{\\
+\>\>float \hyperlink{classMat4_a63ea3c0d4b9a6f53e33e33f1a0de23c0}{m\_00}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}0\mbox{]}\mbox{[}0\mbox{]} and m\_openGL\mbox{[}0\mbox{]} }\\
+\>\>float \hyperlink{classMat4_ab9e74db6fa2e1b95683c347b34df4ea4}{m\_01}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}0\mbox{]}\mbox{[}1\mbox{]} and m\_openGL\mbox{[}1\mbox{]} }\\
+\>\>float \hyperlink{classMat4_af0a3595e5a7fc1eac093faf648539e3d}{m\_02}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}0\mbox{]}\mbox{[}2\mbox{]} and m\_openGL\mbox{[}2\mbox{]} }\\
+\>\>float \hyperlink{classMat4_aff54f200fc9d27b0c360ef20114585b2}{m\_03}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}0\mbox{]}\mbox{[}3\mbox{]} and m\_openGL\mbox{[}3\mbox{]} }\\
+\>\>float \hyperlink{classMat4_a2db5bf4792a33eb8bc726d3bd8dcb522}{m\_10}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}1\mbox{]}\mbox{[}0\mbox{]} and m\_openGL\mbox{[}4\mbox{]} }\\
+\>\>float \hyperlink{classMat4_a6ebbf9e1c9e8dd962bcf5715cc03ab29}{m\_11}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}1\mbox{]}\mbox{[}1\mbox{]} and m\_openGL\mbox{[}5\mbox{]} }\\
+\>\>float \hyperlink{classMat4_a2a512d694359d9db4771181c36e11299}{m\_12}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}1\mbox{]}\mbox{[}2\mbox{]} and m\_openGL\mbox{[}6\mbox{]} }\\
+\>\>float \hyperlink{classMat4_ad63b55e5293017b3534a429bc825bbda}{m\_13}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}1\mbox{]}\mbox{[}3\mbox{]} and m\_openGL\mbox{[}7\mbox{]} }\\
+\>\>float \hyperlink{classMat4_a18f2b94464938689e6635565e65d1145}{m\_20}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}2\mbox{]}\mbox{[}0\mbox{]} and m\_openGL\mbox{[}8\mbox{]} }\\
+\>\>float \hyperlink{classMat4_ac8d557a1082725f7836e150cc7f6e5d2}{m\_21}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}2\mbox{]}\mbox{[}1\mbox{]} and m\_openGL\mbox{[}9\mbox{]} }\\
+\>\>float \hyperlink{classMat4_a549ca9c07e8c512216319559317a8f4f}{m\_22}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}2\mbox{]}\mbox{[}2\mbox{]} and m\_openGL\mbox{[}10\mbox{]} }\\
+\>\>float \hyperlink{classMat4_ae6c4e0d59ae07298c8e14f68a1a44089}{m\_23}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}2\mbox{]}\mbox{[}3\mbox{]} and m\_openGL\mbox{[}11\mbox{]} }\\
+\>\>float \hyperlink{classMat4_aa1c8cc3bfec0146be53ec498617a6acc}{m\_30}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}3\mbox{]}\mbox{[}0\mbox{]} and m\_openGL\mbox{[}12\mbox{]} }\\
+\>\>float \hyperlink{classMat4_a72d6fa2693a1416dea79337e2607041f}{m\_31}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}3\mbox{]}\mbox{[}1\mbox{]} and m\_openGL\mbox{[}13\mbox{]} }\\
+\>\>float \hyperlink{classMat4_adf6fe8b055beb564cd03913ce227495c}{m\_32}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}3\mbox{]}\mbox{[}2\mbox{]} and m\_openGL\mbox{[}14\mbox{]} }\\
+\>\>float \hyperlink{classMat4_af15215a83a00ba09ae5398ea280fe52f}{m\_33}\\
+\>\>\>{\em matrix element, maps to m\mbox{[}3\mbox{]}\mbox{[}3\mbox{]} and m\_openGL\mbox{[}15\mbox{]} }\\
+\>\} }
+\label{unionMat4_1_1@0_a401018066c0f587c933117afe577f73f}
+\\
+\}; }
+\label{classMat4_a2cca9586be7e8f4776d52f91feaf7b0b}
+\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classMat4_ab3c26812d63c39eaf57ef25cdda9c24c}{
+\index{Mat4@{Mat4}!Mat4@{Mat4}}
+\index{Mat4@{Mat4}!Mat4@{Mat4}}
+\subsubsection[{Mat4}]{\setlength{\rightskip}{0pt plus 5cm}Mat4::Mat4 (const float {\em \_\-s} = {\ttfamily 1.0f})}}
+\label{classMat4_ab3c26812d63c39eaf57ef25cdda9c24c}
+
+
+Construct \hyperlink{classMat4}{Mat4} as scale matrix \_\-s. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-s}]Scale value, defaults to 1.0 \end{DoxyParams}
+\hypertarget{classMat4_a962a2d2ba18f96eba15342175237e55c}{
+\index{Mat4@{Mat4}!Mat4@{Mat4}}
+\index{Mat4@{Mat4}!Mat4@{Mat4}}
+\subsubsection[{Mat4}]{\setlength{\rightskip}{0pt plus 5cm}Mat4::Mat4 (const {\bf Mat4} \& {\em \_\-rhs})}}
+\label{classMat4_a962a2d2ba18f96eba15342175237e55c}
+
+
+\hyperlink{classMat4}{Mat4}. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classMat4_a352383553a3abb84b876e222b355be6a}{
+\index{Mat4@{Mat4}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Mat4@{Mat4}}
+\subsubsection[{operator$\ast$}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Mat4} Mat4::operator$\ast$ (const double \& {\em \_\-rhs})}}
+\label{classMat4_a352383553a3abb84b876e222b355be6a}
+
+
+$\ast$ operator, multiply to matrices together 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]Right hand side matrix \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Resulting matrix 
+\end{DoxyReturn}
+\hypertarget{classMat4_a5b8ca6003dee9d49f2a008f1608bebaf}{
+\index{Mat4@{Mat4}!operator$\ast$=@{operator$\ast$=}}
+\index{operator$\ast$=@{operator$\ast$=}!Mat4@{Mat4}}
+\subsubsection[{operator$\ast$=}]{\setlength{\rightskip}{0pt plus 5cm}void Mat4::operator$\ast$= (const {\bf Mat4} \& {\em \_\-rhs})}}
+\label{classMat4_a5b8ca6003dee9d49f2a008f1608bebaf}
+
+
+$\ast$= operator, multiplies the current matrix with \_\-rhs matrix 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-rhs}]matrix to multiply the lhs matrix with \end{DoxyParams}
+\hypertarget{classMat4_a822f5da810857bfd6f639c12aed6dd61}{
+\index{Mat4@{Mat4}!transpose@{transpose}}
+\index{transpose@{transpose}!Mat4@{Mat4}}
+\subsubsection[{transpose}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Mat4} \& Mat4::transpose ()}}
+\label{classMat4_a822f5da810857bfd6f639c12aed6dd61}
+
+
+Transpose matrix, switch from col major to row major and vice versa. \begin{DoxyReturn}{Returns}
+Transposed matrix 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+include/NCCA/\hyperlink{Mat4_8h}{Mat4.h}\item 
+src/NCCA/\hyperlink{Mat4_8cpp}{Mat4.cpp}\end{DoxyCompactItemize}
