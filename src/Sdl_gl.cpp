@@ -33,6 +33,7 @@ SDL_GL::SDL_GL()
   if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO) == -1)
     SDLErrorExit("Couldn't initialise SDL");
 
+  // Initialise the OGG support for SDL mixer
   if(((Mix_Init(MIX_INIT_OGG))&MIX_INIT_OGG) != MIX_INIT_OGG)
     std::cerr << "Failed to initialise OGG support:" << Mix_GetError() << "\n";
 
@@ -60,18 +61,22 @@ SDL_GL::SDL_GL()
 
   m_controller = NULL;
 
+  // Look for possible controllers
   for(int i = 0; i < SDL_NumJoysticks(); i++)
   {
     if((m_controller = SDL_GameControllerOpen(i)))
       break;
   }
 
+  // Open the audio device for the use of this program
   if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0)
   {
       std::cerr << "Unable to initialize audio: " << Mix_GetError() << "\n";
       exit(1);
   }
 
+  // If everything initialised correctly we set the flag that allows the
+  // program to run to be true
   m_act = true;
 }
 // ---------------------------------------------------------------------------------------
@@ -79,6 +84,7 @@ SDL_GL::SDL_GL()
 // ---------------------------------------------------------------------------------------
 SDL_GL::~SDL_GL()
 {
+  // Clean up
   if(!m_controller)
     SDL_GameControllerClose(m_controller);
 
@@ -130,11 +136,13 @@ SDL_GLContext SDL_GL::createOpenGLContext()
 // ---------------------------------------------------------------------------------------
 void SDL_GL::enableLighting() const
 {
+  // Enable 2D textures, point sprites and blend functions
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_POINT_SPRITE);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+  // Setting up light details
   GLfloat mat_specular[] = { 0.5, 0.5, 0.5, 1.0 };
   GLfloat mat_shininess[] = { 100.0 };
   GLfloat light_position[] = { 0.5, 0.75, 1.5, 0.0 };

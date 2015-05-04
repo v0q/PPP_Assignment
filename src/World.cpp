@@ -128,6 +128,8 @@ void World::drawStars() const
 // ---------------------------------------------------------------------------------------
 void World::drawPlanet()
 {
+  // Scale the planet by the defined world radius and call the draw function of the
+  // planet object
   glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
   m_planet.draw();
 }
@@ -136,22 +138,33 @@ void World::drawPlanet()
 // ---------------------------------------------------------------------------------------
 void World::atmosphere()
 {
+  // Generate the displaylist for the atmosphere
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
+    // Turn the polygon mode to GL_LINE so the atmosphere will
+    // be displayed in wireframe mode
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // Set the color to a blueish value and set the opacity to 60%
     glColor4f(0.114, 0.431, 0.506, 0.6);
+
+    // Scale the atmosphere
     glScalef(WORLDRADIUS*ASPHERERADIUS, WORLDRADIUS*ASPHERERADIUS, WORLDRADIUS*ASPHERERADIUS);
 
     glBegin(GL_TRIANGLES);
 
+        // Calling the triangle sphere/geodesic sphere function with the subdivison
+        // level 4 to generate the actual atmosphere
         tSphere(4);
 
     glEnd();
 
+    // Return the scale back to normal as we're not loading identity with every element
     glScalef(1.0f/(WORLDRADIUS*ASPHERERADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS));
 
+    // Turn the polygon mode back to fill so no other objects will be affected by
+    // the wireframe mode
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
   glEndList();
@@ -162,21 +175,23 @@ void World::atmosphere()
 // ---------------------------------------------------------------------------------------
 void World::skybox()
 {
+  // Generate a displaylist for the skybox
   GLuint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
 
+    // We disable lighting and depth mask/testing as the skybox should be fully lit due to
+    // it being a space scenery where the elements kinda "bring light to the scene"
     glDisable(GL_LIGHTING);
     glDepthMask(GL_FALSE);
-    // Scale the skybox to the set radius
+    // Scale the skybox
     glScalef(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS, WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS, WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS);
 
-    // We need to bind the texture inside the list so that the texture is rendered
+    // Binding the texture inside the list so that the texture is rendered
     // whenever the list is called.
     glBindTexture(GL_TEXTURE_2D, m_skyBoxTexId);
     glBegin(GL_TRIANGLES);
 
-      // Set the skybox to be "fully colored" and draw get the triangles of the loaded mesh
-      glColor4f(1, 1, 1, 1);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
       for(int i = 0; i < (int)m_skybox.m_Ind.size(); i += 3)
       {
         m_skybox.m_Norms[m_skybox.m_Ind[i + 2] - 1].normalInvGL();
@@ -187,8 +202,10 @@ void World::skybox()
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    // Return the scale back to normal as we're not loading identity with every element
     glScalef(1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS), 1.0f/(WORLDRADIUS*ASPHERERADIUS*SKYBOXRADIUS));
 
+    // Turning depth mask/testing and lighting back on
     glDepthMask(GL_TRUE);
     glEnable(GL_LIGHTING);
   glEndList();
@@ -199,24 +216,38 @@ void World::skybox()
 // ---------------------------------------------------------------------------------------
 void World::subd(const Vec4 &_a, const Vec4 &_b, const Vec4 &_c, const int _d) const
 {
+  // A vector array holding the new points achieved by the subdivision
   Vec4 v[3];
 
+  // As this is a recursive function, we'll check that we're still subdividing.
+  // If not the function will reach its end and "return"
   if(_d > 0)
   {
+
+    // Calculate the subdivided points by getting the mid point of each side
+    // of the triangle
     v[0] = (_a + _b)/2.0;
     v[1] = (_a + _c)/2.0;
     v[2] = (_b + _c)/2.0;
 
-
+    // Normalise the new points as they will be used for the next subdivision
     v[0].normalize();
     v[1].normalize();
     v[2].normalize();
+
+    // Call the subdivide function with the new triangles formed by the
+    // current subdivision:
+    /*   /\      /\
+        /  \ => /__\
+       /____\  /_\/_\ */
 
     subd(_a, v[0], v[1], _d - 1);
     subd(v[0], _b, v[2], _d - 1);
     subd(v[1], v[2], _c, _d - 1);
     subd(v[0], v[1], v[2], _d - 1);
 
+    // If we've reached the last subdivision level we'll render out the triangles
+    // As we only want the to draw the same sized triangles
     if(_d == 1)
     {
       drawTriangle(_a, v[0], v[1]);
@@ -229,38 +260,32 @@ void World::subd(const Vec4 &_a, const Vec4 &_b, const Vec4 &_c, const int _d) c
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void World::drawTriangle(const Vec4 &_a, const Vec4 &_b, const Vec4 &_c) const
+void World::drawTriangle(
+                         const Vec4 &_a,
+                         const Vec4 &_b,
+                         const Vec4 &_c
+                        ) const
 {
+  // Calculating the normal of a face (not necessarily needed here as we're
+  // only using this method for the wireframed atmosphere.
   Vec4 normal;
-  float u, v;
   normal = _a + _b + _c;
   normal.normalize();
 
   normal.normalGL();
 
-  u = asin(_a.m_x)/PI + 0.5;
-  v = asin(_a.m_y)/PI + 0.5;
-
-  glTexCoord2f(u, v);
   _a.vertexGL();
-
-  u = ((atan2(_b.m_x, _b.m_z) / PI) + 1.0f) * 0.5f;
-  v = (asin(_b.m_y) / PI) + 0.5f;
-
-  glTexCoord2f(u, v);
   _b.vertexGL();
-
-  u = asin(_c.m_x)/PI + 0.5;
-  v = asin(_c.m_y)/PI + 0.5;
-
-  glTexCoord2f(u, v);
   _c.vertexGL();
 }
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void World::tSphere(const int _d) const
+void World::tSphere(
+                    const int _d
+                   ) const
 {
+  // Loop through the icosahedron shape and subdivide each triangle
   for(int k = 0; k < 20; ++k)
   {
     icosHedron[k][0].normalize();
@@ -276,6 +301,7 @@ void World::initStars(
                       const int _a
                      )
 {
+  // Using the boost random to generate random position and opacity for each star
   boost::random::uniform_int_distribution<> u_random(1, 1000);
   for(int i = 0; i < _a; ++i)
   {
@@ -285,8 +311,8 @@ void World::initStars(
            u_random(m_rng)/1000.0f * 2 - 1);
 
     s.normalize();
-    s *= fmod(std::rand(),SKYBOXRADIUS-WORLDRADIUS*ASPHERERADIUS) + 3*WORLDRADIUS*ASPHERERADIUS;
-    s.m_w = 1 - (s.length()/SKYBOXRADIUS);
+    // Now we randomise the distance by getting a value that's between the planet and the skybox
+    s *= fmod(u_random(m_rng),SKYBOXRADIUS-WORLDRADIUS*ASPHERERADIUS) + 3*WORLDRADIUS*ASPHERERADIUS;
     m_stars.push_back(s);
   }
 }
@@ -295,46 +321,74 @@ void World::initStars(
 // ---------------------------------------------------------------------------------------
 void World::generate_Asteroids()
 {
+  // Using the boost random to generate random attributes
+  // for each asteroid
   boost::random::uniform_int_distribution<> u_random(1, 100);
 
+  // As we don't want to generate asteroids every frame, we add the boost random
+  // element to the equation and only generate more asteroids if the randomness
+  // gets a value > 95 which should theoretically be about 5% chance every frame
   if(u_random(m_rng)/100.0 > 0.95 && (int)m_asteroids.size() < m_maxAsteroids)
   {
-    Vec4 aPos(u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f);
+    // Generate a random position for each asteroid (adding 0.01f to each
+    // to avoid the unlikely case of each component resulting to 0
+    // which would cause problems when we normalise the position.
+    Vec4 aPos(u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f,
+              u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f,
+              u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f);
     aPos.normalize();
 
+    // Setting the direction of the asteroid to be the opposite of it's
+    // position, thus the asteroid will be heading towards the planet
     Vec4 aDir = aPos * - 1;
+
+    // We generate
     Vec4 aSide(u_random(m_rng)/100.0,
                u_random(m_rng)/100.0,
                0);
 
-    if(fabs(aPos.m_z) > 0.001)
+    if(fabs(aPos.m_z) > 0.001f)
       aSide.m_z = -(aSide.m_x*aPos.m_x + aSide.m_y*aPos.m_y) / aPos.m_z;
 
+    // Calculating the up vector the the asteroid by taking the cross product
+    // of its position and side vectors
     Vec4 aUp;
     aUp = aSide.cross(aPos);
 
+    // Moving the asteroid to near the skybox
     aPos *= SKYBOXRADIUS;
 
+    // Generate a random scale factor for each asteroid which will be
+    // anything between 0.1f to 0.8f
     float size = u_random(m_rng)/100.0 * 0.8f + 0.1f;
     int type = u_random(m_rng)%2;
 
+    // Push the asteroid to the stl vector to have it drawn later
     m_asteroids.push_back(Asteroid(aPos, aDir,
                                  aUp, aSide,
                                  size, fmod(u_random(m_rng)/100.0, 0.04f) + 0.0315f,
                                  size * 150, type));
   }
 
+  // Bind the asteroid texture and loop through the living asteroids
   glBindTexture(GL_TEXTURE_2D, m_aTexId);
   for(int i = 0; i < (int)m_asteroids.size(); ++i)
   {
+    // Check if the asteroid still has health left, if so we'll call its
+    // drawing function
     if(m_asteroids[i].m_life > 0)
       m_asteroids[i].draw(m_aDisplayList);
     else
     {
+      // If not we check the size of the asteroid as bigger asteroids will generate
+      // two smaller asteroids (idea is that the asteroid breaks to smaller pieces)
+      // TODO: model and implement actually explodable asteroids
       if(m_asteroids[i].m_size > 0.5f)
       {
         for(int j = 0; j < 2; ++j)
         {
+          // Set the start position of the new smalle asteroids to be where the bigger
+          // one was destroyed, randomise rest of the attributes.
           Vec4 aPos = m_asteroids[i].m_pos;
           aPos.normalize();
           Vec4 new_dir = aPos * - 1;
@@ -355,22 +409,29 @@ void World::generate_Asteroids()
         }
       }
 
+      // When an asteroid is destroyed we play the explosion sound and remove it from
+      // the stl vector
       Mix_PlayChannel(-1, m_aExplosion, 0);
 
       m_asteroids.erase(m_asteroids.begin() + i);
     }
   }
   glBindTexture(GL_TEXTURE_2D, 0);
-
 }
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
 void World::partByDist()
 {
+  // Looping through the asteroids to do the spatial partitioning
+  // This is done by checking whether an asteroid has reached the atmosphere
   for(int i = 0; i < (int)m_asteroids.size(); ++i)
     if(fabs(m_asteroids[i].m_pos.length() - WORLDRADIUS*ASPHERERADIUS) < 0.05)
       m_aColIndices.push_back(i);
+
+  // As we're only storing the indices of the asteroids we'll sort the list
+  // and call unique to remove duplicate entries as the loop above is not
+  // checking whether a certain asteroid has already been added to the list
   m_aColIndices.sort();
   m_aColIndices.unique();
 }
@@ -379,6 +440,7 @@ void World::partByDist()
 // ---------------------------------------------------------------------------------------
 void World::genALists()
 {
+  // Generating the displaylists for both asteroid models
   GLuint id;
 
   for(int j = 0; j < 2; ++j)
