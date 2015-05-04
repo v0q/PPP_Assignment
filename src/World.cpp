@@ -41,12 +41,12 @@ World::World() :
   loadModel("models/asteroid2.obj", m_asteroid[1]);
 
 // HACKY SOLUTION START
-#ifdef LINUX
-  loadTexture("textures/sb_90.png", m_skyBoxTexId);
-#endif
-#ifdef DARWIN
+#ifdef LINUX // Remove this line
+  loadTexture("textures/sb_90.png", m_skyBoxTexId); // Remove this line
+#endif // Remove this line
+#ifdef DARWIN // Remove this line
   loadTexture("textures/sb_cube.png", m_skyBoxTexId);
-#endif
+#endif // Remove this line
 // HACKY SOLUTION END
 
   // Loads in the asteroid texture

@@ -66,6 +66,7 @@ class Camera
               m_eye(0.0f, 0.0f, CAMRADIUS),
               m_look(0.0f, 0.0f, 0.0f),
               m_up(0.0f, 1.0f, 0.0f),
+              m_w(1.0f, 0.0f, 0.0f),
               m_fov(65.0f),
               m_n(0.5f),
               m_f(200.0f),

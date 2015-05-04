@@ -54,12 +54,12 @@ Player::Player(
   // the DARWIN ones where ever I've flagged it as //HACKY SOLUTION
 
 // HACKY SOLUTION START
-#ifdef LINUX
-  loadTexture("textures/ss_texture_90.png", m_shipTexId);
-#endif
-#ifdef DARWIN
+#ifdef LINUX // Remove this line
+  loadTexture("textures/ss_texture_90.png", m_shipTexId); // Remove this line
+#endif // Remove this line
+#ifdef DARWIN // Remove this line
   loadTexture("textures/ss_texture.png", m_shipTexId);
-#endif
+#endif // Remove this line
 // HACKY SOLUTION END
 
   // Generates the displaylist from the model data
@@ -116,9 +116,9 @@ void Player::drawPlayer()
     glEnd();
 
 // HACKY SOLUTION START
-#ifdef LINUX
-    glRotatef(-90, 0, 0, 1);
-#endif
+#ifdef LINUX // Remove this line
+    glRotatef(-90, 0, 0, 1); // Remove this line
+#endif // Remove this line
 // HACKY SOLUTION END
 
     // Rotate and tilt the player based on the movement
