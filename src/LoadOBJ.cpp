@@ -6,7 +6,10 @@
 #include "LoadOBJ.h"
 
 // ---------------------------------------------------------------------------------------
-void loadModel(const std::string &_n, model &o_m)
+void loadModel(
+               const std::string &_n,
+               model &o_m
+              )
 {
   // Open the filestream for reading a file
   std::fstream fileIn;
@@ -89,7 +92,9 @@ void loadModel(const std::string &_n, model &o_m)
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void freeModelMem(model &o_m)
+void freeModelMem(
+                  model &o_m
+                 )
 {
   // Clear the data from the vectors and swap 'em to empty ones to free up memory
   o_m.m_Verts.clear();

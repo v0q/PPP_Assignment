@@ -21,7 +21,7 @@ class Projectile
                normal(_nx, _ny, _nz),
                dir(_d), life(0), max_life(_ml) {}
     ~Projectile() {}
-    void drawProjectile(int num_it, Vec4 &_cu, Vec4 &_cl);
+    void drawProjectile(int num_it, const Vec4 &_cu, const Vec4 &_cl);
 
     Vec4 pos, up, left, normal;
     float dir;

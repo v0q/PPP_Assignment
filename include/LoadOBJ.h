@@ -16,7 +16,10 @@
 /// @date 03/05/15
 /// Revision History:
 ///   -
-/// @todo Nothing for now, maybe use namespaces and possibly tidy up the code
+/// @todo Nothing for now, maybe use namespaces and possibly tidy up the code. Possibly
+///       turn this in to a mesh class that would have draw functions etc. For now
+///       as depending on the mesh it might be handled differently the drawing will be
+///       done where ever it's needed.
 // ---------------------------------------------------------------------------------------
 
 #include <string>
@@ -52,16 +55,21 @@ typedef struct
 
 // ---------------------------------------------------------------------------------------
 /// @brief Parse an OBJ-file and store the data in to the provided model structure
-/// @param _n Path to the OBJ-file
-/// @param o_m Model structure to store the data in
+/// @param[in] _n Path to the OBJ-file
+/// @param[out] o_m Model structure to store the data in
 // ---------------------------------------------------------------------------------------
-void loadModel(const std::string &_n, model &o_m);
+void loadModel(
+               const std::string &_n,
+               model &o_m
+              );
 
 // ---------------------------------------------------------------------------------------
 /// @brief Function to clear the stl vectors and freeing up the memory used to store
 ///        the model data.
-/// @param o_m The structure where the data is stored in.
+/// @param[out] o_m The structure where the data is stored in.
 // ---------------------------------------------------------------------------------------
-void freeModelMem(model &o_m);
+void freeModelMem(
+                  model &o_m
+                 );
 
 #endif // end of LOADOBJ_H

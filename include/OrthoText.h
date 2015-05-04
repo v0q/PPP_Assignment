@@ -30,7 +30,12 @@
 
 #include <string>
 
-void OrthoText(void *font, const std::string &_str, GLfloat x, GLfloat y)
+void OrthoText(
+               void *_font,
+               const std::string &_str,
+               const GLfloat _x,
+               const GLfloat _y
+              )
 {
   const char *ch;
   GLint matrixMode;
@@ -51,10 +56,10 @@ void OrthoText(void *font, const std::string &_str, GLfloat x, GLfloat y)
       glLoadIdentity();
       glPushAttrib(GL_COLOR_BUFFER_BIT);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glRasterPos3f(x, y, 0.0);
+        glRasterPos3f(_x, _y, 0.0);
         for(ch = _str.c_str(); *ch; ch++)
         {
-          glutBitmapCharacter(font, (int)*ch);
+          glutBitmapCharacter(_font, (int)*ch);
         }
       glPopAttrib();
 

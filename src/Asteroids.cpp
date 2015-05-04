@@ -13,7 +13,9 @@
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void Asteroid::draw(const std::vector<GLuint> &_dL)
+void Asteroid::draw(
+                    const std::vector<GLuint> &_dL
+                   )
 {
   // Call the move function
   move();

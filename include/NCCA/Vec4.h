@@ -26,23 +26,29 @@ class Vec4
   public:
     // ---------------------------------------------------------------------------------------
     /// @brief Copy ctor that makes a copy of the rhs vector
-    /// @param _rhs Vector to be copied
+    /// @param[in] _rhs Vector to be copied
     // ---------------------------------------------------------------------------------------
-    Vec4(const Vec4 &_rhs);
+    Vec4(
+         const Vec4 &_rhs
+        );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Construct a 4d vector
-    /// @param _x Point/value x
-    /// @param _y Point/value y
-    /// @param _z Point/value z
-    /// @param _w Point/value w
+    /// @param[in] _x Point/value x
+    /// @param[in] _y Point/value y
+    /// @param[in] _z Point/value z
+    /// @param[in] _w Point/value w
     // ---------------------------------------------------------------------------------------
-    Vec4(const float _x = 0.0f, const float _y = 0.0f, const float _z = 0.0f, const float _w = 1.0f) :
-      m_x(_x),
-      m_y(_y),
-      m_z(_z),
-      m_w(_w)
-    { }
+    Vec4(
+         const float _x = 0.0f,
+         const float _y = 0.0f,
+         const float _z = 0.0f,
+         const float _w = 1.0f
+        ) :
+         m_x(_x),
+         m_y(_y),
+         m_z(_z),
+         m_w(_w) {;}
 
     // ---------------------------------------------------------------------------------------
     /// @brief Calls the current Vector as glColor4fv();
@@ -51,17 +57,21 @@ class Vec4
 
     // ---------------------------------------------------------------------------------------
     /// @brief Calculates the cross product between two vectors
-    /// @param _rhs Rhs of v1 cross v2
+    /// @param[in] _rhs Rhs of v1 cross v2
     /// @return Return the cross product of this vector with rhs
     // ---------------------------------------------------------------------------------------
-    Vec4 cross(const Vec4 &_rhs) const;
+    Vec4 cross(
+               const Vec4 &_rhs
+              ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Calculate the dot product of two vectors
-    /// @param _rhs Rhs of v1 dot v2
+    /// @param[in] _rhs Rhs of v1 dot v2
     /// @return Dot product of the two vectors
     // ---------------------------------------------------------------------------------------
-    float dot(const Vec4 &_rhs) const;
+    float dot(
+              const Vec4 &_rhs
+             ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Calculates the length of the vector
@@ -90,7 +100,6 @@ class Vec4
     // ---------------------------------------------------------------------------------------
     void textureGL();
 
-    // Call glVertex3f with components
     // ---------------------------------------------------------------------------------------
     /// @brief Calls the current vector as glVertex3f(m_x, m_y, m_z)
     // ---------------------------------------------------------------------------------------
@@ -103,79 +112,104 @@ class Vec4
 
     // ---------------------------------------------------------------------------------------
     /// @brief * operator multiplies a vector by a matrix V * M
-    /// @param _rhs Matrix to multiply the vector with
+    /// @param[in] _rhs Matrix to multiply the vector with
     /// @return Resulting vector
     // ---------------------------------------------------------------------------------------
-    Vec4 operator *(const Mat4 &_rhs) const;
+    Vec4 operator *(
+                    const Mat4 &_rhs
+                   ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief * operator to multiply a vector by a scalar V1 * _rhs
-    /// @param _rhs Scalar value to multiply with
+    /// @param[in] _rhs Scalar value to multiply with
     /// @return The resulting vector
     // ---------------------------------------------------------------------------------------
-    Vec4 operator *(const float _rhs) const;
+    Vec4 operator *(
+                    const float _rhs
+                   ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief / operator to divide the vector by a scalar. V1 / _rhs
-    /// @param _rhs Scalar value to divide with
+    /// @param[in] _rhs Scalar value to divide with
     /// @return The resulting vector
     // ---------------------------------------------------------------------------------------
-    Vec4 operator /(const float _rhs) const;
+    Vec4 operator /(
+                    const float _rhs
+                   ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief *= operator to multiply the current vector by a scalar. V *= _rhs
-    /// @param _rhs Scalar value to multiply the vector with
+    /// @param[in] _rhs Scalar value to multiply the vector with
     // ---------------------------------------------------------------------------------------
-    void operator *=(const float _rhs);
+    void operator *=(
+                     const float _rhs
+                    );
 
     // ---------------------------------------------------------------------------------------
     /// @brief + operator to do vector addition. Adds to vectors together. V1 + V2
-    /// @param _rhs Rhs of the operation
+    /// @param[in] _rhs Rhs of the operation
     /// @return The resulting vector
     // ---------------------------------------------------------------------------------------
-    Vec4 operator +(const Vec4 &_rhs) const;
+    Vec4 operator +(
+                    const Vec4 &_rhs
+                   ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief += operator to add V2 to the current vector V1 += V2
-    /// @param _rhs Vector to be added
+    /// @param[in] _rhs Vector to be added
     // ---------------------------------------------------------------------------------------
-    void operator +=(const Vec4 &_rhs);
+    void operator +=(
+                     const Vec4 &_rhs
+                    );
 
     // ---------------------------------------------------------------------------------------
     /// @brief - operator for vector substraction. V1 - V2
-    /// @param _rhs Rhs of the substraction
+    /// @param[in] _rhs Rhs of the substraction
     /// @return The resulting vector
     // ---------------------------------------------------------------------------------------
-    Vec4 operator -(const Vec4 &_rhs) const;
+    Vec4 operator -(
+                    const Vec4 &_rhs
+                   ) const;
 
     // ---------------------------------------------------------------------------------------
     /// @brief -= operator to substract V2 from the current vector V1 -= V2
-    /// @param _rhs Vector to be used for the substraction
+    /// @param[in] _rhs Vector to be used for the substraction
     // ---------------------------------------------------------------------------------------
-    void operator -=(const Vec4 &_rhs);
+    void operator -=(
+                     const Vec4 &_rhs
+                    );
 
     // ---------------------------------------------------------------------------------------
     /// @brief == operator to check if two vectors are the same V1 == V2
-    /// @param _rhs Vector to compare the first one with
+    /// @param[in] _rhs Vector to compare the first one with
     /// @return True if two vectors are the same, false if not
     // ---------------------------------------------------------------------------------------
-    bool operator ==(const Vec4 &_rhs);
+    bool operator ==(
+                     const Vec4 &_rhs
+                    );
 
     // ---------------------------------------------------------------------------------------
     /// @brief subscript operator Vec4 v; v[0]==1.0; => set x
-    /// @param _i Index to access
+    /// @param[in] _i Index to access
     /// @return The value at given index
     // ---------------------------------------------------------------------------------------
-    float & operator [](const int _i);
+    float & operator [](
+                        const int _i
+                       );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Set values to the vector
-    /// @param _x Point/value x
-    /// @param _y Point/value y
-    /// @param _z Point/value z
-    /// @param _w Point/value w
+    /// @param[in] _x Point/value x
+    /// @param[in] _y Point/value y
+    /// @param[in] _z Point/value z
+    /// @param[in] _w Point/value w
     // ---------------------------------------------------------------------------------------
-    void set(const float _x, const float _y, const float _z, const float _w = 1.0f);
+    void set(
+             const float _x,
+             const float _y,
+             const float _z,
+             const float _w = 1.0f
+            );
 
     union
     {

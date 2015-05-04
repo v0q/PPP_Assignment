@@ -80,19 +80,25 @@ class Asteroid
 
     // ---------------------------------------------------------------------------------------
     /// @brief Default constructor for an asteroid
-    /// @param _p Position vector
-    /// @param _d Direction vector
-    /// @param _up Up vector
-    /// @param _side Side vector
-    /// @param _s Scale factor
-    /// @param _sp Speed value
-    /// @param _l Life/health
-    /// @param _t Asteroid type for different models
+    /// @param[in] _p Position vector
+    /// @param[in] _d Direction vector
+    /// @param[in] _up Up vector
+    /// @param[in] _side Side vector
+    /// @param[in] _s Scale factor
+    /// @param[in] _sp Speed value
+    /// @param[in] _l Life/health
+    /// @param[in] _t Asteroid type for different models
     // ---------------------------------------------------------------------------------------
-    Asteroid(const Vec4 &_p, const Vec4 &_d,
-             const Vec4 &_up, const Vec4 &_side,
-             const float _s, const float _sp,
-             const float _l, const int _t) :
+    Asteroid(
+             const Vec4 &_p,
+             const Vec4 &_d,
+             const Vec4 &_up,
+             const Vec4 &_side,
+             const float _s,
+             const float _sp,
+             const float _l,
+             const int _t
+            ) :
              m_pos(_p),
              m_dir(_d),
              m_up(_up),
@@ -101,8 +107,7 @@ class Asteroid
              m_speed(_sp),
              m_rot(0.0),
              m_life(_l),
-             c_aType(_t)
-    {}
+             c_aType(_t) {;}
 
     // ---------------------------------------------------------------------------------------
     /// @brief Default destructor
@@ -112,9 +117,15 @@ class Asteroid
     // ---------------------------------------------------------------------------------------
     /// @brief Function that will call the correct displaylist, scale, rotate and translate
     ///        the asteroid to its correct position
-    /// @param D
+    /// @param[in] _dL displaylist holding both asteroid models
     // ---------------------------------------------------------------------------------------
-    void draw(const std::vector<GLuint> &_dL);
+    void draw(
+              const std::vector<GLuint> &_dL
+             );
+
+    // ---------------------------------------------------------------------------------------
+    /// @brief Handles the movement of an asteroid
+    // ---------------------------------------------------------------------------------------
     void move();
 }; // end of class
 

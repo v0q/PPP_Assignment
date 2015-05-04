@@ -24,17 +24,23 @@ namespace audio
 {
   // ---------------------------------------------------------------------------------------
   /// @brief Loads an audio file to Mix_Chunk
-  /// @param _fname Path to the sound file
-  /// @param o_sound Var to store the sound data
+  /// @param[in] _fname Path to the sound file
+  /// @param[out] o_sound Var to store the sound data
   // ---------------------------------------------------------------------------------------
-  void loadSound(const std::string &_fname, Mix_Chunk **o_sound);
+  void loadSound(
+                 const std::string &_fname,
+                 Mix_Chunk **o_sound
+                );
 
   // ---------------------------------------------------------------------------------------
   /// @brief Loads a music file to Mix_Music
-  /// @param _fname Path to the music file
-  /// @param o_music Var to store the music data
+  /// @param[in] _fname Path to the music file
+  /// @param[out] o_music Var to store the music data
   // ---------------------------------------------------------------------------------------
-  void loadSound(const std::string &_fname, Mix_Music **o_music);
+  void loadSound(
+                 const std::string &_fname,
+                 Mix_Music **o_music
+                );
 } // end of namespace
 
 #endif // end of AUDIO_H

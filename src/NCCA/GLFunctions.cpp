@@ -15,7 +15,11 @@
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, const Vec4 _up)
+Mat4 GLFunctions::orientation(
+                              const Vec4 &_eye,
+                              const Vec4 &_look,
+                              const Vec4 &_up
+                             )
 {
   Vec4 n = _look-_eye;
   Vec4 u = _up;
@@ -44,7 +48,12 @@ Mat4 GLFunctions::orientation(Vec4 _eye, Vec4 _look, const Vec4 _up)
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void GLFunctions::perspective(const float _fovy, const float _aspect, const float _zNear, const float _zFar)
+void GLFunctions::perspective(
+                              const float _fovy,
+                              const float _aspect,
+                              const float _zNear,
+                              const float _zFar
+                             )
 {
   float range = tan(radians(_fovy / 2.0)) * _zNear;
   float left = -range * _aspect;
@@ -62,7 +71,9 @@ void GLFunctions::perspective(const float _fovy, const float _aspect, const floa
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-float GLFunctions::radians(const float _deg )
+float GLFunctions::radians(
+                           const float _deg
+                          )
 {
   return (_deg/180.0f) * M_PI;
 }

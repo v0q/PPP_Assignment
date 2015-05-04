@@ -13,6 +13,8 @@
 // ---------------------------------------------------------------------------------------
 void Particle::draw()
 {
+  // Calculate the color of a particle based on how long it has lived relative to its
+  // maximum lifetime
   glColor4f(1,
             1 - (m_life / (float)m_max_life),
             0.5 - 2*(m_life / (float)m_max_life),

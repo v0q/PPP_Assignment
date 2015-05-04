@@ -13,7 +13,10 @@
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void audio::loadSound(const std::string &_fname, Mix_Chunk **o_sound)
+void audio::loadSound(
+                      const std::string &_fname,
+                      Mix_Chunk **o_sound
+                     )
 {
   // Load the audio file and check that the loading succeeded
   // if not then print out an error
@@ -24,7 +27,10 @@ void audio::loadSound(const std::string &_fname, Mix_Chunk **o_sound)
 // ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
-void audio::loadSound(const std::string &_fname, Mix_Music **o_music)
+void audio::loadSound(
+                      const std::string &_fname,
+                      Mix_Music **o_music
+                     )
 {
   // Load the music file and check that the loading succeeded
   // if not then print out an error

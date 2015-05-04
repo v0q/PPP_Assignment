@@ -35,28 +35,39 @@ class GLFunctions
   public:
     // ---------------------------------------------------------------------------------------
     /// @brief Calculates the modelview/look at matrix, used to orient the player as well.
-    /// @param _eye Eye position vector of the camera
-    /// @param _look Look at vector
-    /// @param _up Up vector of the camera
+    /// @param[in] _eye Eye position vector of the camera
+    /// @param[in] _look Look at vector
+    /// @param[in] _up Up vector of the camera
     /// @return The modelview/look at matrix
     // -----------------------------------------------------------------------------------------
-    static Mat4 orientation(Vec4 _eye, Vec4 _look, const Vec4 _up);
+    static Mat4 orientation(
+                            const Vec4 &_eye,
+                            const Vec4 &_look,
+                            const Vec4 &_up
+                           );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Generates a projection matrix and loads it.
-    /// @param _fovy Field of view angle
-    /// @param _aspect Aspect ratio
-    /// @param _zNear Near clipping plane
-    /// @param _zFar Far clipping plane
+    /// @param[in] _fovy Field of view angle
+    /// @param[in] _aspect Aspect ratio
+    /// @param[in] _zNear Near clipping plane
+    /// @param[in] _zFar Far clipping plane
     // ---------------------------------------------------------------------------------------
-    static void perspective(const float _fovy, const float _aspect, const float _zNear, const float _zFar);
+    static void perspective(
+                            const float _fovy,
+                            const float _aspect,
+                            const float _zNear,
+                            const float _zFar
+                           );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Converts degrees into radians.
-    /// @param _deg Degree to convert
+    /// @param[in] _deg Degree to convert
     /// @return Radian value
     // ---------------------------------------------------------------------------------------
-    static float radians(const float _deg );
+    static float radians(
+                         const float _deg
+                        );
 
   protected:
     // ---------------------------------------------------------------------------------------
@@ -67,7 +78,9 @@ class GLFunctions
     // ---------------------------------------------------------------------------------------
     /// @brief Default copy ctor
     // ---------------------------------------------------------------------------------------
-    GLFunctions(const GLFunctions &);
+    GLFunctions(
+                const GLFunctions &
+               );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Default dtor

@@ -24,28 +24,36 @@ class Mat4
   public:
     // ---------------------------------------------------------------------------------------
     /// @brief Construct Mat4 as scale matrix _s
-    /// @param _s Scale value, defaults to 1.0
+    /// @param[in] _s Scale value, defaults to 1.0
     // ---------------------------------------------------------------------------------------
-    Mat4(const float _s = 1.0f);
+    Mat4(
+         const float _s = 1.0f
+        );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Mat4
-    /// @param _rhs
+    /// @param[in] _rhs
     // ---------------------------------------------------------------------------------------
-    Mat4(const Mat4 &_rhs);
+    Mat4(
+        const Mat4 &_rhs
+        );
 
     // ---------------------------------------------------------------------------------------
     /// @brief *= operator, multiplies the current matrix with _rhs matrix
-    /// @param _rhs matrix to multiply the lhs matrix with
+    /// @param[in] _rhs matrix to multiply the lhs matrix with
     // ---------------------------------------------------------------------------------------
-    void operator *=(const Mat4 &_rhs);
+    void operator *=(
+                     const Mat4 &_rhs
+                    );
 
     // ---------------------------------------------------------------------------------------
     /// @brief * operator, multiply to matrices together
-    /// @param _rhs Right hand side matrix
+    /// @param[in] _rhs Right hand side matrix
     /// @return Resulting matrix
     // ---------------------------------------------------------------------------------------
-    Mat4 operator *(const double &_rhs);
+    Mat4 operator *(
+                    const double &_rhs
+                   );
 
     // ---------------------------------------------------------------------------------------
     /// @brief Function that normalizes the matrix

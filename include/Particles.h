@@ -44,19 +44,22 @@ class Particle
 
     // ---------------------------------------------------------------------------------------
     /// @brief Default ctor for a particle
-    /// @param _p Vector for initial position of the particle
-    /// @param _l Maximum lifetime of the given particle
+    /// @param[in] _p Vector for initial position of the particle
+    /// @param[in] _l Maximum lifetime of the given particle
     // ---------------------------------------------------------------------------------------
-    Particle(const Vec4 &_p, const int _l = 0) :
-      m_life(0),
-      m_max_life(_l),
-      m_pos(_p)
-    {
-      // Generate random values on how much the particle moves each frame in which axis
-      m_moveX = 0.01 * (std::rand()/(float)RAND_MAX * 2 - 1);
-      m_moveY = 0.01 * (std::rand()/(float)RAND_MAX * 2 - 1);
-      m_moveZ = 0.01 * (std::rand()/(float)RAND_MAX * 2 - 1);
-    }
+    Particle(
+             const Vec4 &_p,
+             const int _l = 0
+            ) :
+             m_life(0),
+             m_max_life(_l),
+             m_pos(_p)
+            {
+              // Generate random values on how much the particle moves each frame in which axis
+              m_moveX = 0.01 * (std::rand()/(float)RAND_MAX * 2 - 1);
+              m_moveY = 0.01 * (std::rand()/(float)RAND_MAX * 2 - 1);
+              m_moveZ = 0.01 * (std::rand()/(float)RAND_MAX * 2 - 1);
+            }
 
     // ---------------------------------------------------------------------------------------
     /// @brief Default dtor

@@ -11,7 +11,7 @@
 #include "Projectile.h"
 #include "Defs.h"
 
-void Projectile::drawProjectile(int num_it, Vec4 &_cu, Vec4 &_cl)
+void Projectile::drawProjectile(int num_it, const Vec4 &_cu, const Vec4 &_cl)
 {
   float tDim = 1.0/5.0;
   int step = floor(life*25/max_life);
