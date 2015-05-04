@@ -1,9 +1,20 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+ Initial file parsing code © by Jonathan Macey
+*/
+
 #include <fstream>
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
 #include "LoadOBJ.h"
+
+// ---------------------------------------------------------------------------------------
+/// @file LoadOBJ.cpp
+/// @brief Implementation mesh loading functions
+// ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
 void loadModel(

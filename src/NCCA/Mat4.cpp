@@ -1,7 +1,7 @@
 /*
  Copyright © 2015 Teemu Lindborg
  SDAGE 1st year 2nd PPP Assignment
- Matrix class mostly © by Jon Macey
+ Matrix class mostly © by Jonathan Macey
 */
 
 #ifdef LINUX

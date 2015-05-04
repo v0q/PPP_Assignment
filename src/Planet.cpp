@@ -19,6 +19,11 @@
 #include "NCCA/GLFunctions.h"
 
 // ---------------------------------------------------------------------------------------
+/// @file Planet.cpp
+/// @brief Implementation of the planet class functions
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
 Planet::Planet()
 {
   rng.seed(time(NULL));
@@ -149,12 +154,17 @@ void Planet::genSurface()
           // Normalizing the vertex distance to 0 -> 1 for color calculations
           float hVal = (m_pSurface.m_Verts[m_pSurface.m_Ind[k] - 1].length() - min) / (max - min);
 
+          // Depending on the vertex distance we'll have a bit different calculations
           if(hVal < 0.4f)
           {
             r[j] = 0.686f + 0.15f*(hVal / 0.4f);
             g[j] = 0.592f + 0.1f*(hVal / 0.4f);
             b[j] = 0.31f;
 
+            // If the vertex distance < 0.4f we'll add a tree to that point
+            // but also check that no tree has been placed on that vertex yet
+            // to avoid duplicates. If not then update the tree_positions vector
+            // with the position of the vertex and set that vertex to be "visited"
             if(stored_position[m_pSurface.m_Ind[k] - 1] == false)
             {
               tree_positions.push_back(Vec4(m_pSurface.m_Verts[m_pSurface.m_Ind[k] - 1]));

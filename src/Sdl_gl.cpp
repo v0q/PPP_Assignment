@@ -1,3 +1,8 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+*/
+
 #ifdef LINUX
   #include <GL/glut.h>
 #endif
@@ -12,6 +17,12 @@
 #include "Defs.h"
 #include "Sdl_gl.h"
 
+// ---------------------------------------------------------------------------------------
+/// @file Sdl_gl.cpp
+/// @brief Implementation of the SDL_GL class functions
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
 SDL_GL::SDL_GL()
 {
   int audio_rate = 22050;
@@ -19,7 +30,7 @@ SDL_GL::SDL_GL()
   int audio_channels = 2;
   int audio_buffers = 4096;
 
-  if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
+  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO) == -1)
     SDLErrorExit("Couldn't initialise SDL");
 
   if(((Mix_Init(MIX_INIT_OGG))&MIX_INIT_OGG) != MIX_INIT_OGG)
@@ -34,24 +45,24 @@ SDL_GL::SDL_GL()
   glutInit(&argc, argv);
 #endif
 
-  win = SDL_CreateWindow("SS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+  m_win = SDL_CreateWindow("SS", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
-  if(!win)
+  if(!m_win)
   {
     SDLErrorExit("Couldn't create SDL window");
   }
 
-  gl = createOpenGLContext();
-  if(!gl)
+  m_gl = createOpenGLContext();
+  if(!m_gl)
   {
     SDLErrorExit("Problem creating OpenGL context");
   }
 
-  controller = NULL;
+  m_controller = NULL;
 
   for(int i = 0; i < SDL_NumJoysticks(); i++)
   {
-    if((controller = SDL_GameControllerOpen(i)))
+    if((m_controller = SDL_GameControllerOpen(i)))
       break;
   }
 
@@ -61,26 +72,33 @@ SDL_GL::SDL_GL()
       exit(1);
   }
 
-  act = true;
+  m_act = true;
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 SDL_GL::~SDL_GL()
 {
-  if(!controller)
-    SDL_GameControllerClose(controller);
+  if(!m_controller)
+    SDL_GameControllerClose(m_controller);
 
   Mix_CloseAudio();
+  SDL_GL_DeleteContext(m_gl);
   SDL_Quit();
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void SDL_GL::SDLErrorExit(const std::string &_msg)
 {
-  std::cerr<<_msg<<"\n";
-  std::cerr<<SDL_GetError()<<"\n";
+  std::cerr << _msg <<"\n";
+  std::cerr << SDL_GetError() <<"\n";
   SDL_Quit();
   exit(EXIT_FAILURE);
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 SDL_GLContext SDL_GL::createOpenGLContext()
 {
   // Request an opengl 3.2 context first we setup our attributes, if you need any
@@ -105,9 +123,11 @@ SDL_GLContext SDL_GL::createOpenGLContext()
   // enable double buffering (should be on by default)
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   //
-  return SDL_GL_CreateContext(win);
+  return SDL_GL_CreateContext(m_win);
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void SDL_GL::enableLighting() const
 {
   glEnable(GL_TEXTURE_2D);
@@ -134,13 +154,17 @@ void SDL_GL::enableLighting() const
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 bool SDL_GL::isActive() const
 {
-  return act;
+  return m_act;
 }
+// ---------------------------------------------------------------------------------------
 
-void SDL_GL::handleInput(Player &io_p, Camera &_cam)
+// ---------------------------------------------------------------------------------------
+void SDL_GL::handleInput(Player &io_p, Camera &io_cam)
 {
   SDL_Event event;
 
@@ -149,7 +173,7 @@ void SDL_GL::handleInput(Player &io_p, Camera &_cam)
     switch (event.type)
     {
       // this is the window x being clicked.
-      case SDL_QUIT : act = false; break;
+      case SDL_QUIT : m_act = false; break;
 
       // now we look for a keydown event
       case SDL_KEYDOWN:
@@ -157,7 +181,7 @@ void SDL_GL::handleInput(Player &io_p, Camera &_cam)
         switch( event.key.keysym.sym )
         {
           // if it's the escape key act
-          case SDLK_ESCAPE : act = false; break;
+          case SDLK_ESCAPE : m_act = false; break;
           case SDLK_k : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
           case SDLK_l : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
           default : break;
@@ -169,5 +193,6 @@ void SDL_GL::handleInput(Player &io_p, Camera &_cam)
   } // end of poll events
 
   if(io_p.isAlive())
-    io_p.handleMovement(controller, _cam);
+    io_p.handleMovement(m_controller, io_cam);
 }
+// ---------------------------------------------------------------------------------------

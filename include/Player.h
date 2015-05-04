@@ -53,12 +53,12 @@ class Player
     ///        asteroid-projectile &
     ///        asteroid-player
     // ---------------------------------------------------------------------------------------
-    std::vector<Particle> particles;
+    std::vector<Particle> m_particles;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Player's score
     // ---------------------------------------------------------------------------------------
-    int score;
+    int m_score;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Constructor for the player that loads the model, textures, audio and initialises
@@ -75,7 +75,7 @@ class Player
 
     // ---------------------------------------------------------------------------------------
     /// @brief Default dtor, clears the projectile and particle vectors, frees the memory
-    ///        allocated for the ship model and audio
+    ///        allocated for the ship model and audio. Cleans up.
     // ---------------------------------------------------------------------------------------
     ~Player();
 
@@ -130,13 +130,13 @@ class Player
     // ---------------------------------------------------------------------------------------
     /// @brief Vector storing the player's position. Used for collision detection.
     // ---------------------------------------------------------------------------------------
-    Vec4 pos;
+    Vec4 m_pos;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Mat4 matrix where the camera's orientation is stored in, this is then used to
     ///        orient/place the player in front of the camera using glMultMatrixf().
     // ---------------------------------------------------------------------------------------
-    Mat4 orientation;
+    Mat4 m_orientation;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Model structure holding the ship model data.
@@ -146,7 +146,7 @@ class Player
     // ---------------------------------------------------------------------------------------
     /// @brief stl vector storing the living projectile data.
     // ---------------------------------------------------------------------------------------
-    std::vector<Projectile> p;
+    std::vector<Projectile> m_p;
 
     // ---------------------------------------------------------------------------------------
     /// @brief stl vector holding displaylist for the ship
@@ -156,53 +156,53 @@ class Player
     // ---------------------------------------------------------------------------------------
     /// @brief Audio chunk for the firing sound
     // ---------------------------------------------------------------------------------------
-    Mix_Chunk *a_fire;
+    Mix_Chunk *s_aFire;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Music data storing the noise that's played when the player moves
     // ---------------------------------------------------------------------------------------
-    Mix_Music *bgSound;
+    Mix_Music *s_bgSound;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Aim direction angle for shooting
     // ---------------------------------------------------------------------------------------
-    float aimDir;
+    float m_aimDir;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Rotation of the player (changes when the player changes direction)
     // ---------------------------------------------------------------------------------------
-    float rot;
+    float m_rot;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Tilt angle of the ship when player is turning
     // ---------------------------------------------------------------------------------------
-    float turn;
+    float m_turn;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Variables used to translate the player from the dead center of the view to
     ///        simulate the camera trying to catch up with the player when they're moving.
     // ---------------------------------------------------------------------------------------
-    float xMov, yMov;
+    float m_xMov, m_yMov;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Player's health, used to check if player's alive or not.
     // ---------------------------------------------------------------------------------------
-    int life;
+    int m_life;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Used to store the texture data of the ship
     // ---------------------------------------------------------------------------------------
-    GLuint shipTexId;
+    GLuint m_shipTexId;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Used to store the texture data of the projectiles
     // ---------------------------------------------------------------------------------------
-    GLuint projectileId;
+    GLuint m_projectileId;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Used to store the texture data of the fire particles
     // ---------------------------------------------------------------------------------------
-    GLuint particleTexId;
+    GLuint m_particleTexId;
 
     // ---------------------------------------------------------------------------------------
     /// @brief Generates the ship's displaylist from the model data

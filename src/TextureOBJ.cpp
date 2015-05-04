@@ -1,3 +1,8 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+*/
+
 #ifdef LINUX
   #include <GL/gl.h>
 #endif
@@ -9,7 +14,12 @@
 
 #include "TextureOBJ.h"
 
-void loadTexture(const std::string &_n, GLuint &_id)
+// ---------------------------------------------------------------------------------------
+/// @file TextureOBJ.cpp
+/// @brief Implementation of the texture loading function
+// ---------------------------------------------------------------------------------------
+
+void loadTexture(const std::string &_n, GLuint &o_id)
 {
   SDL_Surface *texture;
   if(!(texture = IMG_Load(_n.c_str())))
@@ -20,8 +30,8 @@ void loadTexture(const std::string &_n, GLuint &_id)
 
   GLint mode = ((int)texture->format->BytesPerPixel == 4 ? GL_RGBA : GL_RGB);
 
-  glGenTextures(1, &_id);
-  glBindTexture(GL_TEXTURE_2D, _id);
+  glGenTextures(1, &o_id);
+  glBindTexture(GL_TEXTURE_2D, o_id);
   glTexImage2D(GL_TEXTURE_2D, 0, mode, texture->w, texture->h, 0, mode, GL_UNSIGNED_BYTE, texture->pixels);
 
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

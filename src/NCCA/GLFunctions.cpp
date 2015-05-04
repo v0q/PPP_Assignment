@@ -1,7 +1,7 @@
 /*
  Copyright © 2015 Teemu Lindborg
  SDAGE 1st year 2nd PPP Assignment
- Initial code © by Jon Macey
+ Initial code © by Jonathan Macey
 */
 
 #include <cmath>

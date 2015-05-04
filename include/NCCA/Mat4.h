@@ -4,8 +4,8 @@
  Initial code © by Jonathan Macey
 */
 
-#ifndef MAT4_H__
-#define MAT4_H__
+#ifndef MAT4_H
+#define MAT4_H
 
 // ---------------------------------------------------------------------------------------
 /// @file Mat4.h

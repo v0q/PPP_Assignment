@@ -1,3 +1,8 @@
+/*
+ Copyright © 2015 Teemu Lindborg
+ SDAGE 1st year 2nd PPP Assignment
+*/
+
 #ifdef LINUX
   #include <GL/gl.h>
 #endif
@@ -16,85 +21,119 @@
 #include "NCCA/Vec4.h"
 #include "NCCA/GLFunctions.h"
 
-World::World() : max_asteroids(10)
+// ---------------------------------------------------------------------------------------
+/// @file World.cpp
+/// @brief Implementation of the world class functions
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
+World::World() :
+  m_maxAsteroids(10)
 {
-  rng.seed(time(NULL));
+  // Set the seed of the boost rng to whatever time it is when to program is run
+  // to get different values each time the program is run.
+  m_rng.seed(time(NULL));
+
+  // Loads in the skybox and asteroid models and stores the data to their
+  // respective model structures
   loadModel("models/sphere.obj", m_skybox);
   loadModel("models/asteroid1.obj", m_asteroid[0]);
   loadModel("models/asteroid2.obj", m_asteroid[1]);
 
+// HACKY SOLUTION START
 #ifdef LINUX
-  loadTexture("textures/sb_90.png", skyBoxTexId);
+  loadTexture("textures/sb_90.png", m_skyBoxTexId);
 #endif
 #ifdef DARWIN
-  loadTexture("textures/sb_cube.png", skyBoxTexId);
+  loadTexture("textures/sb_cube.png", m_skyBoxTexId);
 #endif
+// HACKY SOLUTION END
 
-  loadTexture("textures/Am2.jpg", aTexId);
+  // Loads in the asteroid texture
+  loadTexture("textures/Am2.jpg", m_aTexId);
 
+  // Loads the asteroid explosion suond and background music
+  audio::loadSound("sounds/explosion.wav", &m_aExplosion);
+  audio::loadSound("sounds/bg_music.wav", &m_bgMusic);
 
-  audio::loadSound("sounds/explosion.wav", &a_explosion);
-  audio::loadSound("sounds/bg_music.wav", &a_bgmusic);
-
-  atmosphere();
+  // Call the functions that generate the displaylists for skybox,
+  // atmosphere geodesic sphere and asteroids
   skybox();
+  atmosphere();
   genALists();
 
-  Mix_VolumeChunk(a_bgmusic, MIX_MAX_VOLUME * 0.8f);
-  Mix_VolumeChunk(a_explosion, MIX_MAX_VOLUME * 0.4f);
+  // Set the volume levels for the explosions and background music
+  Mix_VolumeChunk(m_bgMusic, MIX_MAX_VOLUME * 0.8f);
+  Mix_VolumeChunk(m_aExplosion, MIX_MAX_VOLUME * 0.4f);
 
-  Mix_PlayChannel(-1, a_bgmusic, -1);
+  // Start playing background music and loop it forever
+  Mix_PlayChannel(-1, m_bgMusic, -1);
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 World::~World()
 {
-  stars.clear();
-  std::vector<Vec4>().swap(stars);
-  w_displayList.clear();
-  std::vector<GLuint>().swap(w_displayList);
-  asteroids.clear();
-  std::vector<Asteroid>().swap(asteroids);
-  a_ColIndices.clear();
-  std::list<int>().swap(a_ColIndices);
+  // Clean up the displaylists, asteroid and star data
+  m_stars.clear();
+  std::vector<Vec4>().swap(m_stars);
+  m_wDisplayList.clear();
+  std::vector<GLuint>().swap(m_wDisplayList);
+  m_asteroids.clear();
+  std::vector<Asteroid>().swap(m_asteroids);
+  m_aColIndices.clear();
+  std::list<int>().swap(m_aColIndices);
 
-  //Clear skybox model related stuff
+  // Clean up the memory allocated for the skybox and asteroid models
   freeModelMem(m_skybox);
 
   for(int i = 0; i < 2; ++i)
     freeModelMem(m_asteroid[i]);
 
-  Mix_FreeChunk(a_explosion);
-  Mix_FreeChunk(a_bgmusic);
+  // Frees the memory allocated for the audio
+  Mix_FreeChunk(m_aExplosion);
+  Mix_FreeChunk(m_bgMusic);
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::drawWorld()
 {
+  // Draws the stars, generate and draw the asteroids and do the spatial partitioning
+  drawStars();
   generate_Asteroids();
   partByDist();
 
-  glCallLists(w_displayList.size(), GL_UNSIGNED_INT, &w_displayList[0]);
+  // Calls the displaylists that draw the atmosphere and skybox and finally the planet
+  glCallLists(m_wDisplayList.size(), GL_UNSIGNED_INT, &m_wDisplayList[0]);
   drawPlanet();
 }
+// ---------------------------------------------------------------------------------------
 
-void World::drawStars(Vec4 _c) const
+// ---------------------------------------------------------------------------------------
+void World::drawStars() const
 {
   glPointSize(6);
   glBegin(GL_POINTS);
-      for(int i = 0; i < (int)stars.size(); ++i)
+      for(int i = 0; i < (int)m_stars.size(); ++i)
       {
-        glColor4f(1, 1, 1, (stars[i].m_w > 0.4 ? stars[i].m_w - 0.4f : stars[i].m_w));
-        glNormal3f(_c.m_x, _c.m_y, _c.m_z);
-        glVertex3f(stars[i].m_x, stars[i].m_y, stars[i].m_z);
+        glColor4f(1.0f, 1.0f, 1.0f, m_stars[i].m_w);
+        glNormal3f(0.0f, 0.0f, 1.0f);
+        m_stars[i].vertexGL();
       }
   glEnd();
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::drawPlanet()
 {
   glScalef(WORLDRADIUS, WORLDRADIUS, WORLDRADIUS);
   m_planet.draw();
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::atmosphere()
 {
   GLuint id = glGenLists(1);
@@ -102,12 +141,12 @@ void World::atmosphere()
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    glColor4f(0.114, 0.431, 0.506, 0.3);
+    glColor4f(0.114, 0.431, 0.506, 0.6);
     glScalef(WORLDRADIUS*ASPHERERADIUS, WORLDRADIUS*ASPHERERADIUS, WORLDRADIUS*ASPHERERADIUS);
 
     glBegin(GL_TRIANGLES);
 
-        tSphere(4, 1);
+        tSphere(4);
 
     glEnd();
 
@@ -116,9 +155,11 @@ void World::atmosphere()
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
   glEndList();
-  w_displayList.push_back(id);
+  m_wDisplayList.push_back(id);
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::skybox()
 {
   GLuint id = glGenLists(1);
@@ -131,7 +172,7 @@ void World::skybox()
 
     // We need to bind the texture inside the list so that the texture is rendered
     // whenever the list is called.
-    glBindTexture(GL_TEXTURE_2D, skyBoxTexId);
+    glBindTexture(GL_TEXTURE_2D, m_skyBoxTexId);
     glBegin(GL_TRIANGLES);
 
       // Set the skybox to be "fully colored" and draw get the triangles of the loaded mesh
@@ -151,10 +192,12 @@ void World::skybox()
     glDepthMask(GL_TRUE);
     glEnable(GL_LIGHTING);
   glEndList();
-  w_displayList.push_back(id);
+  m_wDisplayList.push_back(id);
 }
+// ---------------------------------------------------------------------------------------
 
-void World::subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d, int _ndir) const
+// ---------------------------------------------------------------------------------------
+void World::subd(const Vec4 &_a, const Vec4 &_b, const Vec4 &_c, const int _d) const
 {
   Vec4 v[3];
 
@@ -169,26 +212,28 @@ void World::subd(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _d, int _ndir) const
     v[1].normalize();
     v[2].normalize();
 
-    subd(_a, v[0], v[1], _d - 1, _ndir);
-    subd(v[0], _b, v[2], _d - 1, _ndir);
-    subd(v[1], v[2], _c, _d - 1, _ndir);
-    subd(v[0], v[1], v[2], _d - 1, _ndir);
+    subd(_a, v[0], v[1], _d - 1);
+    subd(v[0], _b, v[2], _d - 1);
+    subd(v[1], v[2], _c, _d - 1);
+    subd(v[0], v[1], v[2], _d - 1);
 
     if(_d == 1)
     {
-      drawTriangle(_a, v[0], v[1], _ndir);
-      drawTriangle(v[0], _b, v[2], _ndir);
-      drawTriangle(v[1], v[2], _c, _ndir);
-      drawTriangle(v[0], v[1], v[2], _ndir);
+      drawTriangle(_a, v[0], v[1]);
+      drawTriangle(v[0], _b, v[2]);
+      drawTriangle(v[1], v[2], _c);
+      drawTriangle(v[0], v[1], v[2]);
     }
   }
 }
+// ---------------------------------------------------------------------------------------
 
-void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
+// ---------------------------------------------------------------------------------------
+void World::drawTriangle(const Vec4 &_a, const Vec4 &_b, const Vec4 &_c) const
 {
   Vec4 normal;
   float u, v;
-  normal = (_a + _b + _c) * _ndir;
+  normal = _a + _b + _c;
   normal.normalize();
 
   normal.normalGL();
@@ -211,46 +256,56 @@ void World::drawTriangle(Vec4 &_a, Vec4 &_b, Vec4 &_c, int _ndir) const
   glTexCoord2f(u, v);
   _c.vertexGL();
 }
+// ---------------------------------------------------------------------------------------
 
-void World::tSphere(int _d, int _ndir) const
+// ---------------------------------------------------------------------------------------
+void World::tSphere(const int _d) const
 {
   for(int k = 0; k < 20; ++k)
   {
     icosHedron[k][0].normalize();
     icosHedron[k][1].normalize();
     icosHedron[k][2].normalize();
-    subd(icosHedron[k][0], icosHedron[k][1], icosHedron[k][2], _d, _ndir);
+    subd(icosHedron[k][0], icosHedron[k][1], icosHedron[k][2], _d);
   }
 }
+// ---------------------------------------------------------------------------------------
 
-void World::initStars(int _a)
+// ---------------------------------------------------------------------------------------
+void World::initStars(
+                      const int _a
+                     )
 {
+  boost::random::uniform_int_distribution<> u_random(1, 1000);
   for(int i = 0; i < _a; ++i)
   {
-    Vec4 s(std::rand()/(float)RAND_MAX * 2 - 1,
-           std::rand()/(float)RAND_MAX * 2 - 1,
-           std::rand()/(float)RAND_MAX * 2 - 1);
+    Vec4 s(u_random(m_rng)/1000.0f * 2 - 1,
+           u_random(m_rng)/1000.0f * 2 - 1,
+           u_random(m_rng)/1000.0f * 2 - 1,
+           u_random(m_rng)/1000.0f * 2 - 1);
 
     s.normalize();
     s *= fmod(std::rand(),SKYBOXRADIUS-WORLDRADIUS*ASPHERERADIUS) + 3*WORLDRADIUS*ASPHERERADIUS;
     s.m_w = 1 - (s.length()/SKYBOXRADIUS);
-    stars.push_back(s);
+    m_stars.push_back(s);
   }
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::generate_Asteroids()
 {
   boost::random::uniform_int_distribution<> u_random(1, 100);
 
-  if(u_random(rng)/100.0 > 0.95 && (int)asteroids.size() < max_asteroids)
+  if(u_random(m_rng)/100.0 > 0.95 && (int)m_asteroids.size() < m_maxAsteroids)
   {
-    Vec4 aPos(u_random(rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(rng)/100.0 * 2.0 - 1.0 + 0.01f);
+    Vec4 aPos(u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f, u_random(m_rng)/100.0 * 2.0 - 1.0 + 0.01f);
     aPos.normalize();
 
     Vec4 aDir = aPos * - 1;
-    Vec4 aSide(u_random(rng)/100.0,
-              u_random(rng)/100.0,
-              0);
+    Vec4 aSide(u_random(m_rng)/100.0,
+               u_random(m_rng)/100.0,
+               0);
 
     if(fabs(aPos.m_z) > 0.001)
       aSide.m_z = -(aSide.m_x*aPos.m_x + aSide.m_y*aPos.m_y) / aPos.m_z;
@@ -260,64 +315,68 @@ void World::generate_Asteroids()
 
     aPos *= SKYBOXRADIUS;
 
-    float size = u_random(rng)/100.0 * 0.8f + 0.1f;
-    int type = u_random(rng)%2;
+    float size = u_random(m_rng)/100.0 * 0.8f + 0.1f;
+    int type = u_random(m_rng)%2;
 
-    asteroids.push_back(Asteroid(aPos, aDir,
+    m_asteroids.push_back(Asteroid(aPos, aDir,
                                  aUp, aSide,
-                                 size, fmod(u_random(rng)/100.0, 0.04f) + 0.0315f,
+                                 size, fmod(u_random(m_rng)/100.0, 0.04f) + 0.0315f,
                                  size * 150, type));
   }
 
-  glBindTexture(GL_TEXTURE_2D, aTexId);
-  for(int i = 0; i < (int)asteroids.size(); ++i)
+  glBindTexture(GL_TEXTURE_2D, m_aTexId);
+  for(int i = 0; i < (int)m_asteroids.size(); ++i)
   {
-    if(asteroids[i].m_life > 0)
-      asteroids[i].draw(a_displayList);
+    if(m_asteroids[i].m_life > 0)
+      m_asteroids[i].draw(m_aDisplayList);
     else
     {
-      if(asteroids[i].m_size > 0.5f)
+      if(m_asteroids[i].m_size > 0.5f)
       {
         for(int j = 0; j < 2; ++j)
         {
-          Vec4 aPos = asteroids[i].m_pos;
+          Vec4 aPos = m_asteroids[i].m_pos;
           aPos.normalize();
           Vec4 new_dir = aPos * - 1;
-          Vec4 new_side(u_random(rng)/100.0 + 0.01f,
-                    u_random(rng)/100.0 + 0.01f,
+          Vec4 new_side(u_random(m_rng)/100.0 + 0.01f,
+                    u_random(m_rng)/100.0 + 0.01f,
                     0);
           Vec4 new_up = new_side.cross(aPos);
 
           if(fabs(aPos.m_z) > 0.001)
             new_side.m_z = -(new_side.m_x * aPos.m_x + new_side.m_y * aPos.m_y) / aPos.m_z;
 
-          float new_size = asteroids[i].m_size * fmod(u_random(rng)/100.0, 0.35f) + 0.25f;
+          float new_size = m_asteroids[i].m_size * fmod(u_random(m_rng)/100.0, 0.35f) + 0.25f;
 
-          asteroids.push_back(Asteroid(asteroids[i].m_pos, new_dir,
-                                       new_up, new_side,
-                                       new_size, fmod(u_random(rng)/100.0, 0.055) + 0.02f,
-                                       new_size*150, u_random(rng)%2));
+          m_asteroids.push_back(Asteroid(m_asteroids[i].m_pos, new_dir,
+                                         new_up, new_side,
+                                         new_size, fmod(u_random(m_rng)/100.0, 0.055) + 0.02f,
+                                         new_size*150, u_random(m_rng)%2));
         }
       }
 
-      Mix_PlayChannel(-1, a_explosion, 0);
+      Mix_PlayChannel(-1, m_aExplosion, 0);
 
-      asteroids.erase(asteroids.begin() + i);
+      m_asteroids.erase(m_asteroids.begin() + i);
     }
   }
   glBindTexture(GL_TEXTURE_2D, 0);
 
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::partByDist()
 {
-  for(int i = 0; i < (int)asteroids.size(); ++i)
-    if(fabs(asteroids[i].m_pos.length() - WORLDRADIUS*ASPHERERADIUS) < 0.05)
-      a_ColIndices.push_back(i);
-  a_ColIndices.sort();
-  a_ColIndices.unique();
+  for(int i = 0; i < (int)m_asteroids.size(); ++i)
+    if(fabs(m_asteroids[i].m_pos.length() - WORLDRADIUS*ASPHERERADIUS) < 0.05)
+      m_aColIndices.push_back(i);
+  m_aColIndices.sort();
+  m_aColIndices.unique();
 }
+// ---------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------
 void World::genALists()
 {
   GLuint id;
@@ -342,6 +401,7 @@ void World::genALists()
       glEnd();
     glEndList();
 
-    a_displayList.push_back(id);
+    m_aDisplayList.push_back(id);
   }
 }
+// ---------------------------------------------------------------------------------------
