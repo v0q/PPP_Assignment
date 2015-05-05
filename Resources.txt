@@ -2,20 +2,20 @@ Textures & visual stuff
 -----------------------------------------------------------------------------
 Asteroid models & Asteroid textures
 /*
- Copyright © 2012 Solcommand.com
- http://www.solcommand.com/2012/12/low-poly-asteroids.html
+ Solcommand.com (2012). Low-poly Asteroids
+ [Accessed 2015]. Available from: <http://www.solcommand.com/2012/12/low-poly-asteroids.html>.
 */
 
 Skybox texture/background
 /*
- Copyright © 2012 Unknown
- http://freshwallpapers.net/space/galaxy-background.html
+ Unknown (2012). Galaxy Background
+ [Accessed 2015]. Available from: <http://freshwallpapers.net/space/galaxy-background.html>.
 */
 
 Projectile animated sprite sheet
 /*
- Copyright © 2011 Nordenfelt – Steampunk Shoot 'em Up
- http://www.nordenfelt-thegame.com/blog/2011/11/02/nordenfelt-dev-log-25/
+ Nordenfelt (2011). Steampunk Shoot 'em Up
+ [Accessed 2015]. Available from: <http://www.nordenfelt-thegame.com/blog/2011/11/02/nordenfelt-dev-log-25/>.
 */
 -----------------------------------------------------------------------------
 
@@ -24,18 +24,18 @@ Audio etc.
 -----------------------------------------------------------------------------
 Background music
 /*
- Copyright © 2014 joshuaempyre
- http://www.freesound.org/people/joshuaempyre/sounds/251461/
+ joshuaempyre (2014). Arcade Music Loop.wav
+ [Accessed 2015]. Available from: <http://www.freesound.org/people/joshuaempyre/sounds/251461/>.
 */
 
 Explosion
 /*
- Copyright © 2010 Nbs Dark
- http://www.freesound.org/people/Nbs%20Dark/sounds/94185/
+ Nbs Dark (2010). Explosion.wav
+ [Accessed 2015]. Available from: <http://www.freesound.org/people/Nbs%20Dark/sounds/94185/>.
 */
 
 Flame
 /*
- Copyright © 2014 copyc4t
- http://www.freesound.org/people/copyc4t/sounds/235731/
+ copyc4t (2014). TF_Flame.flac
+ [Accessed 2015]. Available from: <http://www.freesound.org/people/copyc4t/sounds/235731/>.
 */

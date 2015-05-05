@@ -62,6 +62,11 @@
 
 #define MAX_FPS 100.0f
 
+/// @brief FPS counter
+/// Modified from : Added a fps limiter using SDL_Delay
+/// Toby Howard toby.howardy@manchester.ac.uk (January 3, 2013). General purpose frames per second counter for OpenGL/GLUT GNU/Linux programs.
+/// [Accessed 2015]. Available from: <http://studentnet.cs.manchester.ac.uk/ugt/COMP27112/OpenGL/frames.txt>.
+
 struct timeval frameStartTime, frameEndTime;
 
 void frameStart(void) {
